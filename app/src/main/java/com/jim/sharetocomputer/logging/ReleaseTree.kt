@@ -14,31 +14,18 @@
     You should have received a copy of the GNU General Public License
     along with Share To Computer.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.jim.sharetocomputer
+package com.jim.sharetocomputer.logging
 
-import com.jim.sharetocomputer.logging.DebugTree
-import com.jim.sharetocomputer.logging.ReleaseTree
-import com.jim.sharetocomputer.logging.KoinLogger
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.KoinApplication
-import org.koin.core.context.startKoin
+import android.util.Log
 import timber.log.Timber
 
-class Application : android.app.Application() {
+class ReleaseTree: Timber.DebugTree() {
 
-    override fun onCreate() {
-        super.onCreate()
-        if (BuildConfig.DEBUG) {
-            Timber.plant(DebugTree())
-        } else {
-            Timber.plant(ReleaseTree())
+    override fun isLoggable(tag: String?, priority: Int): Boolean {
+        if (priority == Log.VERBOSE || priority == Log.DEBUG) {
+            return false
         }
-
-        startKoin {
-            KoinApplication.logger = KoinLogger()
-            androidContext(this@Application)
-            modules(applicationModule)
-        }
+        return true
     }
 
 }

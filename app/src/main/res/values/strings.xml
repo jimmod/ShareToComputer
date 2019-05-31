@@ -1,0 +1,12 @@
+<!DOCTYPE resources [
+    <!ENTITY appname "Share to Computer">
+    ]>
+<resources>
+    <string name="app_name">&appname;</string>
+    <string name="channel_name">Default Notification</string>
+    <string name="channel_description">Description Here</string>
+    <string name="notification_server_title">Share to Computer</string>
+    <string name="notification_server_text">Running</string>
+    <string name="download_instruction">Go to your browser and open URL:\n%1$s</string>
+    <string name="default_instruction">To share select text/images/file and share it to \"&appname;\"</string>
+</resources>

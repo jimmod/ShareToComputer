@@ -75,7 +75,7 @@ class WebServerService : Service() {
             notificationManager.createNotificationChannel(channel)
         }
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(getString(R.string.notification_server_title))
             .setContentText(getString(R.string.notification_server_text))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

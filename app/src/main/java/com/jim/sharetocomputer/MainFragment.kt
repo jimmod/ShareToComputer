@@ -20,12 +20,9 @@ import android.content.Context
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.jim.sharetocomputer.databinding.FragmentMainBinding
 import org.koin.android.ext.android.inject
@@ -35,7 +32,7 @@ import timber.log.Timber
 
 class MainFragment : Fragment() {
 
-    val port by inject<Int>(named("PORT"))
+    private val port by inject<Int>(named("PORT"))
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentMainBinding.inflate(inflater, container, false)

@@ -30,8 +30,6 @@ import com.jim.sharetocomputer.webserver.WebServerMultipleFiles
 import com.jim.sharetocomputer.webserver.WebServerSingleFile
 import com.jim.sharetocomputer.webserver.WebServerText
 import org.koin.android.ext.android.get
-import org.koin.core.Koin
-import org.koin.core.context.GlobalContext
 import timber.log.Timber
 
 class WebServerService : Service() {

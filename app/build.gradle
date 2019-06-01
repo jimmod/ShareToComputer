@@ -52,7 +52,11 @@ dependencies {
 
     testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.test:core:$testExtJunit"
+    testImplementation "androidx.test.ext:junit:$testExtJunit"
     testImplementation "org.robolectric:robolectric:$robolectric"
     testImplementation "org.koin:koin-test:$koinVersion"
+    testImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
 }

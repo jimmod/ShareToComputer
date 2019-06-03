@@ -49,7 +49,7 @@ class WebServerService : Service() {
             }
             stopTime = System.currentTimeMillis() + TIME_AUTO_STOP
             Timber.d("Starting WebServer")
-            StopperThread().start()
+            StopperThread(stopTime).start()
             webServer!!.start()
 
             return START_STICKY
@@ -81,7 +81,7 @@ class WebServerService : Service() {
     }
 
 
-    inner class StopperThread: Thread() {
+    inner class StopperThread(private val stopTime: Long): Thread() {
         override fun run() {
             while (true) {
                 if (System.currentTimeMillis() >= stopTime) {

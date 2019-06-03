@@ -8,4 +8,4 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
 
-script: ./gradlew clean lint testDebugUnitTest assembleRelease
+script: ./gradlew clean app:lint app:testDebugUnitTest app:assembleRelease

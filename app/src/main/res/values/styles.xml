@@ -19,4 +19,8 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light"/>
 
+    <style name="AppTheme.Drawer" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:background">@color/colorPrimaryDark</item>
+    </style>
+
 </resources>

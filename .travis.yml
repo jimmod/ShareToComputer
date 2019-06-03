@@ -1,0 +1,11 @@
+language: android
+dist: trusty
+
+android:
+  components:
+    - build-tools-28.0.3
+    - android-28
+    - extra-google-m2repository
+    - extra-android-m2repository
+
+script: ./gradlew clean app:lint app:testDebugUnitTest app:assembleRelease

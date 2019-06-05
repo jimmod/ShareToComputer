@@ -8,7 +8,7 @@
     <string name="channel_description">Common notification</string>
     <string name="notification_server_title">&appname;</string>
     <string name="notification_server_text">is sharing</string>
-    <string name="download_instruction">Go to your browser and open URL:\n%1$s</string>
+    <string name="download_instruction">Go to your browser and open URL:\nhttp://%1$s:%2$s</string>
     <string name="default_instruction">To share select text/images/file and share it to \"&appname;\"</string>
     <string name="about">About</string>
     <string name="version">Version</string>
@@ -16,4 +16,6 @@
     <string name="source_code_url">https://github.com/jimmod/ShareToComputer</string>
     <string name="license">License</string>
     <string name="license_detail">GNU General Public License version 3 or later.\nCopyright © 2019 Jimmy</string>
+    <string name="select_file">Select File</string>
+    <string name="stop_share">Stop sharing</string>
 </resources>

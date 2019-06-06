@@ -5,8 +5,8 @@ import android.content.Intent
 import android.util.SparseArray
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.jim.sharetocomputer.coroutines.TestableDispatchers
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -23,7 +23,7 @@ suspend fun FragmentActivity.startActivityForResult(intent: Intent): Instrumenta
     var fragment = supportFragmentManager.findFragmentByTag(TAG) as FragmentHelper?
     if (fragment==null) {
         fragment = FragmentHelper()
-        GlobalScope.launch(Dispatchers.Main) {
+        GlobalScope.launch(TestableDispatchers.Main) {
             Timber.d("Add headless fragment")
             supportFragmentManager
                 .beginTransaction()
@@ -33,7 +33,7 @@ suspend fun FragmentActivity.startActivityForResult(intent: Intent): Instrumenta
     }
     fragment.addMapping(requestCode, result)
 
-    GlobalScope.launch(Dispatchers.Main) {
+    GlobalScope.launch(TestableDispatchers.Main) {
         fragment.startActivityForResult(intent, requestCode)
     }
     return result.await()

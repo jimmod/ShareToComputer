@@ -7,7 +7,7 @@
     <string name="channel_name">Default notification</string>
     <string name="channel_description">Common notification</string>
     <string name="notification_server_title">&appname;</string>
-    <string name="notification_server_text">is sharing</string>
+    <string name="notification_server_text">Open from your browser http://%1$s:%2$s</string>
     <string name="download_instruction">Go to your browser and open URL:\nhttp://%1$s:%2$s</string>
     <string name="default_instruction">To share select text/images/file and share it to \"&appname;\"</string>
     <string name="about">About</string>

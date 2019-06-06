@@ -26,11 +26,13 @@ import org.koin.dsl.module
 
 
 val applicationModule = module {
-    single(named(PORT)) { 8080 }
-    factory { WebServerText(get(named(PORT))) }
-    factory { WebServerSingleFile(get(), get(named(PORT))) }
-    factory { WebServerMultipleFiles(get(), get(named(PORT))) }
-    viewModel { (activity: FragmentActivity) -> MainViewModel(activity, get(named(PORT))) }
+    single(named(Module.PORT)) { 8080 }
+    factory { WebServerText(get(named(Module.PORT))) }
+    factory { WebServerSingleFile(get(), get(named(Module.PORT))) }
+    factory { WebServerMultipleFiles(get(), get(named(Module.PORT))) }
+    viewModel { (activity: FragmentActivity) -> MainViewModel(activity, get(named(Module.PORT))) }
 }
 
-private const val PORT = "PORT"
+object Module {
+    const val PORT = "PORT"
+}

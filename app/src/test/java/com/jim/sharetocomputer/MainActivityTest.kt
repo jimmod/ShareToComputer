@@ -14,9 +14,7 @@ import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.Description
 import org.hamcrest.Matchers
-import org.hamcrest.TypeSafeMatcher
 import org.junit.After
 import org.junit.Assert.assertThat
 import org.junit.Before
@@ -135,8 +133,8 @@ class MainActivityTest {
 
     private fun assertServiceStarted(expectedIntent: Intent) {
         val serviceIntent = Shadows.shadowOf(activity).nextStartedService
-        assertThat(serviceIntent, sameComponentAs(expectedIntent))
-        assertThat(serviceIntent, sameExtrasAs(expectedIntent))
+        assertThat(serviceIntent, ExtraMatchers.sameComponentAs(expectedIntent))
+        assertThat(serviceIntent, ExtraMatchers.sameExtrasAs(expectedIntent))
     }
 
     private fun assertServiceNotStarted() {
@@ -144,30 +142,6 @@ class MainActivityTest {
         assertThat(serviceIntent, Matchers.nullValue())
     }
 
-    private fun sameComponentAs(expectedIntent: Intent) =
-        object : TypeSafeMatcher<Intent>() {
-            override fun describeTo(description: Description) {
-                description.appendText("has component: ${expectedIntent.component?.className}")
-            }
-
-            public override fun matchesSafely(intent: Intent): Boolean {
-                return expectedIntent.component?.className.equals(intent.component?.className)
-            }
-        }
-
-    private fun sameExtrasAs(expectedIntent: Intent) =
-        object : TypeSafeMatcher<Intent>() {
-            override fun describeTo(description: Description) {
-                description.appendText("has extras: ${expectedIntent.extras?.keySet()}")
-            }
-
-            public override fun matchesSafely(intent: Intent): Boolean {
-                expectedIntent.extras?.keySet()?.forEach {key ->
-                    if (expectedIntent.extras!!.get(key)!=intent.extras!!.get(key)) return false
-                }
-                return true
-            }
-        }
     companion object {
         private const val text = "Hello World"
         private val intentShareText = Intent().apply {

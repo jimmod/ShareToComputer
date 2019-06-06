@@ -1,100 +1,194 @@
 package com.jim.sharetocomputer
 
+import android.app.Activity
+import android.app.Instrumentation
+import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.espresso.intent.rule.IntentsTestRule
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.Description
+import org.hamcrest.Matchers
+import org.hamcrest.TypeSafeMatcher
 import org.junit.After
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertThat
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.robolectric.Robolectric
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows
+import org.robolectric.annotation.Config
 import java.io.File
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
+@Config(application = RobolectricApplication::class)
 class MainActivityTest {
+
+    @get:Rule
+    val uiRule = IntentsTestRule(MainActivity::class.java, false, false)
+
+    private val activity by lazy {uiRule.activity}
+
+    @Before
+    fun before() {
+        startKoin {
+            androidContext(ApplicationProvider.getApplicationContext())
+            modules(applicationModule)
+        }
+    }
 
     @After
     fun after() {
         stopKoin()
+        uiRule.finishActivity()
     }
 
     @Test
     fun open_launcher_should_not_start_service() {
-        val controller = Robolectric.buildActivity(MainActivity::class.java)
-        controller.setup()
+        launchActivity()
 
-        val service = Shadows.shadowOf(controller.get()).nextStartedService
-        assertNull(service)
+        assertServiceNotStarted()
     }
 
     @Test
     fun share_text_should_start_service() {
-        val sampleText = "Hello World"
-        val intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            type = ClipDescription.MIMETYPE_TEXT_PLAIN
-            putExtra(Intent.EXTRA_TEXT, sampleText)
-        }
-        val controller = Robolectric.buildActivity(MainActivity::class.java, intent)
-        controller.setup()
+        launchActivity(intentShareText)
 
-        val service = Shadows.shadowOf(controller.get()).nextStartedService
-
-        val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestText(sampleText))
-        assertThat(service, IntentMatchers.hasComponent(expectedIntent.component!!.className))
-        expectedIntent.extras!!.keySet().forEach { key ->
-            val expectedValue = expectedIntent.getParcelableExtra<ShareRequest>(key)
-            assertThat(service, IntentMatchers.hasExtra(key, expectedValue))
-        }
+        val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestText(text))
+        assertServiceStarted(expectedIntent)
     }
 
     @Test
     fun share_single_file_should_start_service() {
-        val uri = Uri.fromFile(File.createTempFile("temp","del"))
-        val intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            type = "image/png"
-            putExtra(Intent.EXTRA_STREAM, uri)
-        }
-        val controller = Robolectric.buildActivity(MainActivity::class.java, intent)
-        controller.setup()
-
-        val service = Shadows.shadowOf(controller.get()).nextStartedService
+        launchActivity(intentShareUri)
 
         val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestSingleFile(uri))
-        assertThat(service, IntentMatchers.hasComponent(expectedIntent.component!!.className))
-        expectedIntent.extras!!.keySet().forEach { key ->
-            val expectedValue = expectedIntent.getParcelableExtra<ShareRequest>(key)
-            assertThat(service, IntentMatchers.hasExtra(key, expectedValue))
-        }
+        assertServiceStarted(expectedIntent)
     }
 
     @Test
     fun share_multiple_file_should_start_service() {
+        launchActivity(intentShareUris)
+
+        val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestMultipleFile(uris))
+        assertServiceStarted(expectedIntent)
+    }
+
+    @Test
+    fun click_select_button_single_file() {
+        launchActivity()
+        setupDummyForActionGetContent_singleFile()
+
+        pressSelectButton()
+
+        val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestSingleFile(uri))
+        assertServiceStarted(expectedIntent)
+    }
+
+    @Test
+    fun click_select_button_multiple_files() {
+        launchActivity()
+        setupDummyForActionGetContent_multipleFiles()
+
+        pressSelectButton()
+
+        val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestMultipleFile(uris))
+        assertServiceStarted(expectedIntent)
+    }
+
+    private fun setupDummyForActionGetContent_singleFile() {
+        val resultIntent = Intent().apply {
+            data = uri
+        }
+        val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent)
+        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT)).respondWith(result)
+    }
+
+    private fun setupDummyForActionGetContent_multipleFiles() {
+        val resultIntent = Intent().apply {
+            val item = ClipData.Item(uris[0])
+            clipData = ClipData("", emptyArray(), item).apply {
+                addItem(ClipData.Item(uris[1]))
+            }
+        }
+        val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent)
+        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT)).respondWith(result)
+    }
+
+    private fun launchActivity(intent: Intent? = null) {
+        uiRule.launchActivity(intent)
+    }
+
+    private fun pressSelectButton() {
+        onView(withId(R.id.select_file)).perform(click())
+    }
+
+    private fun assertServiceStarted(expectedIntent: Intent) {
+        val serviceIntent = Shadows.shadowOf(activity).nextStartedService
+        assertThat(serviceIntent, sameComponentAs(expectedIntent))
+        assertThat(serviceIntent, sameExtrasAs(expectedIntent))
+    }
+
+    private fun assertServiceNotStarted() {
+        val serviceIntent = Shadows.shadowOf(activity).nextStartedService
+        assertThat(serviceIntent, Matchers.nullValue())
+    }
+
+    private fun sameComponentAs(expectedIntent: Intent) =
+        object : TypeSafeMatcher<Intent>() {
+            override fun describeTo(description: Description) {
+                description.appendText("has component: ${expectedIntent.component?.className}")
+            }
+
+            public override fun matchesSafely(intent: Intent): Boolean {
+                return expectedIntent.component?.className.equals(intent.component?.className)
+            }
+        }
+
+    private fun sameExtrasAs(expectedIntent: Intent) =
+        object : TypeSafeMatcher<Intent>() {
+            override fun describeTo(description: Description) {
+                description.appendText("has extras: ${expectedIntent.extras?.keySet()}")
+            }
+
+            public override fun matchesSafely(intent: Intent): Boolean {
+                expectedIntent.extras?.keySet()?.forEach {key ->
+                    if (expectedIntent.extras!!.get(key)!=intent.extras!!.get(key)) return false
+                }
+                return true
+            }
+        }
+    companion object {
+        private const val text = "Hello World"
+        private val intentShareText = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = ClipDescription.MIMETYPE_TEXT_PLAIN
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
+        val uri = Uri.fromFile(File.createTempFile("temp","del"))!!
+        val intentShareUri = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "image/png"
+            putExtra(Intent.EXTRA_STREAM, uri)
+        }
         val uris = arrayListOf(
             Uri.fromFile(File.createTempFile("temp","del")),
             Uri.fromFile(File.createTempFile("temp2","del"))
         )
-        val intent = Intent().apply {
+        val intentShareUris = Intent().apply {
             action = Intent.ACTION_SEND_MULTIPLE
             putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
         }
-        val controller = Robolectric.buildActivity(MainActivity::class.java, intent)
-        controller.setup()
 
-        val service = Shadows.shadowOf(controller.get()).nextStartedService
-
-        val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestMultipleFile(uris))
-        assertThat(service, IntentMatchers.hasComponent(expectedIntent.component!!.className))
-        expectedIntent.extras!!.keySet().forEach { key ->
-            val expectedValue = expectedIntent.getParcelableExtra<ShareRequest>(key)
-            assertThat(service, IntentMatchers.hasExtra(key, expectedValue))
-        }
     }
 }

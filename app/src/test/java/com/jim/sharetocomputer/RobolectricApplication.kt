@@ -17,5 +17,32 @@
 package com.jim.sharetocomputer
 
 import android.app.Application
+import com.jim.sharetocomputer.coroutines.DirectDispatcher
+import com.jim.sharetocomputer.coroutines.TestableDispatchers
+import com.jim.sharetocomputer.logging.StdoutTree
+import timber.log.Timber
 
-class RobolectricApplication: Application()
+class RobolectricApplication: Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        setupLogging()
+
+        setupCoroutinesDispatchers()
+
+        WebServerService.isRunning = false
+    }
+
+    private fun setupLogging() {
+        Timber.uprootAll()
+        Timber.plant(StdoutTree())
+    }
+
+    private fun setupCoroutinesDispatchers() {
+        TestableDispatchers.setMain(DirectDispatcher())
+        TestableDispatchers.setDefault(DirectDispatcher())
+        TestableDispatchers.setIo(DirectDispatcher())
+        TestableDispatchers.setUnconfined(DirectDispatcher())
+    }
+}

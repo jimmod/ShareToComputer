@@ -37,6 +37,11 @@ class WebServerService : Service() {
     private var webServer: WebServer? = null
     private var stopTime: Long = Long.MAX_VALUE
 
+    override fun onCreate() {
+        super.onCreate()
+        isRunning = true
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.d("onStartCommand")
         startForeground(NOTIFICATION_ID, createNotification())
@@ -96,6 +101,7 @@ class WebServerService : Service() {
     override fun onDestroy() {
         Timber.d("onDestroy")
         webServer?.stop()
+        isRunning = false
         super.onDestroy()
     }
 
@@ -109,9 +115,11 @@ class WebServerService : Service() {
         private const val NOTIFICATION_ID = 1945
         private const val CHANNEL_ID = "DEFAULT_CHANNEL"
 
-        fun createIntent(context: Context, request: ShareRequest): Intent {
+        var isRunning = false
+
+        fun createIntent(context: Context, request: ShareRequest?): Intent {
             return Intent(context, WebServerService::class.java).apply {
-                putExtra(EXTRA_REQUEST, request)
+                request?.let { putExtra(EXTRA_REQUEST, it) }
             }
         }
     }

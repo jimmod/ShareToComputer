@@ -54,6 +54,9 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timber"
     implementation "org.koin:koin-android:$koinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
+//    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
+    implementation "org.koin:koin-android-viewmodel:$koinVersion"
 
     testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.test:core:$testExtJunit"
@@ -61,6 +64,7 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$robolectric"
     testImplementation "org.koin:koin-test:$koinVersion"
     testImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutinesVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"

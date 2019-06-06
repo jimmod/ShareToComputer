@@ -17,6 +17,7 @@ buildscript {
         nanohttpd='2.3.1'
         navigationVersion = '2.0.0'
         koinVersion = '2.0.1'
+        fragmentVersion = '1.1.0-alpha09'
 
         junitVersion = '4.12'
         robolectric = '4.2'
@@ -25,7 +26,6 @@ buildscript {
 
         coreTestingVersion = '2.0.0'
         coroutinesVersion = "1.1.1"
-        fragmentVersion = '1.1.0-alpha09'
         glideVersion = '4.9.0'
         gradleVersion = '3.4.1'
         gsonVersion = '2.8.2'

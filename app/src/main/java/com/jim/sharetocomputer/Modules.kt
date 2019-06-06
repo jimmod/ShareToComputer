@@ -16,16 +16,21 @@
 */
 package com.jim.sharetocomputer
 
+import androidx.fragment.app.FragmentActivity
 import com.jim.sharetocomputer.webserver.WebServerMultipleFiles
 import com.jim.sharetocomputer.webserver.WebServerSingleFile
 import com.jim.sharetocomputer.webserver.WebServerText
+import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 
 val applicationModule = module {
-    single(named("PORT")) { 8080 }
-    factory { WebServerText(get(named("PORT"))) }
-    factory { WebServerSingleFile(get(), get(named("PORT"))) }
-    factory { WebServerMultipleFiles(get(), get(named("PORT"))) }
+    single(named(PORT)) { 8080 }
+    factory { WebServerText(get(named(PORT))) }
+    factory { WebServerSingleFile(get(), get(named(PORT))) }
+    factory { WebServerMultipleFiles(get(), get(named(PORT))) }
+    viewModel { (activity: FragmentActivity) -> MainViewModel(activity, get(named(PORT))) }
 }
+
+private const val PORT = "PORT"

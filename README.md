@@ -4,6 +4,10 @@
 
 Share any files to your computer through wifi
 
+<a href='https://play.google.com/store/apps/details?id=com.jim.sharetocomputer&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="60"/></a>
+
+**Will be on F-Droid soon*
+
 # Description
 
 Easiest and fastest way to share text, images or any files from your phone to your computer.

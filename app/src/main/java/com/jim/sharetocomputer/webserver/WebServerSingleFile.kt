@@ -19,7 +19,6 @@ package com.jim.sharetocomputer.webserver
 import android.content.ClipDescription
 import android.content.Context
 import android.net.Uri
-import android.webkit.MimeTypeMap
 import com.jim.sharetocomputer.Message
 import timber.log.Timber
 
@@ -42,12 +41,10 @@ class WebServerSingleFile(private val context: Context, port: Int) : WebServer(p
             )
         } else {
             val fis = context.contentResolver.openInputStream(uri!!)
-            val mime = MimeTypeMap.getSingleton()
-            val mimeType = mime.getExtensionFromMimeType(context.contentResolver.getType(uri!!))
-            Timber.d("Response:$mimeType")
+            Timber.d("Response:$uri")
             return newFixedLengthResponse(
                 Response.Status.OK,
-                mimeType,
+                null,
                 fis,
                 -1
             ).apply {

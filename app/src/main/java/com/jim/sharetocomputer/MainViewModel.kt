@@ -1,12 +1,9 @@
 package com.jim.sharetocomputer
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.net.wifi.WifiManager
 import android.os.Build
-import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,21 +15,7 @@ import timber.log.Timber
 class MainViewModel(private val context: FragmentActivity, private val port: Int) : ViewModel() {
 
     private var request: ShareRequest? = null
-    val ip = MutableLiveData<String>().apply { value = "lalala" }
-    private val instructionVisibility = MutableLiveData<Int>().apply { value = View.VISIBLE }
-    private val downloadVisibility = MutableLiveData<Int>().apply { value = View.GONE }
-
-    private fun displayInstruction(visible: Boolean = true) {
-        GlobalScope.launch(TestableDispatchers.Main) {
-            if (visible && instructionVisibility.value!=View.VISIBLE) {
-                instructionVisibility.value = View.VISIBLE
-                downloadVisibility.value = View.GONE
-            } else if (!visible && downloadVisibility.value!=View.VISIBLE) {
-                instructionVisibility.value = View.GONE
-                downloadVisibility.value = View.VISIBLE
-            }
-        }
-    }
+    val ip = MutableLiveData<String>().apply { value = "unknown" }
 
     fun selectFile() {
         Timber.d("select file")
@@ -54,27 +37,25 @@ class MainViewModel(private val context: FragmentActivity, private val port: Int
                         }
                         startWebService(ShareRequest.ShareRequestMultipleFile(uris))
                     }
-                    displayInstruction(false)
                 }
             }
         }
     }
+
+    fun deviceIp(): String = context.getIp()
 
     fun setRequest(request: ShareRequest?) {
         this.request = request
         if (request != null) {
             Timber.d("request found $request")
             startWebService(request)
-            displayInstruction(false)
         } else {
             Timber.d("no request")
-            displayInstruction()
         }
     }
 
     fun stopShare() {
         stopWebService()
-        displayInstruction()
     }
 
     private fun startWebService(request: ShareRequest) {
@@ -93,38 +74,11 @@ class MainViewModel(private val context: FragmentActivity, private val port: Int
         context.stopService(intent)
     }
 
-    fun deviceIp(): String {
-        val wifiManager =
-            context.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager? ?: return "0.0.0.0"
-        val ipAddress = wifiManager.connectionInfo.ipAddress
-        return String.format(
-            "%d.%d.%d.%d",
-            ipAddress and 0xff,
-            ipAddress shr 8 and 0xff,
-            ipAddress shr 16 and 0xff,
-            ipAddress shr 24 and 0xff
-        )
-    }
-
     fun devicePort(): Int {
         return port
     }
 
-    fun downloadVisibility(): MutableLiveData<Int> {
-        if (WebServerService.isRunning) {
-            displayInstruction(false)
-        } else {
-            displayInstruction()
-        }
-        return downloadVisibility
-    }
-
-    fun instructionVisibility(): MutableLiveData<Int> {
-        if (WebServerService.isRunning) {
-            displayInstruction(false)
-        } else {
-            displayInstruction()
-        }
-        return instructionVisibility
+    fun isSharing(): MutableLiveData<Boolean> {
+        return WebServerService.isRunning
     }
 }

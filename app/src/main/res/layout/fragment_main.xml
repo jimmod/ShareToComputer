@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <import type="androidx.core.text.HtmlCompat" />
+        <import type="android.view.View"/>
 
         <variable
             name="viewModel"
@@ -23,7 +22,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/default_instruction"
-            android:visibility="@{viewModel.instructionVisibility()}"
+            android:visibility="@{viewModel.isSharing() ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,7 +33,7 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> viewModel.selectFile()}"
             android:text="@string/select_file"
-            android:visibility="@{viewModel.instructionVisibility()}"
+            android:visibility="@{viewModel.isSharing() ? View.GONE : View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/instruction" />
@@ -45,7 +44,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@{@string/download_instruction(viewModel.deviceIp(), viewModel.devicePort())}"
-            android:visibility="@{viewModel.downloadVisibility()}"
+            android:visibility="@{viewModel.isSharing() ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone" />
@@ -57,7 +56,7 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> viewModel.stopShare()}"
             android:text="@string/stop_share"
-            android:visibility="@{viewModel.downloadVisibility()}"
+            android:visibility="@{viewModel.isSharing() ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/share_message"

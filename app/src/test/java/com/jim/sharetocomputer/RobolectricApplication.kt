@@ -31,7 +31,7 @@ class RobolectricApplication: Application() {
 
         setupCoroutinesDispatchers()
 
-        WebServerService.isRunning = false
+        WebServerService.isRunning.value = false
     }
 
     private fun setupLogging() {

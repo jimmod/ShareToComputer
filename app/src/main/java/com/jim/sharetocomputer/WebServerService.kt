@@ -16,30 +16,31 @@
 */
 package com.jim.sharetocomputer
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.MutableLiveData
 import com.jim.sharetocomputer.webserver.WebServer
 import com.jim.sharetocomputer.webserver.WebServerMultipleFiles
 import com.jim.sharetocomputer.webserver.WebServerSingleFile
 import com.jim.sharetocomputer.webserver.WebServerText
 import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
+import org.koin.core.qualifier.named
 import timber.log.Timber
 
 class WebServerService : Service() {
 
     private var webServer: WebServer? = null
     private var stopTime: Long = Long.MAX_VALUE
+    private val port by inject<Int>(named(Module.PORT))
 
     override fun onCreate() {
         super.onCreate()
-        isRunning = true
+        isRunning.value = true
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -77,11 +78,18 @@ class WebServerService : Service() {
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
+        val stopIntent = ActionActivity.stopShareIntent(this)
+        val stopPendingIntent = TaskStackBuilder.create(this).run {
+            addNextIntentWithParentStack(stopIntent)
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(getString(R.string.notification_server_title))
-            .setContentText(getString(R.string.notification_server_text))
+            .setContentText(getString(R.string.notification_server_text, this.getIp(), port.toString()))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .addAction(R.mipmap.ic_launcher, getString(R.string.stop_share),
+                stopPendingIntent)
         return builder.build()
     }
 
@@ -101,7 +109,7 @@ class WebServerService : Service() {
     override fun onDestroy() {
         Timber.d("onDestroy")
         webServer?.stop()
-        isRunning = false
+        isRunning.value = false
         super.onDestroy()
     }
 
@@ -115,7 +123,7 @@ class WebServerService : Service() {
         private const val NOTIFICATION_ID = 1945
         private const val CHANNEL_ID = "DEFAULT_CHANNEL"
 
-        var isRunning = false
+        var isRunning = MutableLiveData<Boolean>().apply { value = false }
 
         fun createIntent(context: Context, request: ShareRequest?): Intent {
             return Intent(context, WebServerService::class.java).apply {

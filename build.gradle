@@ -18,27 +18,12 @@ buildscript {
         navigationVersion = '2.0.0'
         koinVersion = '2.0.1'
         fragmentVersion = '1.1.0-alpha09'
+        gsonVersion = '2.8.5'
 
         junitVersion = '4.12'
         robolectric = '4.2'
         espressoVersion = '3.1.1'
         testExtJunit = '1.1.0'
-
-        coreTestingVersion = '2.0.0'
-        coroutinesVersion = "1.1.1"
-        glideVersion = '4.9.0'
-        gradleVersion = '3.4.1'
-        gsonVersion = '2.8.2'
-        ktlintVersion = '0.30.0'
-        lifecycleVersion = '2.2.0-alpha01'
-        materialVersion = '1.0.0'
-        recyclerViewVersion = '1.1.0-alpha05'
-        roomVersion = '2.1.0-beta01'
-        runnerVersion = '1.0.1'
-        supportLibraryVersion = '1.1.0-alpha05'
-        truth = '0.42'
-        uiAutomatorVersion = '2.2.0'
-        workVersion = '2.1.0-alpha02'
     }
 
 

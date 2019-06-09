@@ -20,7 +20,9 @@ import android.app.Application
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.test.core.app.ApplicationProvider
+import com.google.gson.Gson
 import com.jim.sharetocomputer.RobolectricApplication
+import com.jim.sharetocomputer.ShareInfo
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -53,6 +55,10 @@ class WebServerMultipleFilesTest {
 
     @Before
     fun setup() {
+        uris.forEachIndexed { index, uri ->
+            shadowContentResolver.registerInputStream(uri, ByteArrayInputStream(SAMPLE_TEXT[index]))
+        }
+
         webServer.start()
     }
 
@@ -63,27 +69,15 @@ class WebServerMultipleFilesTest {
 
     @Test
     fun default_content() {
-        val (code, _) = httpGet(TEST_URL)
+        val (code, _) = httpGetFile(TEST_URL)
         Assert.assertEquals(404, code)
     }
 
     @Test
-    fun check_response_body() {
-        val uris = listOf<Uri>(
-            Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/21"),
-            Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/22"),
-            Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/23")
-        )
-
-        shadowContentResolver.registerInputStream(uris[0], ByteArrayInputStream(SAMPLE_TEXT))
-        shadowContentResolver.registerInputStream(uris[1], ByteArrayInputStream(SAMPLE_TEXT2))
-        shadowContentResolver.registerInputStream(uris[2], ByteArrayInputStream(SAMPLE_TEXT3))
-        val totalSize = (SAMPLE_TEXT.size + SAMPLE_TEXT2.size + SAMPLE_TEXT3.size).toLong()
-
+    fun get_content_as_zip() {
         webServer.setUris(uris)
 
-        val (code, file) = httpGet(TEST_URL)
-
+        val (code, file) = httpGetFile(TEST_URL_ZIP)
         Assert.assertEquals(200, code)
         Assert.assertNotNull(file)
         val zipFile = ZipFile(file).entries().toList()
@@ -93,10 +87,49 @@ class WebServerMultipleFilesTest {
             actualTotalSize += it.size
         }
         Assert.assertEquals(totalSize, actualTotalSize)
+    }
+
+    @Test
+    fun get_content_one_by_one() {
+        webServer.setUris(uris)
+
+        uris.forEachIndexed { index, uri ->
+            val (code, content) = httpGetContent(TEST_URL_INDEX(index))
+            Assert.assertEquals(200, code)
+            Assert.assertNotNull(content)
+            Assert.assertEquals(String(SAMPLE_TEXT[index]), String(content!!))
+        }
 
     }
 
-    private fun httpGet(url: String): Pair<Int, File?> {
+    @Test
+    fun get_content_one_by_one_wrong_index() {
+        webServer.setUris(uris)
+
+        val (code, _) = httpGetContent(TEST_URL_INDEX(10))
+        Assert.assertEquals(404, code)
+
+    }
+
+    @Test
+    fun get_content_info() {
+        webServer.setUris(uris)
+
+        val (code, file) = httpGetFile(TEST_URL_INFO)
+        Assert.assertEquals(200, code)
+        val shareInfo = Gson().fromJson(FileReader(file), ShareInfo::class.java)
+        Assert.assertEquals(uris.size, shareInfo.total)
+    }
+
+    @Test
+    fun display_main_page() {
+        webServer.setUris(uris)
+
+        val (code, _) = httpGetContent(TEST_URL)
+        Assert.assertEquals(200, code)
+    }
+
+    private fun httpGetFile(url: String): Pair<Int, File?> {
         val obj = URL(url)
         val con = obj.openConnection() as HttpURLConnection
         con.requestMethod = "GET"
@@ -114,14 +147,41 @@ class WebServerMultipleFilesTest {
         }
         return Pair(code, file)
     }
+    private fun httpGetContent(url: String): Pair<Int, ByteArray?> {
+        val obj = URL(url)
+        val con = obj.openConnection() as HttpURLConnection
+        con.requestMethod = "GET"
+        val code = con.responseCode
+        var content: ByteArray? = null
+        try {
+            BufferedInputStream(con.inputStream).use {
+                content = it.readBytes()
+            }
+        } catch (e: Exception) {
+        }
+        return Pair(code, content)
+    }
 
     companion object {
         private const val TEST_PORT = 8080
         private const val TEST_URL = "http://localhost:$TEST_PORT"
+        private const val TEST_URL_ZIP = "$TEST_URL/zip"
+        private const val TEST_URL_INFO = "$TEST_URL/info"
+        private fun TEST_URL_INDEX(index: Int) = "$TEST_URL/$index"
 
-        private val SAMPLE_TEXT = "Hello World".toByteArray(Charsets.UTF_8)
-        private val SAMPLE_TEXT2 = "Another Random World".toByteArray(Charsets.UTF_8)
-        private val SAMPLE_TEXT3 = "N/A".toByteArray(Charsets.UTF_8)
+        private val SAMPLE_TEXT = arrayOf(
+            "Hello World".toByteArray(Charsets.UTF_8),
+            "Another Random World".toByteArray(Charsets.UTF_8),
+            "N/A".toByteArray(Charsets.UTF_8)
+        )
+
+        val uris = listOf<Uri>(
+            Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/21"),
+            Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/22"),
+            Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/23")
+        )
+
+        val totalSize = (SAMPLE_TEXT[0].size + SAMPLE_TEXT[1].size + SAMPLE_TEXT[2].size).toLong()
 
     }
 }

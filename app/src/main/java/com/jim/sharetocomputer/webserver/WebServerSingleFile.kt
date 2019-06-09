@@ -20,6 +20,7 @@ import android.content.ClipDescription
 import android.content.Context
 import android.net.Uri
 import com.jim.sharetocomputer.Message
+import com.jim.sharetocomputer.ext.getFileName
 import timber.log.Timber
 
 class WebServerSingleFile(private val context: Context, port: Int) : WebServer(port) {

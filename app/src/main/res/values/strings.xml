@@ -18,4 +18,5 @@
     <string name="license_detail">GNU General Public License version 3 or later.\nCopyright © 2019 Jimmy</string>
     <string name="select_file">Select File</string>
     <string name="stop_share">Stop sharing</string>
+    <string name="download">Download</string>
 </resources>

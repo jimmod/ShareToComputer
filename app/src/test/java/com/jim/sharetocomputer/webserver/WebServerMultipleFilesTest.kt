@@ -93,8 +93,8 @@ class WebServerMultipleFilesTest {
     fun get_content_one_by_one() {
         webServer.setUris(uris)
 
-        uris.forEachIndexed { index, uri ->
-            val (code, content) = httpGetContent(TEST_URL_INDEX(index))
+        uris.forEachIndexed { index, _ ->
+            val (code, content) = httpGetContent(testUrlIndex(index))
             Assert.assertEquals(200, code)
             Assert.assertNotNull(content)
             Assert.assertEquals(String(SAMPLE_TEXT[index]), String(content!!))
@@ -106,7 +106,7 @@ class WebServerMultipleFilesTest {
     fun get_content_one_by_one_wrong_index() {
         webServer.setUris(uris)
 
-        val (code, _) = httpGetContent(TEST_URL_INDEX(10))
+        val (code, _) = httpGetContent(testUrlIndex(10))
         Assert.assertEquals(404, code)
 
     }
@@ -167,7 +167,7 @@ class WebServerMultipleFilesTest {
         private const val TEST_URL = "http://localhost:$TEST_PORT"
         private const val TEST_URL_ZIP = "$TEST_URL/zip"
         private const val TEST_URL_INFO = "$TEST_URL/info"
-        private fun TEST_URL_INDEX(index: Int) = "$TEST_URL/$index"
+        private fun testUrlIndex(index: Int) = "$TEST_URL/$index"
 
         private val SAMPLE_TEXT = arrayOf(
             "Hello World".toByteArray(Charsets.UTF_8),

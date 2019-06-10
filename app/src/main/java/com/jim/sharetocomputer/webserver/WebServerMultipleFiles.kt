@@ -19,10 +19,8 @@ package com.jim.sharetocomputer.webserver
 import android.content.ClipDescription
 import android.content.Context
 import android.net.Uri
-import com.google.gson.Gson
 import com.jim.sharetocomputer.Message
 import com.jim.sharetocomputer.R
-import com.jim.sharetocomputer.ShareInfo
 import com.jim.sharetocomputer.ext.appName
 import com.jim.sharetocomputer.ext.getFileName
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +49,7 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
             return if (uris == null || session == null) {
                 throw IllegalArgumentException()
             } else if (session.uri == "/info") {
-                infoResponse()
+                infoResponse(uris?.size?:0)
             } else if (session.uri == "/zip") {
                 Timber.d("*Creating zip")
                 zipResponse()
@@ -86,20 +84,6 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
             Response.Status.OK,
             "text/html",
             ByteArrayInputStream(content),
-            -1
-        )
-    }
-
-    private fun infoResponse(): Response {
-        val shareInfo = ShareInfo(
-            total = uris?.size?:0
-        )
-        val inputStream = ByteArrayInputStream(Gson().toJson(shareInfo).toByteArray())
-
-        return newFixedLengthResponse(
-            Response.Status.OK,
-            "application/json",
-            inputStream,
             -1
         )
     }

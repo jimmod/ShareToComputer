@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/fragment_qrcode"
+        android:title="@string/scan_qr_code"/>
+
+    <item
         android:id="@+id/fragment_about"
         android:title="@string/about"/>
 

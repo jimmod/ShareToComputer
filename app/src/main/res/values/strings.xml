@@ -19,4 +19,6 @@
     <string name="select_file">Select File</string>
     <string name="stop_share">Stop sharing</string>
     <string name="download">Download</string>
+    <string name="qrcode_url">http://%1$s:%2$s</string>
+    <string name="scan_qr_code">Scan QR code</string>
 </resources>

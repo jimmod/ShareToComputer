@@ -2,20 +2,25 @@ package com.jim.sharetocomputer
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
+import com.jim.sharetocomputer.ext.getIp
+import com.jim.sharetocomputer.ext.startActivityForResult
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
+
 
 class MainViewModel(private val context: FragmentActivity, private val port: Int) : ViewModel() {
 
     private var request: ShareRequest? = null
     val ip = MutableLiveData<String>().apply { value = "unknown" }
+    var qrcode = MutableLiveData<Drawable>()
 
     fun selectFile() {
         Timber.d("select file")

@@ -23,6 +23,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.MutableLiveData
+import com.jim.sharetocomputer.ext.getIp
 import com.jim.sharetocomputer.webserver.WebServer
 import com.jim.sharetocomputer.webserver.WebServerMultipleFiles
 import com.jim.sharetocomputer.webserver.WebServerSingleFile

@@ -16,6 +16,20 @@
 */
 package com.jim.sharetocomputer.webserver
 
+import com.google.gson.Gson
+import com.jim.sharetocomputer.ShareInfo
 import fi.iki.elonen.NanoHTTPD
+import java.io.ByteArrayInputStream
 
-open class WebServer(port: Int): NanoHTTPD(port)
+open class WebServer(port: Int): NanoHTTPD(port) {
+    protected fun infoResponse(total: Int): Response {
+        val shareInfo = ShareInfo(total)
+        val inputStream = ByteArrayInputStream(Gson().toJson(shareInfo).toByteArray())
+        return newFixedLengthResponse(
+            Response.Status.OK,
+            "application/json",
+            inputStream,
+            -1
+        )
+    }
+}

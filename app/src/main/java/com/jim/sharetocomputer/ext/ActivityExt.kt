@@ -1,10 +1,11 @@
-package com.jim.sharetocomputer
+package com.jim.sharetocomputer.ext
 
 import android.app.Instrumentation
 import android.content.Intent
 import android.util.SparseArray
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.google.zxing.integration.android.IntentIntegrator
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.GlobalScope
@@ -35,6 +36,32 @@ suspend fun FragmentActivity.startActivityForResult(intent: Intent): Instrumenta
 
     GlobalScope.launch(TestableDispatchers.Main) {
         fragment.startActivityForResult(intent, requestCode)
+    }
+    return result.await()
+}
+
+suspend fun FragmentActivity.startBarcodeScan(): Instrumentation.ActivityResult? {
+    if (isFinishing) {
+        return null
+    }
+    val result = CompletableDeferred<Instrumentation.ActivityResult>()
+    val requestCode = IntentIntegrator.REQUEST_CODE
+
+    var fragment = supportFragmentManager.findFragmentByTag(TAG) as FragmentHelper?
+    if (fragment==null) {
+        fragment = FragmentHelper()
+        GlobalScope.launch(TestableDispatchers.Main) {
+            Timber.d("Add headless fragment")
+            supportFragmentManager
+                .beginTransaction()
+                .add(fragment, TAG)
+                .commitNowAllowingStateLoss()
+        }
+    }
+    fragment.addMapping(requestCode, result)
+
+    GlobalScope.launch(TestableDispatchers.Main) {
+        IntentIntegrator.forSupportFragment(fragment).initiateScan()
     }
     return result.await()
 }

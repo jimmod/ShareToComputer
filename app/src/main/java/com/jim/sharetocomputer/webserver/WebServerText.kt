@@ -26,8 +26,15 @@ class WebServerText(port: Int): WebServer(port) {
 
     override fun serve(session: IHTTPSession?): Response {
         Timber.d("Incoming http request")
-        if (text==null) return newFixedLengthResponse(Response.Status.NOT_FOUND, ClipDescription.MIMETYPE_TEXT_PLAIN, Message.ERROR_CONTENT_NOT_SET)
-        return newFixedLengthResponse(Response.Status.OK, ClipDescription.MIMETYPE_TEXT_HTML, text)
+        return if (text==null || session==null) {
+            newFixedLengthResponse(Response.Status.NOT_FOUND, ClipDescription.MIMETYPE_TEXT_PLAIN, Message.ERROR_CONTENT_NOT_SET)
+        } else if (session.uri == "/info") {
+            infoResponse(1)
+        } else {
+            newFixedLengthResponse(Response.Status.OK, ClipDescription.MIMETYPE_TEXT_HTML, text).apply {
+                addHeader("Content-Disposition", "filename=\"${System.currentTimeMillis()}.html\"")
+            }
+        }
     }
 
     fun setText(value: String) {

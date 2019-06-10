@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:allowBackup="false"
+        android:hardwareAccelerated="true"
         tools:ignore="GoogleAppIndexingWarning">
         <service
             android:name=".WebServerService"
@@ -53,6 +54,11 @@
                 <action android:name="com.jim.sharetocomputer.STOP_SHARE" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="portrait"
+            tools:replace="screenOrientation" />
     </application>
 
 </manifest>

@@ -17,22 +17,24 @@
 package com.jim.sharetocomputer.webserver
 
 import android.content.ClipDescription
+import com.jim.sharetocomputer.FileInfo
 import com.jim.sharetocomputer.Message
 import timber.log.Timber
 
 class WebServerText(port: Int): WebServer(port) {
 
     private var text: String? = null
+    private val filename = "${System.currentTimeMillis()}.txt"
 
     override fun serve(session: IHTTPSession?): Response {
         Timber.d("Incoming http request")
         return if (text==null || session==null) {
             newFixedLengthResponse(Response.Status.NOT_FOUND, ClipDescription.MIMETYPE_TEXT_PLAIN, Message.ERROR_CONTENT_NOT_SET)
         } else if (session.uri == "/info") {
-            infoResponse(1)
+            infoResponse(1, listOf(FileInfo(filename)))
         } else {
-            newFixedLengthResponse(Response.Status.OK, ClipDescription.MIMETYPE_TEXT_HTML, text).apply {
-                addHeader("Content-Disposition", "filename=\"${System.currentTimeMillis()}.html\"")
+            newFixedLengthResponse(Response.Status.OK, ClipDescription.MIMETYPE_TEXT_PLAIN, text).apply {
+                addHeader("Content-Disposition", "filename=\"$filename\"")
             }
         }
     }

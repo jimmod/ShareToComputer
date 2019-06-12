@@ -24,7 +24,6 @@ import org.junit.Before
 import org.junit.Test
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -69,6 +68,8 @@ class WebServerTextTest {
         Assert.assertEquals(200, code)
         val shareInfo = Gson().fromJson(content, ShareInfo::class.java)
         Assert.assertEquals(1, shareInfo.total)
+        Assert.assertEquals(1, shareInfo.files.size)
+        Assert.assertTrue(shareInfo.files[0].filename.matches("[0-9]+\\.txt".toRegex()))
     }
 
     private fun httpGet(url: String): Pair<Int, String> {

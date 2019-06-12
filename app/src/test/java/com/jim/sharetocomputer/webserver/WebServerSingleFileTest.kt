@@ -89,6 +89,8 @@ class WebServerSingleFileTest {
         Assert.assertEquals(200, code)
         val shareInfo = Gson().fromJson(String(content!!), ShareInfo::class.java)
         Assert.assertEquals(1, shareInfo.total)
+        Assert.assertEquals(1, shareInfo.files.size)
+        Assert.assertEquals("21", shareInfo.files[0].filename)
     }
 
     private fun httpGet(url: String): Pair<Int, ByteArray?> {

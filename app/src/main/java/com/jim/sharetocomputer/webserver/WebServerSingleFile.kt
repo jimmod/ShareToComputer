@@ -19,6 +19,7 @@ package com.jim.sharetocomputer.webserver
 import android.content.ClipDescription
 import android.content.Context
 import android.net.Uri
+import com.jim.sharetocomputer.FileInfo
 import com.jim.sharetocomputer.Message
 import com.jim.sharetocomputer.ext.getFileName
 import timber.log.Timber
@@ -41,7 +42,7 @@ class WebServerSingleFile(private val context: Context, port: Int) : WebServer(p
                 Message.ERROR_CONTENT_NOT_SET
             )
         } else if (session.uri == "/info") {
-            return infoResponse(1)
+            return infoResponse(1, listOf(FileInfo(context.getFileName(uri!!))))
         } else {
             val fis = context.contentResolver.openInputStream(uri!!)
             Timber.d("Response:$uri")

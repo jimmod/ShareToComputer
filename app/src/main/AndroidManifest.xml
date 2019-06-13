@@ -64,7 +64,7 @@
             android:enabled="true" />
 
         <service
-            android:name=".DownloadIntentService"
+            android:name=".DownloadService"
             android:enabled="true" />
     </application>
 

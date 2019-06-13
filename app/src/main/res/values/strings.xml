@@ -6,7 +6,7 @@
     <string name="version_name">1.0.1</string>
     <string name="channel_name">Default notification</string>
     <string name="channel_description">Common notification</string>
-    <string name="notification_server_title">&appname;</string>
+    <string name="notification_title">&appname;</string>
     <string name="notification_server_text">Open from your browser http://%1$s:%2$s</string>
     <string name="download_instruction">Go to your browser and open URL:\nhttp://%1$s:%2$s</string>
     <string name="default_instruction">To share select text/images/file and share it to \"&appname;\"</string>
@@ -22,5 +22,9 @@
     <string name="downloading">Downloading</string>
     <string name="qrcode_url">http://%1$s:%2$s</string>
     <string name="scan_qr_code">Scan QR code</string>
-    <string name="download_start_info">Downloading files to your download folder</string>
+
+    <string name="warning_newer_qrcode">[&appname;] Start downloading\nWarning: newer version QR code detected, please update to newer version</string>
+
+    <string name="info_download_start">[&appname;] Start downloading</string>
+    <string name="info_download_completed">[&appname;] Download complete</string>
 </resources>

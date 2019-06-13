@@ -21,8 +21,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
@@ -42,12 +44,19 @@ class QrCodeFragment: Fragment() {
                     result.resultCode,
                     result.resultData
                 )
-                val url = resultBarcode!!.contents
-                Timber.d("Downloading from: $url")
-                activity?.startService(DownloadIntentService.createIntent(activity!!, url))
+                val qrCodeInfo = Gson().fromJson(resultBarcode!!.contents, QrCodeInfo::class.java)
+                Timber.d("Downloading from: $qrCodeInfo")
+                ContextCompat.startForegroundService(
+                    activity!!,
+                    DownloadService.createIntent(activity!!, qrCodeInfo.url)
+                )
 
                 GlobalScope.launch(TestableDispatchers.Main) {
-                    Toast.makeText(activity, R.string.download_start_info, Toast.LENGTH_LONG).show()
+                    if (qrCodeInfo.version > Application.QR_CODE_VERSION) {
+                        Toast.makeText(activity, R.string.warning_newer_qrcode, Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(activity, R.string.info_download_start, Toast.LENGTH_LONG).show()
+                    }
                     findNavController().popBackStack()
                 }
 

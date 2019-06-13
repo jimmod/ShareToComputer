@@ -28,7 +28,7 @@ import org.junit.Test
 import timber.log.Timber
 import java.io.File
 
-class DownloadIntentServiceTest {
+class DownloadServiceTest {
 
     private val application by lazy { ApplicationProvider.getApplicationContext<Application>() }
     private lateinit var webserver: NanoHTTPD
@@ -40,7 +40,6 @@ class DownloadIntentServiceTest {
             File(downloadFolder, FILENAME_PNG2)
         )
     }
-
 
     @Before
     fun before() {
@@ -70,7 +69,7 @@ class DownloadIntentServiceTest {
     fun download_single_file() {
         webserver = MockServerSingleFile().apply { start() }
 
-        val intent = DownloadIntentService.createIntent(application, URL)
+        val intent = DownloadService.createIntent(application, URL)
         application.startService(intent)
 
         val actualFile = File(downloadFolder, FILENAME_PNG)
@@ -83,7 +82,7 @@ class DownloadIntentServiceTest {
     fun download_text_content() {
         webserver = MockServerTextContent().apply { start() }
 
-        val intent = DownloadIntentService.createIntent(application, URL)
+        val intent = DownloadService.createIntent(application, URL)
         application.startService(intent)
 
         val actualFile = File(downloadFolder, FILENAME_TEXT)
@@ -94,9 +93,9 @@ class DownloadIntentServiceTest {
 
     @Test
     fun download_multiple_files() {
-        webserver = MockServerTextContent().apply { start() }
+        webserver = MockServerMultipleFiles().apply { start() }
 
-        val intent = DownloadIntentService.createIntent(application, URL)
+        val intent = DownloadService.createIntent(application, URL)
         application.startService(intent)
 
         val actualFile1 = File(downloadFolder, FILENAME_PNG)
@@ -113,7 +112,7 @@ class DownloadIntentServiceTest {
     fun download_exist_filename_will_rename_it() {
         webserver = MockServerSingleFile().apply { start() }
 
-        val intent = DownloadIntentService.createIntent(application, URL)
+        val intent = DownloadService.createIntent(application, URL)
         application.startService(intent)
 
         val actualFile = File(downloadFolder, FILENAME_PNG)
@@ -121,7 +120,7 @@ class DownloadIntentServiceTest {
             Assert.assertEquals(true, actualFile.exists())
         }
 
-        val intent2 = DownloadIntentService.createIntent(application, URL)
+        val intent2 = DownloadService.createIntent(application, URL)
         application.startService(intent2)
 
         val actualFile2 = File(downloadFolder, FILENAME_PNG2)
@@ -204,7 +203,7 @@ class DownloadIntentServiceTest {
     }
 
     companion object {
-        private const val TAG = "[DownloadIntentServiceTest]"
+        private const val TAG = "[DownloadServiceTest]"
         private const val TEMP_FOLDER = "tempTest"
         private const val PORT = 8080
         private const val URL = "http://localhost:$PORT"

@@ -71,7 +71,7 @@ class WebServerService : Service() {
             val name = getString(R.string.channel_name)
             val descriptionText = getString(R.string.channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+            val channel = NotificationChannel(Application.CHANNEL_ID, name, importance).apply {
                 description = descriptionText
             }
             // Register the channel with the system
@@ -84,9 +84,9 @@ class WebServerService : Service() {
             addNextIntentWithParentStack(stopIntent)
             getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
         }
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+        val builder = NotificationCompat.Builder(this, Application.CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(getString(R.string.notification_server_title))
+            .setContentTitle(getString(R.string.notification_title))
             .setContentText(getString(R.string.notification_server_text, this.getIp(), port.toString()))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .addAction(R.mipmap.ic_launcher, getString(R.string.stop_share),
@@ -122,7 +122,6 @@ class WebServerService : Service() {
         private const val EXTRA_REQUEST = "request"
         private const val TIME_AUTO_STOP = 5 * 60 * 1000
         private const val NOTIFICATION_ID = 1945
-        private const val CHANNEL_ID = "DEFAULT_CHANNEL"
 
         var isRunning = MutableLiveData<Boolean>().apply { value = false }
 

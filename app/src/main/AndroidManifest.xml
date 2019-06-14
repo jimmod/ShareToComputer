@@ -47,12 +47,7 @@
 
         <activity android:name=".ActionActivity"
             android:taskAffinity=""
-            android:excludeFromRecents="true">
-
-            <intent-filter>
-                <action android:name="com.jim.sharetocomputer.STOP_SHARE" />
-            </intent-filter>
-        </activity>
+            android:excludeFromRecents="true" />
 
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"

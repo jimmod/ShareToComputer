@@ -16,10 +16,7 @@
 */
 package com.jim.sharetocomputer
 
-import android.app.DownloadManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -90,16 +87,32 @@ class DownloadService : Service() {
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
+        val stopIntent = ActionActivity.stopDownloadIntent(this)
+        val stopPendingIntent = TaskStackBuilder.create(this).run {
+            addNextIntentWithParentStack(stopIntent)
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
         return NotificationCompat.Builder(this, Application.CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(getString(R.string.notification_title))
             .setContentText(getString(R.string.downloading))
+            .addAction(
+                R.mipmap.ic_launcher, getString(R.string.stop),
+                stopPendingIntent
+            )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)!!
     }
 
     private fun updateNotification() {
         val notification = createNotification()
-            .setContentText(getString(R.string.info_downloading, completeIds.size + 1, queuedIds.size))
+            .setContentText(
+                resources.getQuantityString(
+                    R.plurals.info_downloading,
+                    queuedIds.size,
+                    completeIds.size + 1,
+                    queuedIds.size
+                )
+            )
             .build()
         startForeground(NOTIFICATION_ID, notification)
     }
@@ -148,7 +161,7 @@ class DownloadService : Service() {
         private const val EXTRA_URL = "url"
         private const val NOTIFICATION_ID = 4519
 
-        fun createIntent(context: Context, url: String): Intent {
+        fun createIntent(context: Context, url: String?): Intent {
             return Intent(context, DownloadService::class.java).apply {
                 putExtra(EXTRA_URL, url)
             }

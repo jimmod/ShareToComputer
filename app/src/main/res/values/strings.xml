@@ -18,9 +18,13 @@
     <string name="license_detail">GNU General Public License version 3 or later.\nCopyright © 2019 Jimmy</string>
     <string name="select_file">Select File</string>
     <string name="stop_share">Stop sharing</string>
+    <string name="stop">Stop</string>
     <string name="download">Download</string>
     <string name="downloading">Downloading</string>
-    <string name="info_downloading">Download %1$d of %2$d file(s)</string>
+    <plurals name="info_downloading">
+        <item quantity="one">Download %1$d of %2$d file</item>
+        <item quantity="other">Download %1$d of %2$d files</item>
+    </plurals>
     <string name="qrcode_url">http://%1$s:%2$s</string>
     <string name="scan_qr_code">Scan QR code</string>
 

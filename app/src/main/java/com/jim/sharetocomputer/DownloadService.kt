@@ -16,7 +16,10 @@
 */
 package com.jim.sharetocomputer
 
-import android.app.*
+import android.app.DownloadManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -38,22 +41,26 @@ import java.net.URL
 
 class DownloadService : Service() {
 
-    private val ids = mutableListOf<Long>()
+    private val queuedIds = mutableSetOf<Long>()
+    private val completeIds = mutableSetOf<Long>()
     private val onComplete = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1L)
+            val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1L) ?: -1
             Timber.d("download completed: $id")
-            ids.remove(id)
-            if (ids.isEmpty()) {
+            if (id == -1L) return
+            completeIds.add(id)
+            if (queuedIds.size == completeIds.size) {
                 Timber.d("all download completed")
                 Toast.makeText(this@DownloadService, R.string.info_download_completed, Toast.LENGTH_LONG).show()
                 stopSelf()
+            } else {
+                updateNotification()
             }
         }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(NOTIFICATION_ID, createNotification())
+        startForeground(NOTIFICATION_ID, createNotification().build())
         GlobalScope.launch {
             onHandleIntent(intent)
         }
@@ -70,7 +77,7 @@ class DownloadService : Service() {
         super.onDestroy()
     }
 
-    private fun createNotification(): Notification {
+    private fun createNotification(): NotificationCompat.Builder {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = getString(R.string.channel_name)
             val descriptionText = getString(R.string.channel_description)
@@ -83,12 +90,18 @@ class DownloadService : Service() {
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
-        val builder = NotificationCompat.Builder(this, Application.CHANNEL_ID)
+        return NotificationCompat.Builder(this, Application.CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(getString(R.string.notification_title))
             .setContentText(getString(R.string.downloading))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        return builder.build()
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)!!
+    }
+
+    private fun updateNotification() {
+        val notification = createNotification()
+            .setContentText(getString(R.string.info_downloading, completeIds.size + 1, queuedIds.size))
+            .build()
+        startForeground(NOTIFICATION_ID, notification)
     }
 
     private suspend fun onHandleIntent(intent: Intent?) = withContext(TestableDispatchers.Default) {
@@ -100,9 +113,10 @@ class DownloadService : Service() {
         val downloadManager = getSystemService(DownloadManager::class.java)
         requests.forEachIndexed { index, request ->
             val id = downloadManager.enqueue(request)
-            ids.add(id)
+            queuedIds.add(id)
             Timber.d("*enqueue[$index]: $id")
         }
+        updateNotification()
     }
 
     private fun getDownloadRequests(url: String, shareInfo: ShareInfo): List<DownloadManager.Request> {

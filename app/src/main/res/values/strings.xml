@@ -24,6 +24,7 @@
     <string name="scan_qr_code">Scan QR code</string>
 
     <string name="warning_newer_qrcode">[&appname;] Start downloading\nWarning: newer version QR code detected, please update to newer version</string>
+    <string name="warning_unknown_qrcode">Unknown QR code format</string>
 
     <string name="info_download_start">[&appname;] Start downloading</string>
     <string name="info_download_completed">[&appname;] Download complete</string>

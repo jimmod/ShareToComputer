@@ -20,7 +20,9 @@ import android.app.Application
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.test.core.app.ApplicationProvider
+import com.google.gson.Gson
 import com.jim.sharetocomputer.RobolectricApplication
+import com.jim.sharetocomputer.ShareInfo
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -54,6 +56,7 @@ class WebServerSingleFileTest {
     @Before
     fun setup() {
         webServer.start()
+        shadowContentResolver.registerInputStream(uri, ByteArrayInputStream(SAMPLE_TEXT.toByteArray(Charsets.UTF_8)))
     }
 
     @After
@@ -69,9 +72,6 @@ class WebServerSingleFileTest {
 
     @Test
     fun check_response_body() {
-        val uri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/21")
-        shadowContentResolver.registerInputStream(uri, ByteArrayInputStream(SAMPLE_TEXT.toByteArray(Charsets.UTF_8)))
-
         webServer.setUri(uri)
 
         val (code, content) = httpGet(TEST_URL)
@@ -79,6 +79,18 @@ class WebServerSingleFileTest {
         Assert.assertEquals(200, code)
         Assert.assertNotNull(content)
         Assert.assertEquals(SAMPLE_TEXT, String(content!!))
+    }
+
+    @Test
+    fun get_content_info() {
+        webServer.setUri(uri)
+
+        val (code, content) = httpGet(TEST_URL_INFO)
+        Assert.assertEquals(200, code)
+        val shareInfo = Gson().fromJson(String(content!!), ShareInfo::class.java)
+        Assert.assertEquals(1, shareInfo.total)
+        Assert.assertEquals(1, shareInfo.files.size)
+        Assert.assertEquals("21", shareInfo.files[0].filename)
     }
 
     private fun httpGet(url: String): Pair<Int, ByteArray?> {
@@ -99,8 +111,12 @@ class WebServerSingleFileTest {
     companion object {
         private const val TEST_PORT = 8080
         private const val TEST_URL = "http://localhost:$TEST_PORT"
+        private const val TEST_URL_INFO = "$TEST_URL/info"
 
         private const val SAMPLE_TEXT = "Hello World"
+
+        private val uri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/21")
+
 
     }
 }

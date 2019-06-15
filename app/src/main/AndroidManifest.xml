@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.jim.sharetocomputer.Application"
@@ -16,10 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:allowBackup="false"
+        android:hardwareAccelerated="true"
+        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <service
-            android:name=".WebServerService"
-            android:enabled="true" />
 
         <activity android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -47,12 +47,20 @@
 
         <activity android:name=".ActionActivity"
             android:taskAffinity=""
-            android:excludeFromRecents="true">
+            android:excludeFromRecents="true" />
 
-            <intent-filter>
-                <action android:name="com.jim.sharetocomputer.STOP_SHARE" />
-            </intent-filter>
-        </activity>
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="portrait"
+            tools:replace="screenOrientation" />
+
+        <service
+            android:name=".WebServerService"
+            android:enabled="true" />
+
+        <service
+            android:name=".DownloadService"
+            android:enabled="true" />
     </application>
 
 </manifest>

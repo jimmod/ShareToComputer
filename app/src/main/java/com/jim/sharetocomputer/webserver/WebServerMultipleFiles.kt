@@ -19,10 +19,9 @@ package com.jim.sharetocomputer.webserver
 import android.content.ClipDescription
 import android.content.Context
 import android.net.Uri
-import com.google.gson.Gson
+import com.jim.sharetocomputer.FileInfo
 import com.jim.sharetocomputer.Message
 import com.jim.sharetocomputer.R
-import com.jim.sharetocomputer.ShareInfo
 import com.jim.sharetocomputer.ext.appName
 import com.jim.sharetocomputer.ext.getFileName
 import kotlinx.coroutines.Dispatchers
@@ -51,22 +50,25 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
             return if (uris == null || session == null) {
                 throw IllegalArgumentException()
             } else if (session.uri == "/info") {
-                infoResponse()
+                infoResponse(
+                    uris?.size ?: 0,
+                    uris?.map { FileInfo(context.getFileName(it)) } ?: emptyList()
+                )
             } else if (session.uri == "/zip") {
                 Timber.d("*Creating zip")
                 zipResponse()
             } else if (session.uri.matches("/[0-9]+".toRegex())) {
                 val index = session.uri.split("/")[1].toInt()
-                if (index>=uris!!.size) throw IllegalArgumentException()
+                if (index >= uris!!.size) throw IllegalArgumentException()
                 val uri = uris!!.elementAt(index)
                 Timber.d("* uris[$index]:$uri")
                 contentUriResponse(uri)
-            } else if (session.uri=="/") {
+            } else if (session.uri == "/") {
                 mainWebResponse()
             } else {
                 throw IllegalArgumentException()
             }
-        } catch (e:IllegalArgumentException) {
+        } catch (e: IllegalArgumentException) {
             return newFixedLengthResponse(
                 Response.Status.NOT_FOUND,
                 ClipDescription.MIMETYPE_TEXT_PLAIN,
@@ -86,20 +88,6 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
             Response.Status.OK,
             "text/html",
             ByteArrayInputStream(content),
-            -1
-        )
-    }
-
-    private fun infoResponse(): Response {
-        val shareInfo = ShareInfo(
-            total = uris?.size?:0
-        )
-        val inputStream = ByteArrayInputStream(Gson().toJson(shareInfo).toByteArray())
-
-        return newFixedLengthResponse(
-            Response.Status.OK,
-            "application/json",
-            inputStream,
             -1
         )
     }
@@ -165,7 +153,7 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
 
     private fun tableBody(index: Int, filename: String) = """
         <tr>
-        <td>${index+1}</td>
+        <td>${index + 1}</td>
         <td>$filename</td>
         <td><a href="/$index">${context.getString(R.string.download)}</a></td>
         </tr>

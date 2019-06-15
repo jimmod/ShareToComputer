@@ -17,8 +17,8 @@
 package com.jim.sharetocomputer
 
 import com.jim.sharetocomputer.logging.DebugTree
-import com.jim.sharetocomputer.logging.ReleaseTree
 import com.jim.sharetocomputer.logging.KoinLogger
+import com.jim.sharetocomputer.logging.ReleaseTree
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -39,6 +39,11 @@ class Application : android.app.Application() {
             androidContext(this@Application)
             modules(applicationModule)
         }
+    }
+
+    companion object {
+        const val QR_CODE_VERSION = 1
+        const val CHANNEL_ID = "DEFAULT_CHANNEL"
     }
 
 }

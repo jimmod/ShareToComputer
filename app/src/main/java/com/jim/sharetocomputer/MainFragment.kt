@@ -17,12 +17,18 @@
 package com.jim.sharetocomputer
 
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.gson.Gson
+import com.google.zxing.BarcodeFormat
 import com.jim.sharetocomputer.databinding.FragmentMainBinding
+import com.jim.sharetocomputer.ext.convertDpToPx
+import com.jim.sharetocomputer.ext.getIp
+import com.journeyapps.barcodescanner.BarcodeEncoder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -39,6 +45,22 @@ class MainFragment : Fragment() {
         val binding = FragmentMainBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = mainViewModel
+        try {
+            val barcodeEncoder = BarcodeEncoder()
+            val barcodeContent = Gson().toJson(
+                QrCodeInfo(
+                    Application.QR_CODE_VERSION,
+                    context!!.getString(R.string.qrcode_url, context!!.getIp(), port.toString())
+                )
+            )
+            val bitmap = barcodeEncoder.encodeBitmap(
+                barcodeContent,
+                BarcodeFormat.QR_CODE,
+                context!!.convertDpToPx(200F).toInt(), context!!.convertDpToPx(200F).toInt())
+            mainViewModel.qrcode.value = BitmapDrawable(activity?.resources, bitmap)
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
 
         val request = arguments?.get(ARGS_REQUEST) as ShareRequest?
         mainViewModel.setRequest(request)

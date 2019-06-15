@@ -26,11 +26,25 @@ class ActionActivityTest {
         val intent = ActionActivity.stopShareIntent(application)
         uiRule.launchActivity(intent)
 
-        assertServiceStopped()
+        assertWebServerServiceStopped()
     }
 
-    private fun assertServiceStopped() {
+    @Test
+    fun stop_download() {
+        val intent = ActionActivity.stopDownloadIntent(application)
+        uiRule.launchActivity(intent)
+
+        assertDownloadServiceStopped()
+    }
+
+    private fun assertWebServerServiceStopped() {
         val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), null)
+        val serviceIntent = Shadows.shadowOf(uiRule.activity).nextStoppedService
+        assertThat(serviceIntent, ExtraMatchers.sameComponentAs(expectedIntent))
+    }
+
+    private fun assertDownloadServiceStopped() {
+        val expectedIntent = DownloadService.createIntent(ApplicationProvider.getApplicationContext(), null)
         val serviceIntent = Shadows.shadowOf(uiRule.activity).nextStoppedService
         assertThat(serviceIntent, ExtraMatchers.sameComponentAs(expectedIntent))
     }

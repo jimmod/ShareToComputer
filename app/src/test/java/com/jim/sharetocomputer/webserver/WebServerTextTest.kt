@@ -16,13 +16,14 @@
 */
 package com.jim.sharetocomputer.webserver
 
+import com.google.gson.Gson
+import com.jim.sharetocomputer.ShareInfo
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -59,6 +60,18 @@ class WebServerTextTest {
         Assert.assertEquals(SAMPLE_TEXT, body)
     }
 
+    @Test
+    fun get_content_info() {
+        webServer.setText(SAMPLE_TEXT)
+
+        val (code, content) = httpGet(TEST_URL_INFO)
+        Assert.assertEquals(200, code)
+        val shareInfo = Gson().fromJson(content, ShareInfo::class.java)
+        Assert.assertEquals(1, shareInfo.total)
+        Assert.assertEquals(1, shareInfo.files.size)
+        Assert.assertTrue(shareInfo.files[0].filename.matches("[0-9]+\\.txt".toRegex()))
+    }
+
     private fun httpGet(url: String): Pair<Int, String> {
         val obj = URL(url)
         val con = obj.openConnection() as HttpURLConnection
@@ -79,6 +92,7 @@ class WebServerTextTest {
     companion object {
         private const val TEST_PORT = 8080
         private const val TEST_URL = "http://localhost:$TEST_PORT"
+        private const val TEST_URL_INFO = "$TEST_URL/info"
 
         private const val SAMPLE_TEXT = "Hello World"
 

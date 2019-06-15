@@ -13,17 +13,25 @@ class ActionActivity: AppCompatActivity() {
         val action = intent?.action
         Timber.d("onCreate action: $action")
         if (action == ACTION_STOP_SHARE) {
-            Timber.i("Stopping service")
+            Timber.i("Stopping web server service")
             stopService(WebServerService.createIntent(this, null))
+        } else if (action == ACTION_STOP_DOWNLOAD) {
+            Timber.i("Stopping download service")
+            stopService(DownloadService.createIntent(this, null))
         }
         finish()
     }
 
     companion object {
         const val ACTION_STOP_SHARE = "com.jim.sharetocomputer.STOP_SHARE"
+        const val ACTION_STOP_DOWNLOAD = "com.jim.sharetocomputer.STOP_DOWNLOAD"
 
         fun stopShareIntent(context:Context) = Intent(context, ActionActivity::class.java).apply {
             action = ACTION_STOP_SHARE
+        }
+
+        fun stopDownloadIntent(context: Context) = Intent(context, ActionActivity::class.java).apply {
+            action = ACTION_STOP_DOWNLOAD
         }
 
     }

@@ -30,7 +30,7 @@ class MainViewModel(private val context: FragmentActivity, private val port: Int
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             }
             context.startActivityForResult(intent)?.let {result ->
-                Timber.d("Result: ${result.resultCode}|${result.resultData.data}")
+                Timber.d("Result: ${result.resultCode}|${result.resultData?.data}")
                 if (result.resultCode == Activity.RESULT_OK) {
                     result.resultData.data?.run {
                         startWebService(ShareRequest.ShareRequestSingleFile(this))

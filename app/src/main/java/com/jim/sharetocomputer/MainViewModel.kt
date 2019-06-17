@@ -1,10 +1,12 @@
 package com.jim.sharetocomputer
 
 import android.app.Activity
+import android.app.Instrumentation
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,23 +27,48 @@ class MainViewModel(private val context: FragmentActivity, private val port: Int
     fun selectFile() {
         Timber.d("select file")
         GlobalScope.launch(TestableDispatchers.Default) {
-            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            val intent = Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+                type = "*/*"
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            }
+            context.startActivityForResult(intent)?.let { result ->
+                handleSelectFileResult(result)
+            }
+        }
+    }
+
+    fun selectMedia() {
+        Timber.d("select media")
+        GlobalScope.launch(TestableDispatchers.Default) {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
                 type = "*/*"
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             }
             context.startActivityForResult(intent)?.let {result ->
-                Timber.d("Result: ${result.resultCode}|${result.resultData?.data}")
-                if (result.resultCode == Activity.RESULT_OK) {
-                    result.resultData.data?.run {
-                        startWebService(ShareRequest.ShareRequestSingleFile(this))
+                handleSelectFileResult(result)
+            }
+        }
+    }
+
+    fun scanQrCode() {
+        Timber.d("scan qr code")
+    }
+
+    private fun handleSelectFileResult(result: Instrumentation.ActivityResult) {
+        Timber.d("Result: ${result.resultCode}|${result.resultData?.data}")
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.resultData.data?.run {
+                startWebService(ShareRequest.ShareRequestSingleFile(this))
+            }
+            result.resultData.clipData?.run {
+                if (this.itemCount == 1) {
+                    startWebService(ShareRequest.ShareRequestSingleFile(this.getItemAt(0).uri))
+                } else {
+                    val uris = mutableListOf<Uri>()
+                    for (i in 0 until this.itemCount) {
+                        uris.add(this.getItemAt(i).uri)
                     }
-                    result.resultData.clipData?.run {
-                        val uris = mutableListOf<Uri>()
-                        for (i in 0 until this.itemCount) {
-                            uris.add(this.getItemAt(i).uri)
-                        }
-                        startWebService(ShareRequest.ShareRequestMultipleFile(uris))
-                    }
+                    startWebService(ShareRequest.ShareRequestMultipleFile(uris))
                 }
             }
         }

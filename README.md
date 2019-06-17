@@ -2,11 +2,10 @@
 
 # ShareToComputer
 
-Share any files to your computer through wifi
+Share any files from your phone to your computer & other phones through wifi
 
-<a href='https://play.google.com/store/apps/details?id=com.jim.sharetocomputer&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="60"/></a>
-
-**Will be on F-Droid soon*
+<a href='https://play.google.com/store/apps/details?id=com.jim.sharetocomputer&pcampaignid=github-jimmod'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="60"/></a>
+<a href='https://f-droid.org/en/packages/com.jim.sharetocomputer/'><img alt='Get it on F-DROID' src='https://fdroid.gitlab.io/artwork/badge/get-it-on.png' height="60"/></a>
 
 # Description
 

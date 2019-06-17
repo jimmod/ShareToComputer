@@ -9,6 +9,7 @@
     <string name="notification_title">&appname;</string>
     <string name="notification_server_text">Open from your browser http://%1$s:%2$s</string>
     <string name="download_instruction">Go to your browser and open URL:\nhttp://%1$s:%2$s</string>
+    <string name="download_url">http://%1$s:%2$s</string>
     <string name="default_instruction">To share select text/images/file and share it to \"&appname;\"</string>
     <string name="about">About</string>
     <string name="version">Version</string>
@@ -33,4 +34,8 @@
 
     <string name="info_download_start">[&appname;] Start downloading</string>
     <string name="info_download_completed">[&appname;] Download complete</string>
+    <string name="share_image_video">Share Image/Video</string>
+    <string name="share_file">Share File</string>
+    <string name="download_instruction_qr_code">Download with QR code</string>
+    <string name="download_instruction_browser">Download from browser:</string>
 </resources>

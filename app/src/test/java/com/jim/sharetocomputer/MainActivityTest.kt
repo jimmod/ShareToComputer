@@ -83,22 +83,50 @@ class MainActivityTest {
     }
 
     @Test
-    fun click_select_button_single_file() {
+    fun share_file_select_one_file() {
         launchActivity()
         setupDummyForActionGetContent_singleFile()
 
-        pressSelectButton()
+        pressShareFileButton()
 
         val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestSingleFile(uri))
         assertServiceStarted(expectedIntent)
     }
 
     @Test
-    fun click_select_button_multiple_files() {
+    fun share_file_select_multiple_files() {
         launchActivity()
         setupDummyForActionGetContent_multipleFiles()
 
-        pressSelectButton()
+        pressShareFileButton()
+
+        val expectedIntent = WebServerService.createIntent(
+            ApplicationProvider.getApplicationContext(),
+            ShareRequest.ShareRequestMultipleFile(uris)
+        )
+        assertServiceStarted(expectedIntent)
+    }
+
+    @Test
+    fun share_image_select_one_file() {
+        launchActivity()
+        setupDummyForActionPick_singleMedia()
+
+        pressShareImageVideoButton()
+
+        val expectedIntent = WebServerService.createIntent(
+            ApplicationProvider.getApplicationContext(),
+            ShareRequest.ShareRequestSingleFile(uri)
+        )
+        assertServiceStarted(expectedIntent)
+    }
+
+    @Test
+    fun share_image_select_multiple_files() {
+        launchActivity()
+        setupDummyForActionPick_multipleMedia()
+
+        pressShareImageVideoButton()
 
         val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestMultipleFile(uris))
         assertServiceStarted(expectedIntent)
@@ -123,12 +151,36 @@ class MainActivityTest {
         Intents.intending(IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT)).respondWith(result)
     }
 
+    private fun setupDummyForActionPick_singleMedia() {
+        val resultIntent = Intent().apply {
+            val item = ClipData.Item(uri)
+            clipData = ClipData("", emptyArray(), item)
+        }
+        val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent)
+        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_PICK)).respondWith(result)
+    }
+
+    private fun setupDummyForActionPick_multipleMedia() {
+        val resultIntent = Intent().apply {
+            val item = ClipData.Item(uris[0])
+            clipData = ClipData("", emptyArray(), item).apply {
+                addItem(ClipData.Item(uris[1]))
+            }
+        }
+        val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent)
+        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_PICK)).respondWith(result)
+    }
+
     private fun launchActivity(intent: Intent? = null) {
         uiRule.launchActivity(intent)
     }
 
-    private fun pressSelectButton() {
-        onView(withId(R.id.select_file)).perform(click())
+    private fun pressShareFileButton() {
+        onView(withId(R.id.share_file)).perform(click())
+    }
+
+    private fun pressShareImageVideoButton() {
+        onView(withId(R.id.share_media)).perform(click())
     }
 
     private fun assertServiceStarted(expectedIntent: Intent) {

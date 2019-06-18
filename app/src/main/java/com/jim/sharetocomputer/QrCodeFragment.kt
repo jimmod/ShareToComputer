@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -32,6 +33,7 @@ import com.jim.sharetocomputer.coroutines.TestableDispatchers
 import com.jim.sharetocomputer.ext.startBarcodeScan
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 
@@ -45,24 +47,26 @@ class QrCodeFragment : Fragment() {
                     result.resultCode,
                     result.resultData
                 )
-                var message = R.string.info_download_start
                 try {
-                    val qrCodeInfo = Gson().fromJson(resultBarcode!!.contents, QrCodeInfo::class.java)
-                    Timber.d("Downloading from: $qrCodeInfo")
-                    ContextCompat.startForegroundService(
-                        activity!!,
-                        DownloadService.createIntent(activity!!, qrCodeInfo.url)
-                    )
-                    if (qrCodeInfo.version > Application.QR_CODE_VERSION) {
-                        message = R.string.warning_newer_qrcode
+                    Gson().fromJson(resultBarcode!!.contents, QrCodeInfo::class.java)?.let { qrCodeInfo ->
+                        Timber.d("Downloading from: $qrCodeInfo")
+                        ContextCompat.startForegroundService(
+                            activity!!,
+                            DownloadService.createIntent(activity!!, qrCodeInfo.url)
+                        )
+                        if (qrCodeInfo.version > Application.QR_CODE_VERSION) {
+                            showToast(R.string.warning_newer_qrcode)
+                        } else {
+                            showToast(R.string.info_download_start)
+                        }
+
                     }
                 } catch (e: JsonSyntaxException) {
                     Timber.w(e)
-                    message = R.string.warning_unknown_qrcode
+                    showToast(R.string.warning_unknown_qrcode)
                 }
 
                 GlobalScope.launch(TestableDispatchers.Main) {
-                    Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
                     findNavController().popBackStack()
                 }
 
@@ -70,5 +74,10 @@ class QrCodeFragment : Fragment() {
         }
         return null
     }
+
+    private suspend fun showToast(@StringRes id: Int, duration: Int = Toast.LENGTH_LONG) =
+        withContext(TestableDispatchers.Main) {
+            Toast.makeText(activity, id, duration).show()
+        }
 
 }

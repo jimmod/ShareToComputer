@@ -18,6 +18,7 @@
         android:layout_marginEnd="40dp">
 
         <LinearLayout
+            android:id="@+id/layout_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -47,6 +48,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_sharing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"

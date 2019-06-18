@@ -1,0 +1,4 @@
+V1.1.0:
+- Update UI
+- Share to other phone with QR code
+- Bug fixes

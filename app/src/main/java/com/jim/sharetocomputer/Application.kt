@@ -24,7 +24,7 @@ import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
-class Application : android.app.Application() {
+open class Application : android.app.Application() {
 
     override fun onCreate() {
         super.onCreate()

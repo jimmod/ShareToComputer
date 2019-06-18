@@ -1,0 +1,9 @@
+<h2><b>Description</b></h2>
+Easiest and fastest way to share text, images or any files from your phone to your computer or phones.
+
+<h2><b>Feature</b></h2>
+- Share to your computer, use browser to download the files shared (require no installation on computer)
+- Share to other phones, choose "scan QR code"
+- Through wifi no internet access required
+- No ads, free
+- Open source check the full source code at https://github.com/jimmod/ShareToComputer

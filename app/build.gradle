@@ -10,9 +10,9 @@ android {
         applicationId "com.jim.sharetocomputer"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 1010
-        versionName "1.0.1"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        versionCode 1100
+        versionName "1.1.0"
+        testInstrumentationRunner "com.jim.sharetocomputer.TestRunner"
     }
     dataBinding {
         enabled = true
@@ -69,4 +69,5 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
+    androidTestImplementation 'tools.fastlane:screengrab:1.1.0'
 }

@@ -12,3 +12,6 @@
 /build
 /captures
 .externalNativeBuild
+fastlane/Appfile
+fastlane/report.xml
+fastlane/README.md

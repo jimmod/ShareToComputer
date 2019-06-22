@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_fragment_main_to_fragment_qrcode"
             app:destination="@id/fragment_qrcode" />
+        <action
+            android:id="@+id/action_fragment_main_to_fragment_setting"
+            app:destination="@id/fragment_setting" />
     </fragment>
 
 
@@ -28,5 +31,9 @@
         android:id="@+id/fragment_qrcode"
         android:name="com.jim.sharetocomputer.QrCodeFragment"
         android:label="@string/scan_qr_code" />
+    <fragment
+        android:id="@+id/fragment_setting"
+        android:name="com.jim.sharetocomputer.SettingFragment"
+        android:label="@string/setting" />
 
 </navigation>

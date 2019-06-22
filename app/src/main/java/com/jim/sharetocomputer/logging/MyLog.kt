@@ -13,6 +13,7 @@ import com.jim.sharetocomputer.BuildConfig
 object MyLog {
 
     const val LOG_FILE = "mylog.log"
+    private lateinit var logFolder: String
 
     fun d(msg: String) {
         XLog.tag(tag()).d(msg)
@@ -38,6 +39,8 @@ object MyLog {
         }
     }
 
+    fun logFilePath() = "$logFolder/$LOG_FILE"
+
     fun setupLogging(context: Context) {
         val config = LogConfiguration.Builder()
             .logLevel(
@@ -50,7 +53,7 @@ object MyLog {
             .build()
 
         val androidPrinter = AndroidPrinter()
-        val logFolder = context.filesDir.absolutePath + "/log"
+        logFolder = context.filesDir.absolutePath + "/log"
         val filePrinter = FilePrinter.Builder(logFolder)
             .fileNameGenerator(ChangelessFileNameGenerator(LOG_FILE))        // Default: ChangelessFileNameGenerator("log")
             .flattener(ClassicFlattener())

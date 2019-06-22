@@ -58,6 +58,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$gsonVersion"
     implementation "com.journeyapps:zxing-android-embedded:$zxingVersion"
     implementation "com.elvishew:xlog:$xlogVersion"
+    implementation "androidx.preference:preference:1.1.0-beta01"
 
     testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.test:core:$testExtJunit"

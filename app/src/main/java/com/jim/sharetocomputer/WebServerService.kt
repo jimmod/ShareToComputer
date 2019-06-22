@@ -24,6 +24,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.MutableLiveData
 import com.jim.sharetocomputer.ext.getIp
+import com.jim.sharetocomputer.logging.MyLog
 import com.jim.sharetocomputer.webserver.WebServer
 import com.jim.sharetocomputer.webserver.WebServerMultipleFiles
 import com.jim.sharetocomputer.webserver.WebServerSingleFile
@@ -31,7 +32,6 @@ import com.jim.sharetocomputer.webserver.WebServerText
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
-import timber.log.Timber
 
 class WebServerService : Service() {
 
@@ -45,7 +45,7 @@ class WebServerService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Timber.d("onStartCommand")
+        MyLog.i("onStartCommand")
         startForeground(NOTIFICATION_ID, createNotification())
         intent?.getParcelableExtra<ShareRequest>(EXTRA_REQUEST)?.let { request ->
             webServer?.stop()
@@ -55,7 +55,6 @@ class WebServerService : Service() {
                 is ShareRequest.ShareRequestMultipleFile -> get<WebServerMultipleFiles>().apply { setUris(request.uris) }
             }
             stopTime = System.currentTimeMillis() + TIME_AUTO_STOP
-            Timber.d("Starting WebServer")
             StopperThread(stopTime).start()
             webServer!!.start()
 
@@ -99,6 +98,7 @@ class WebServerService : Service() {
         override fun run() {
             while (true) {
                 if (System.currentTimeMillis() >= stopTime) {
+                    MyLog.i("Auto stop service after ${TIME_AUTO_STOP}ms")
                     stopSelf()
                     break
                 }
@@ -108,7 +108,7 @@ class WebServerService : Service() {
     }
 
     override fun onDestroy() {
-        Timber.d("onDestroy")
+        MyLog.i("onDestroy")
         webServer?.stop()
         isRunning.value = false
         super.onDestroy()

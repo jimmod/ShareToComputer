@@ -17,10 +17,12 @@
 package com.jim.sharetocomputer
 
 import android.app.Application
+import com.elvishew.xlog.LogConfiguration
+import com.elvishew.xlog.LogLevel
+import com.elvishew.xlog.XLog
+import com.elvishew.xlog.printer.ConsolePrinter
 import com.jim.sharetocomputer.coroutines.DirectDispatcher
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
-import com.jim.sharetocomputer.logging.StdoutTree
-import timber.log.Timber
 
 class RobolectricApplication: Application() {
 
@@ -35,8 +37,14 @@ class RobolectricApplication: Application() {
     }
 
     private fun setupLogging() {
-        Timber.uprootAll()
-        Timber.plant(StdoutTree())
+        val config = LogConfiguration.Builder()
+            .logLevel(LogLevel.ALL)
+            .build()
+
+        XLog.init(
+            config,
+            ConsolePrinter()
+        )
     }
 
     private fun setupCoroutinesDispatchers() {

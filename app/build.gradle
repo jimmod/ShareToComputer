@@ -19,7 +19,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -51,13 +51,13 @@ dependencies {
     implementation "org.nanohttpd:nanohttpd:$nanohttpd"
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
-    implementation "com.jakewharton.timber:timber:$timber"
     implementation "org.koin:koin-android:$koinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
     implementation "org.koin:koin-android-viewmodel:$koinVersion"
     implementation "com.google.code.gson:gson:$gsonVersion"
-    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+    implementation "com.journeyapps:zxing-android-embedded:$zxingVersion"
+    implementation "com.elvishew:xlog:$xlogVersion"
 
     testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.test:core:$testExtJunit"

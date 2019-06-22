@@ -16,23 +16,21 @@
 */
 package com.jim.sharetocomputer
 
-import com.jim.sharetocomputer.logging.DebugTree
 import com.jim.sharetocomputer.logging.KoinLogger
-import com.jim.sharetocomputer.logging.ReleaseTree
+import com.jim.sharetocomputer.logging.MyLog
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
-import timber.log.Timber
+
 
 open class Application : android.app.Application() {
 
     override fun onCreate() {
         super.onCreate()
-        if (BuildConfig.DEBUG) {
-            Timber.plant(DebugTree())
-        } else {
-            Timber.plant(ReleaseTree())
-        }
+
+        MyLog.setupLogging(this)
+        MyLog.i("Application is starting")
+        MyLog.i("*QR Code version: $QR_CODE_VERSION")
 
         startKoin {
             KoinApplication.logger = KoinLogger()

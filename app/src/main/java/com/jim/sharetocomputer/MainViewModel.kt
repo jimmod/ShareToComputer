@@ -13,9 +13,9 @@ import androidx.lifecycle.ViewModel
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
 import com.jim.sharetocomputer.ext.getIp
 import com.jim.sharetocomputer.ext.startActivityForResult
+import com.jim.sharetocomputer.logging.MyLog
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 
 class MainViewModel(private val context: FragmentActivity, private val port: Int) : ViewModel() {
@@ -25,7 +25,7 @@ class MainViewModel(private val context: FragmentActivity, private val port: Int
     var qrcode = MutableLiveData<Drawable>()
 
     fun selectFile() {
-        Timber.d("select file")
+        MyLog.i("Select File")
         GlobalScope.launch(TestableDispatchers.Default) {
             val intent = Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
                 type = "*/*"
@@ -38,7 +38,7 @@ class MainViewModel(private val context: FragmentActivity, private val port: Int
     }
 
     fun selectMedia() {
-        Timber.d("select media")
+        MyLog.i("Select Media")
         GlobalScope.launch(TestableDispatchers.Default) {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
                 type = "*/*"
@@ -50,12 +50,8 @@ class MainViewModel(private val context: FragmentActivity, private val port: Int
         }
     }
 
-    fun scanQrCode() {
-        Timber.d("scan qr code")
-    }
-
     private fun handleSelectFileResult(result: Instrumentation.ActivityResult) {
-        Timber.d("Result: ${result.resultCode}|${result.resultData?.data}")
+        MyLog.i("*Result: ${result.resultCode}|${result.resultData?.extras?.keySet()}")
         if (result.resultCode == Activity.RESULT_OK) {
             result.resultData.data?.run {
                 startWebService(ShareRequest.ShareRequestSingleFile(this))
@@ -79,10 +75,10 @@ class MainViewModel(private val context: FragmentActivity, private val port: Int
     fun setRequest(request: ShareRequest?) {
         this.request = request
         if (request != null) {
-            Timber.d("request found $request")
+            MyLog.i("request found $request")
             startWebService(request)
         } else {
-            Timber.d("no request")
+            MyLog.i("no request")
         }
     }
 
@@ -93,10 +89,10 @@ class MainViewModel(private val context: FragmentActivity, private val port: Int
     private fun startWebService(request: ShareRequest) {
         val intent = WebServerService.createIntent(context, request)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Timber.d("Starting web service foreground")
+            MyLog.i("Starting web service foreground")
             context.startForegroundService(intent)
         } else {
-            Timber.d("Starting web service")
+            MyLog.i("Starting web service")
             context.startService(intent)
         }
     }

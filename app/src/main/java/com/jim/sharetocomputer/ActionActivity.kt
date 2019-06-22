@@ -4,19 +4,19 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import timber.log.Timber
+import com.jim.sharetocomputer.logging.MyLog
 
 class ActionActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val action = intent?.action
-        Timber.d("onCreate action: $action")
+        MyLog.i("onCreate action: $action")
         if (action == ACTION_STOP_SHARE) {
-            Timber.i("Stopping web server service")
+            MyLog.i("*Stopping web server service")
             stopService(WebServerService.createIntent(this, null))
         } else if (action == ACTION_STOP_DOWNLOAD) {
-            Timber.i("Stopping download service")
+            MyLog.i("*Stopping download service")
             stopService(DownloadService.createIntent(this, null))
         }
         finish()

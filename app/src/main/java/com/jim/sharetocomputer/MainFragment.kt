@@ -16,7 +16,7 @@
 */
 package com.jim.sharetocomputer
 
-import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,47 +28,51 @@ import com.google.zxing.BarcodeFormat
 import com.jim.sharetocomputer.databinding.FragmentMainBinding
 import com.jim.sharetocomputer.ext.convertDpToPx
 import com.jim.sharetocomputer.ext.getIp
+import com.jim.sharetocomputer.logging.MyLog
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
-import timber.log.Timber
 
 
 class MainFragment : Fragment() {
 
     private val port by inject<Int>(named("PORT"))
     private val mainViewModel: MainViewModel by viewModel(parameters = { parametersOf(activity) })
+    private val qrCodeBitmap by lazy { generateQrCode() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        MyLog.i("onCreate")
         val binding = FragmentMainBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = mainViewModel
-        try {
-            val barcodeEncoder = BarcodeEncoder()
-            val barcodeContent = Gson().toJson(
-                QrCodeInfo(
-                    Application.QR_CODE_VERSION,
-                    context!!.getString(R.string.qrcode_url, context!!.getIp(), port.toString())
-                )
-            )
-            val bitmap = barcodeEncoder.encodeBitmap(
-                barcodeContent,
-                BarcodeFormat.QR_CODE,
-                context!!.convertDpToPx(200F).toInt(), context!!.convertDpToPx(200F).toInt())
-            mainViewModel.qrcode.value = BitmapDrawable(activity?.resources, bitmap)
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
+        mainViewModel.qrcode.value = BitmapDrawable(activity?.resources, qrCodeBitmap)
 
         val request = arguments?.get(ARGS_REQUEST) as ShareRequest?
         mainViewModel.setRequest(request)
         return binding.root
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Timber.d("onActivityResult $requestCode $resultCode ${data?.extras?.keySet()}")
+    private fun generateQrCode(): Bitmap {
+        val barcodeEncoder = BarcodeEncoder()
+        val barcodeContent = Gson().toJson(
+            QrCodeInfo(
+                Application.QR_CODE_VERSION,
+                context!!.getString(R.string.qrcode_url, context!!.getIp(), port.toString())
+            )
+        )
+        return barcodeEncoder.encodeBitmap(
+            barcodeContent,
+            BarcodeFormat.QR_CODE,
+            context!!.convertDpToPx(200F).toInt(), context!!.convertDpToPx(200F).toInt()
+        )
+    }
+
+    override fun onDestroyView() {
+        MyLog.i("onDestroy")
+        qrCodeBitmap.recycle()
+        super.onDestroyView()
     }
 
     companion object {

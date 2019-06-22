@@ -19,6 +19,7 @@ package com.jim.sharetocomputer.webserver
 import com.google.gson.Gson
 import com.jim.sharetocomputer.FileInfo
 import com.jim.sharetocomputer.ShareInfo
+import com.jim.sharetocomputer.logging.MyLog
 import fi.iki.elonen.NanoHTTPD
 import java.io.ByteArrayInputStream
 
@@ -32,5 +33,10 @@ open class WebServer(port: Int): NanoHTTPD(port) {
             inputStream,
             -1
         )
+    }
+
+    override fun start() {
+        MyLog.i("Starting WebServer")
+        super.start()
     }
 }

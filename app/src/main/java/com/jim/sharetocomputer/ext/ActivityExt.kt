@@ -7,10 +7,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
+import com.jim.sharetocomputer.logging.MyLog
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 private const val TAG = "startActivityForResult"
 
@@ -25,7 +25,7 @@ suspend fun FragmentActivity.startActivityForResult(intent: Intent): Instrumenta
     if (fragment==null) {
         fragment = FragmentHelper()
         GlobalScope.launch(TestableDispatchers.Main) {
-            Timber.d("Add headless fragment")
+            MyLog.d("Add headless fragment")
             supportFragmentManager
                 .beginTransaction()
                 .add(fragment, TAG)
@@ -40,7 +40,7 @@ suspend fun FragmentActivity.startActivityForResult(intent: Intent): Instrumenta
     return result.await()
 }
 
-suspend fun FragmentActivity.startBarcodeScan(): Instrumentation.ActivityResult? {
+suspend fun FragmentActivity.startQrCodeScan(): Instrumentation.ActivityResult? {
     if (isFinishing) {
         return null
     }
@@ -51,7 +51,7 @@ suspend fun FragmentActivity.startBarcodeScan(): Instrumentation.ActivityResult?
     if (fragment==null) {
         fragment = FragmentHelper()
         GlobalScope.launch(TestableDispatchers.Main) {
-            Timber.d("Add headless fragment")
+            MyLog.d("Add headless fragment")
             supportFragmentManager
                 .beginTransaction()
                 .add(fragment, TAG)
@@ -72,12 +72,12 @@ class FragmentHelper : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Timber.d("onActivityResult $requestCode|$resultCode")
+        MyLog.i("onActivityResult $requestCode|$resultCode|${data?.extras?.keySet()}")
         map[requestCode].complete(Instrumentation.ActivityResult(resultCode, data))
     }
 
     fun addMapping(requestCode: Int, result: CompletableDeferred<Instrumentation.ActivityResult>) {
-        Timber.d("Add result code mapping $requestCode|")
+        MyLog.d("Add result code mapping $requestCode|")
         map.put(requestCode, result)
     }
 

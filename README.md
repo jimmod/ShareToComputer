@@ -4,8 +4,12 @@
 
 Share any files from your phone to your computer & other phones through wifi
 
-<a href='https://play.google.com/store/apps/details?id=com.jim.sharetocomputer&pcampaignid=github-jimmod'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="60"/></a>
-<a href='https://f-droid.org/en/packages/com.jim.sharetocomputer/'><img alt='Get it on F-DROID' src='https://fdroid.gitlab.io/artwork/badge/get-it-on.png' height="60"/></a>
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.jim.sharetocomputer/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=com.jim.sharetocomputer)
 
 # Description
 
@@ -19,4 +23,3 @@ Require no installation on your computer.
 3. It will open the app and display an URL, e.g http://192.168.0.100:8080
 4. Go to your computer browser and open the the URL
 5. it will download/display the content you shared
-

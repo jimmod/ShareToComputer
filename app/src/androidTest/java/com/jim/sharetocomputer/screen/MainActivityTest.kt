@@ -14,8 +14,7 @@ import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.rule.IntentsTestRule
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import com.jim.sharetocomputer.MainActivity
 import com.jim.sharetocomputer.R
 import com.jim.sharetocomputer.permissionGrant
@@ -54,6 +53,14 @@ class MainActivityUiTest {
         Screengrab.screenshot("screen_about")
     }
 
+    @Test
+    fun screen_setting() {
+        clickDrawerMenu(R.id.fragment_setting)
+
+        assertSettingScreenIsDisplayed()
+        Screengrab.screenshot("screen_setting")
+    }
+
     private fun setupDummyImageSelect() {
         val resultIntent = Intent().apply {
             val item = ClipData.Item(uri)
@@ -82,6 +89,10 @@ class MainActivityUiTest {
 
     private fun assertSharingScreenIsDisplayed() {
         onView(withId(R.id.layout_sharing)).check(matches(isDisplayed()))
+    }
+
+    private fun assertSettingScreenIsDisplayed() {
+        onView(withText(R.string.title_send_feedback_preference)).check(matches(isDisplayed()))
     }
 
     companion object {

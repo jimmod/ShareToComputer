@@ -1,0 +1,4 @@
+V1.1.1:
+- Add setting - download log & send feedback via email
+- Fix QR code json not compatible with other version
+- Fix wrong filename & mime-type on some device (Pixel 3)

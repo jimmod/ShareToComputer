@@ -25,7 +25,7 @@ platform :android do
   end
 
   desc "Build debug and test APK for screenshots"
-  lane :build_for_screengrab do
+  lane :screenshot do
     build_android_app(
       task: 'assemble',
       build_type: 'Debug'
@@ -34,6 +34,7 @@ platform :android do
       task: 'assemble',
       build_type: 'AndroidTest'
     )
+    screengrab
   end
 
   desc "Deploy a new beta version to the Google Play"

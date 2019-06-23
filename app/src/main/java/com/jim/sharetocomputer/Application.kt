@@ -40,6 +40,7 @@ open class Application : android.app.Application() {
     }
 
     companion object {
+        const val EMAIL_ADDRESS = "sharetocomputer@gmail.com"
         const val QR_CODE_VERSION = 1
         const val CHANNEL_ID = "DEFAULT_CHANNEL"
     }

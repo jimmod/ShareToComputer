@@ -129,19 +129,6 @@ class DownloadServiceTest {
         }
     }
 
-    private fun assertTimeout(timeout: Int, function: () -> Unit) {
-        var run = true
-        val loopUntilTimestamp = System.currentTimeMillis() + timeout
-        while (System.currentTimeMillis() < loopUntilTimestamp && run) {
-            try {
-                function()
-                run = false
-            } catch (e: AssertionError) {
-            }
-        }
-        function()
-    }
-
     inner class MockServerSingleFile : NanoHTTPD(PORT) {
 
         override fun serve(session: IHTTPSession): Response {

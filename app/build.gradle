@@ -58,9 +58,11 @@ dependencies {
     implementation "com.google.code.gson:gson:$gsonVersion"
     implementation "com.journeyapps:zxing-android-embedded:$zxingVersion"
     implementation "com.elvishew:xlog:$xlogVersion"
-    implementation "androidx.preference:preference:1.1.0-beta01"
+    implementation "androidx.preference:preference:$androidxPreferenceVersion"
+    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-beta01'
 
     testImplementation "junit:junit:$junitVersion"
+    //noinspection GradleDependency
     testImplementation "androidx.test:core:$testExtJunit"
     testImplementation "androidx.test.ext:junit:$testExtJunit"
     testImplementation "org.robolectric:robolectric:$robolectric"

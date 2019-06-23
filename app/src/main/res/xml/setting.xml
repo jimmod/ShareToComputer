@@ -8,4 +8,9 @@
         android:title="@string/title_download_log_preference"
         app:iconSpaceReserved="false" />
 
+    <Preference
+        android:key="send_feedback"
+        android:title="@string/title_send_feedback_preference"
+        app:iconSpaceReserved="false" />
+
 </PreferenceScreen>

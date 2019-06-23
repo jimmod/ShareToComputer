@@ -139,9 +139,8 @@ class DownloadService : Service() {
         return shareInfo.files.mapIndexed { index, fileInfo ->
             val uri = Uri.parse("$url/$index")
             return@mapIndexed DownloadManager.Request(uri).apply {
-                this.setTitle(getString(R.string.app_name))
+                this.setTitle(fileInfo.filename)
                 this.setDescription(getString(R.string.downloading))
-                this.setMimeType("*/*")
                 this.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
                 this.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileInfo.filename)
             }

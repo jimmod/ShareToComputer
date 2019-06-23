@@ -15,6 +15,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.jim.sharetocomputer.*
 import org.hamcrest.Matchers
 import org.junit.*
+import tools.fastlane.screengrab.Screengrab
 import java.io.File
 
 class SettingFragmentTest {
@@ -38,6 +39,7 @@ class SettingFragmentTest {
 
         downloadLog().check(matches(isDisplayed()))
         sendFeedback().check(matches(isDisplayed()))
+        Screengrab.screenshot("screen_setting")
     }
 
 

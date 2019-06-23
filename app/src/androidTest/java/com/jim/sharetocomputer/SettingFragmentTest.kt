@@ -1,4 +1,4 @@
-package com.jim.sharetocomputer.screen
+package com.jim.sharetocomputer
 
 import android.app.Activity
 import android.app.Instrumentation.ActivityResult
@@ -12,10 +12,8 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.*
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import com.jim.sharetocomputer.*
 import org.hamcrest.Matchers
 import org.junit.*
-import tools.fastlane.screengrab.Screengrab
 import java.io.File
 
 class SettingFragmentTest {
@@ -39,7 +37,6 @@ class SettingFragmentTest {
 
         downloadLog().check(matches(isDisplayed()))
         sendFeedback().check(matches(isDisplayed()))
-        Screengrab.screenshot("screen_setting")
     }
 
 

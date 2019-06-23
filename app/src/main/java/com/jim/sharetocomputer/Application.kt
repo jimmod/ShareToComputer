@@ -18,6 +18,7 @@ package com.jim.sharetocomputer
 
 import com.jim.sharetocomputer.logging.KoinLogger
 import com.jim.sharetocomputer.logging.MyLog
+import com.jim.sharetocomputer.logging.MyUncaughtExceptionHandler
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -27,6 +28,10 @@ open class Application : android.app.Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        Thread.setDefaultUncaughtExceptionHandler(
+            MyUncaughtExceptionHandler(Thread.getDefaultUncaughtExceptionHandler())
+        )
 
         MyLog.setupLogging(this)
         MyLog.i("Application is starting")

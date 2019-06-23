@@ -35,7 +35,6 @@ import com.jim.sharetocomputer.ext.startQrCodeScan
 import com.jim.sharetocomputer.logging.MyLog
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class QrCodeFragment : Fragment() {
@@ -60,7 +59,7 @@ class QrCodeFragment : Fragment() {
         super.onDestroy()
     }
 
-    private suspend fun handleQrCodeResult(result: Instrumentation.ActivityResult) {
+    private fun handleQrCodeResult(result: Instrumentation.ActivityResult) {
         val resultQrCode: IntentResult? = IntentIntegrator.parseActivityResult(
             IntentIntegrator.REQUEST_CODE,
             result.resultCode,
@@ -86,8 +85,8 @@ class QrCodeFragment : Fragment() {
         }
     }
 
-    private suspend fun showToast(@StringRes id: Int, duration: Int = Toast.LENGTH_LONG) =
-        withContext(TestableDispatchers.Main) {
+    private fun showToast(@StringRes id: Int, duration: Int = Toast.LENGTH_LONG) =
+        GlobalScope.launch(TestableDispatchers.Main) {
             Toast.makeText(activity, id, duration).show()
         }
 

@@ -1,3 +1,11 @@
 package com.jim.sharetocomputer
 
-data class QrCodeInfo(val version: Int, val url: String)
+import com.google.gson.annotations.SerializedName
+
+data class QrCodeInfo(
+    @SerializedName("version")
+    val version: Int,
+
+    @SerializedName("url")
+    val url: String
+)

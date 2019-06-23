@@ -33,7 +33,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.jim.sharetocomputer.databinding.ActivityMainBinding
-import timber.log.Timber
+import com.jim.sharetocomputer.logging.MyLog
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("onCreate")
+        MyLog.i("onCreate")
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
         navController = Navigation.findNavController(this, R.id.main_nav_fragment)
@@ -72,6 +72,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        MyLog.i("onDestroy")
+        super.onDestroy()
+    }
+
     private fun Intent.generateShareRequest(): ShareRequest? {
         if (action== Intent.ACTION_SEND && type?.startsWith("text")==true) {
             return ShareRequest.ShareRequestText(getStringExtra(Intent.EXTRA_TEXT) ?: "")
@@ -84,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                 return ShareRequest.ShareRequestMultipleFile(uris)
             }
         } else {
-            Timber.w("Unknown action: $action|$type")
+            MyLog.w("Unknown action: $action|$type")
         }
         return null
     }
@@ -99,10 +104,5 @@ class MainActivity : AppCompatActivity() {
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Timber.d("onActivityResult $requestCode $resultCode ${data?.extras?.keySet()}")
     }
 }

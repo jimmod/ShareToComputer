@@ -22,7 +22,7 @@ import android.net.Uri
 import com.jim.sharetocomputer.FileInfo
 import com.jim.sharetocomputer.Message
 import com.jim.sharetocomputer.ext.getFileName
-import timber.log.Timber
+import com.jim.sharetocomputer.logging.MyLog
 
 class WebServerSingleFile(private val context: Context, port: Int) : WebServer(port) {
 
@@ -33,9 +33,9 @@ class WebServerSingleFile(private val context: Context, port: Int) : WebServer(p
     }
 
     override fun serve(session: IHTTPSession?): Response {
-        Timber.d("Incoming http request")
+        MyLog.i("Incoming http request from ${session?.remoteIpAddress}(${session?.remoteHostName}) to ${session?.uri}")
         if (uri == null || session == null) {
-            Timber.w("Empty uri")
+            MyLog.w("Empty uri($uri) or session($session)")
             return newFixedLengthResponse(
                 Response.Status.NOT_FOUND,
                 ClipDescription.MIMETYPE_TEXT_PLAIN,
@@ -45,7 +45,7 @@ class WebServerSingleFile(private val context: Context, port: Int) : WebServer(p
             return infoResponse(1, listOf(FileInfo(context.getFileName(uri!!))))
         } else {
             val fis = context.contentResolver.openInputStream(uri!!)
-            Timber.d("Response:$uri")
+            MyLog.d("*Response:$uri")
             return newFixedLengthResponse(
                 Response.Status.OK,
                 null,

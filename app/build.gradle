@@ -19,7 +19,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -36,6 +36,15 @@ android {
         warningsAsErrors true
         abortOnError true
     }
+    sourceSets {
+        String sharedTestDir = 'src/sharedTest/java'
+        test {
+            java.srcDir sharedTestDir
+        }
+        androidTest {
+            java.srcDir sharedTestDir
+        }
+    }
 
     useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
@@ -51,15 +60,18 @@ dependencies {
     implementation "org.nanohttpd:nanohttpd:$nanohttpd"
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
-    implementation "com.jakewharton.timber:timber:$timber"
     implementation "org.koin:koin-android:$koinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
     implementation "org.koin:koin-android-viewmodel:$koinVersion"
     implementation "com.google.code.gson:gson:$gsonVersion"
-    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+    implementation "com.journeyapps:zxing-android-embedded:$zxingVersion"
+    implementation "com.elvishew:xlog:$xlogVersion"
+    implementation "androidx.preference:preference:$androidxPreferenceVersion"
+    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-beta01'
 
     testImplementation "junit:junit:$junitVersion"
+    //noinspection GradleDependency
     testImplementation "androidx.test:core:$testExtJunit"
     testImplementation "androidx.test.ext:junit:$testExtJunit"
     testImplementation "org.robolectric:robolectric:$robolectric"

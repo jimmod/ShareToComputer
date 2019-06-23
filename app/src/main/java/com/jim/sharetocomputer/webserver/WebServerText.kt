@@ -19,7 +19,7 @@ package com.jim.sharetocomputer.webserver
 import android.content.ClipDescription
 import com.jim.sharetocomputer.FileInfo
 import com.jim.sharetocomputer.Message
-import timber.log.Timber
+import com.jim.sharetocomputer.logging.MyLog
 
 class WebServerText(port: Int): WebServer(port) {
 
@@ -27,7 +27,7 @@ class WebServerText(port: Int): WebServer(port) {
     private val filename = "${System.currentTimeMillis()}.txt"
 
     override fun serve(session: IHTTPSession?): Response {
-        Timber.d("Incoming http request")
+        MyLog.i("Incoming http request from ${session?.remoteIpAddress}(${session?.remoteHostName}) to ${session?.uri}")
         return if (text==null || session==null) {
             newFixedLengthResponse(Response.Status.NOT_FOUND, ClipDescription.MIMETYPE_TEXT_PLAIN, Message.ERROR_CONTENT_NOT_SET)
         } else if (session.uri == "/info") {

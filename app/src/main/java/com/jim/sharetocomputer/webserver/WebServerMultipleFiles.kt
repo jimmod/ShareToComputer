@@ -24,11 +24,11 @@ import com.jim.sharetocomputer.Message
 import com.jim.sharetocomputer.R
 import com.jim.sharetocomputer.ext.appName
 import com.jim.sharetocomputer.ext.getFileName
+import com.jim.sharetocomputer.logging.MyLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.OutputStream
 import java.io.PipedInputStream
@@ -45,7 +45,7 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
     }
 
     override fun serve(session: IHTTPSession?): Response {
-        Timber.i("Incoming http request ${session?.uri}")
+        MyLog.i("Incoming http request from ${session?.remoteIpAddress}(${session?.remoteHostName}) to ${session?.uri}")
         try {
             return if (uris == null || session == null) {
                 throw IllegalArgumentException()
@@ -55,13 +55,12 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
                     uris?.map { FileInfo(context.getFileName(it)) } ?: emptyList()
                 )
             } else if (session.uri == "/zip") {
-                Timber.d("*Creating zip")
                 zipResponse()
             } else if (session.uri.matches("/[0-9]+".toRegex())) {
                 val index = session.uri.split("/")[1].toInt()
                 if (index >= uris!!.size) throw IllegalArgumentException()
                 val uri = uris!!.elementAt(index)
-                Timber.d("* uris[$index]:$uri")
+                MyLog.d("*Response uris[$index]:$uri")
                 contentUriResponse(uri)
             } else if (session.uri == "/") {
                 mainWebResponse()
@@ -133,7 +132,6 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
     }
 
     private suspend fun writeZip(outputStream: OutputStream) = withContext(Dispatchers.Default) {
-        Timber.d("Streaming zip file")
         try {
             ZipOutputStream(outputStream).use { zip ->
                 uris!!.forEach { uri ->
@@ -143,9 +141,10 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
                         zip.write(it)
                     }
                 }
+                MyLog.i("Streaming zip file done")
             }
         } catch (e: Exception) {
-            Timber.e(e)
+            MyLog.e("Error on streaming zip", e)
         } finally {
             outputStream.close()
         }

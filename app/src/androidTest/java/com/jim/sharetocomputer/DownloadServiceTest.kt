@@ -20,15 +20,14 @@ import android.app.Application
 import android.os.Environment
 import androidx.test.core.app.ApplicationProvider
 import com.google.gson.Gson
+import com.jim.sharetocomputer.logging.MyLog
 import fi.iki.elonen.NanoHTTPD
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
-import timber.log.Timber
+import org.junit.*
 import java.io.File
 
 class DownloadServiceTest {
+    @get:Rule
+    val grant = permissionGrant()
 
     private val application by lazy { ApplicationProvider.getApplicationContext<Application>() }
     private lateinit var webserver: NanoHTTPD
@@ -55,8 +54,8 @@ class DownloadServiceTest {
     private fun cleanTempFile() {
         fileTemp.forEach {
             val result = it.delete()
-            if (!result) Timber.e("Fail delete ${it.absolutePath}")
-            else Timber.e("Success delete ${it.absolutePath}")
+            if (!result) MyLog.e("Fail delete ${it.absolutePath}")
+            else MyLog.e("Success delete ${it.absolutePath}")
         }
         assertTimeout(1000) {
             fileTemp.forEach {
@@ -129,23 +128,10 @@ class DownloadServiceTest {
         }
     }
 
-    private fun assertTimeout(timeout: Int, function: () -> Unit) {
-        var run = true
-        val loopUntilTimestamp = System.currentTimeMillis() + timeout
-        while (System.currentTimeMillis() < loopUntilTimestamp && run) {
-            try {
-                function()
-                run = false
-            } catch (e: AssertionError) {
-            }
-        }
-        function()
-    }
-
     inner class MockServerSingleFile : NanoHTTPD(PORT) {
 
         override fun serve(session: IHTTPSession): Response {
-            Timber.d("$TAG incoming request")
+            MyLog.d("$TAG incoming request")
             return if (session.uri == "/info") {
                 newFixedLengthResponse(Response.Status.OK, "application/json", INFO_RESPONSE_SINGLE_FILE)
             } else {
@@ -161,7 +147,7 @@ class DownloadServiceTest {
     inner class MockServerTextContent : NanoHTTPD(PORT) {
 
         override fun serve(session: IHTTPSession): Response {
-            Timber.d("$TAG incoming request")
+            MyLog.d("$TAG incoming request")
             return if (session.uri == "/info") {
                 newFixedLengthResponse(Response.Status.OK, "application/json", INFO_RESPONSE_TEXT)
             } else {
@@ -177,7 +163,7 @@ class DownloadServiceTest {
     inner class MockServerMultipleFiles : NanoHTTPD(PORT) {
 
         override fun serve(session: IHTTPSession): Response {
-            Timber.d("$TAG incoming request")
+            MyLog.d("$TAG incoming request")
             return when {
                 session.uri == "/info" -> newFixedLengthResponse(
                     Response.Status.OK,

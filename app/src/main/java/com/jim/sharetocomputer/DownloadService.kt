@@ -29,10 +29,10 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.google.gson.Gson
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
+import com.jim.sharetocomputer.logging.MyLog
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.io.InputStreamReader
 import java.net.URL
 
@@ -43,11 +43,11 @@ class DownloadService : Service() {
     private val onComplete = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1L) ?: -1
-            Timber.d("download completed: $id")
+            MyLog.i("A download completed: $id")
             if (id == -1L) return
             completeIds.add(id)
             if (queuedIds.size == completeIds.size) {
-                Timber.d("all download completed")
+                MyLog.i("All download completed")
                 Toast.makeText(this@DownloadService, R.string.info_download_completed, Toast.LENGTH_LONG).show()
                 stopSelf()
             } else {
@@ -57,6 +57,7 @@ class DownloadService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        MyLog.i("onStartCommand")
         startForeground(NOTIFICATION_ID, createNotification().build())
         GlobalScope.launch {
             onHandleIntent(intent)
@@ -118,16 +119,18 @@ class DownloadService : Service() {
     }
 
     private suspend fun onHandleIntent(intent: Intent?) = withContext(TestableDispatchers.Default) {
-        Timber.d("onHandleIntent")
         val url = intent!!.getStringExtra(EXTRA_URL)
         val shareInfo = downloadInfo(url)
-        val requests = getDownloadRequests(url, shareInfo)
-
+        if (shareInfo == null) {
+            stopSelf()
+        }
+        val requests = getDownloadRequests(url, shareInfo!!)
+        MyLog.d("Prepare to download $shareInfo")
         val downloadManager = getSystemService(DownloadManager::class.java)
         requests.forEachIndexed { index, request ->
             val id = downloadManager.enqueue(request)
             queuedIds.add(id)
-            Timber.d("*enqueue[$index]: $id")
+            MyLog.i("*enqueue[$index]: $id")
         }
         updateNotification()
     }
@@ -145,11 +148,16 @@ class DownloadService : Service() {
         }
     }
 
-    private fun downloadInfo(client: String): ShareInfo {
-        val url = URL("$client/info")
-        val inputStream = InputStreamReader(url.openStream())
+    private fun downloadInfo(client: String): ShareInfo? {
+        return try {
+            val url = URL("$client/info")
+            val inputStream = InputStreamReader(url.openStream())
 
-        return Gson().fromJson(inputStream, ShareInfo::class.java)
+            Gson().fromJson(inputStream, ShareInfo::class.java)
+        } catch (e: Throwable) {
+            MyLog.e("Error on downloading and parsing info", e)
+            null
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? {

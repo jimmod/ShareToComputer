@@ -18,6 +18,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.jim.sharetocomputer.MainActivity
 import com.jim.sharetocomputer.R
+import com.jim.sharetocomputer.permissionGrant
 import org.junit.Rule
 import org.junit.Test
 import tools.fastlane.screengrab.Screengrab
@@ -28,6 +29,9 @@ class MainActivityUiTest {
 
     @get:Rule
     val rule = IntentsTestRule(MainActivity::class.java)
+
+    @get:Rule
+    val grant = permissionGrant()
 
     @Test
     fun screen_sharing() {

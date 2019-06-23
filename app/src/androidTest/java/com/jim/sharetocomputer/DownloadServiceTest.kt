@@ -22,13 +22,12 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.gson.Gson
 import com.jim.sharetocomputer.logging.MyLog
 import fi.iki.elonen.NanoHTTPD
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.*
 import java.io.File
 
 class DownloadServiceTest {
+    @get:Rule
+    val grant = permissionGrant()
 
     private val application by lazy { ApplicationProvider.getApplicationContext<Application>() }
     private lateinit var webserver: NanoHTTPD

@@ -1,6 +1,5 @@
 package com.jim.sharetocomputer.screen
 
-import android.Manifest
 import android.app.Activity
 import android.app.Instrumentation.ActivityResult
 import android.content.Intent
@@ -13,11 +12,7 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.*
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.rule.GrantPermissionRule
-import com.jim.sharetocomputer.Application
-import com.jim.sharetocomputer.R
-import com.jim.sharetocomputer.SettingFragment
-import com.jim.sharetocomputer.assertTimeout
+import com.jim.sharetocomputer.*
 import org.hamcrest.Matchers
 import org.junit.*
 import java.io.File
@@ -25,10 +20,7 @@ import java.io.File
 class SettingFragmentTest {
 
     @get:Rule
-    val grant = GrantPermissionRule.grant(
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )!!
+    val grant = permissionGrant()
 
     @Before
     fun before() {

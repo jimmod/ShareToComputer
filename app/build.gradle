@@ -36,6 +36,15 @@ android {
         warningsAsErrors true
         abortOnError true
     }
+    sourceSets {
+        String sharedTestDir = 'src/sharedTest/java'
+        test {
+            java.srcDir sharedTestDir
+        }
+        androidTest {
+            java.srcDir sharedTestDir
+        }
+    }
 
     useLibrary 'android.test.runner'
     useLibrary 'android.test.base'

@@ -40,10 +40,11 @@ class MainFragment : Fragment() {
 
     private val port by inject<Int>(named("PORT"))
     private val mainViewModel: MainViewModel by viewModel(parameters = { parametersOf(activity) })
-    private val qrCodeBitmap by lazy { generateQrCode() }
+    private var qrCodeBitmap: Bitmap? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         MyLog.i("onCreate")
+        qrCodeBitmap = generateQrCode()
         val binding = FragmentMainBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = mainViewModel
@@ -71,7 +72,7 @@ class MainFragment : Fragment() {
 
     override fun onDestroyView() {
         MyLog.i("onDestroy")
-        qrCodeBitmap.recycle()
+        qrCodeBitmap?.recycle()
         super.onDestroyView()
     }
 

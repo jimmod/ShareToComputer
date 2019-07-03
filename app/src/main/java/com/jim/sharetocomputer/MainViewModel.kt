@@ -27,10 +27,12 @@ class MainViewModel(private val context: FragmentActivity, private val port: Int
     fun selectFile() {
         MyLog.i("Select File")
         GlobalScope.launch(TestableDispatchers.Default) {
-            val intent = Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-                type = "*/*"
-                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            }
+            val intent =
+                Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "*/*"
+                    putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                }
             context.startActivityForResult(intent)?.let { result ->
                 handleSelectFileResult(result)
             }
@@ -44,7 +46,7 @@ class MainViewModel(private val context: FragmentActivity, private val port: Int
                 type = "*/*"
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             }
-            context.startActivityForResult(intent)?.let {result ->
+            context.startActivityForResult(intent)?.let { result ->
                 handleSelectFileResult(result)
             }
         }

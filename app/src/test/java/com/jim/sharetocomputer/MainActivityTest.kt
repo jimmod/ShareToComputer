@@ -137,7 +137,7 @@ class MainActivityTest {
             data = uri
         }
         val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent)
-        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT)).respondWith(result)
+        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_OPEN_DOCUMENT)).respondWith(result)
     }
 
     private fun setupDummyForActionGetContent_multipleFiles() {
@@ -148,7 +148,7 @@ class MainActivityTest {
             }
         }
         val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent)
-        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT)).respondWith(result)
+        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_OPEN_DOCUMENT)).respondWith(result)
     }
 
     private fun setupDummyForActionPick_singleMedia() {

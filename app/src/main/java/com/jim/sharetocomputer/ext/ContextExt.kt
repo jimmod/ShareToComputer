@@ -12,7 +12,7 @@ import com.jim.sharetocomputer.R
 import com.jim.sharetocomputer.logging.MyLog
 
 
-internal fun Context.appName(): String = getString(R.string.app_name)
+internal fun Context.getAppName(): String = getString(R.string.app_name)
 
 internal fun Context.getFileName(uri: Uri): String {
     var result: String? = null

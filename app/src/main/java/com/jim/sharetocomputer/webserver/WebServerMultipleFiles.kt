@@ -22,7 +22,7 @@ import android.net.Uri
 import com.jim.sharetocomputer.FileInfo
 import com.jim.sharetocomputer.Message
 import com.jim.sharetocomputer.R
-import com.jim.sharetocomputer.ext.appName
+import com.jim.sharetocomputer.ext.getAppName
 import com.jim.sharetocomputer.ext.getFileName
 import com.jim.sharetocomputer.logging.MyLog
 import kotlinx.coroutines.Dispatchers
@@ -80,6 +80,7 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
         var content: ByteArray? = null
         context.assets.open("web/main.html").use {
             content = String(it.readBytes())
+                .replace("[[title]]", context.getAppName())
                 .replace("[[tbody]]", generateTbody())
                 .toByteArray()
         }
@@ -101,7 +102,7 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
             inputStream,
             -1
         ).apply {
-            addHeader("Content-Disposition", "filename=\"${context.appName()}.zip\"")
+            addHeader("Content-Disposition", "filename=\"${context.getAppName()}.zip\"")
         }.also {
             GlobalScope.launch {
                 writeZip(outputStream)

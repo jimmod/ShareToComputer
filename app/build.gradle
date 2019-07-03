@@ -68,7 +68,7 @@ dependencies {
     implementation "com.journeyapps:zxing-android-embedded:$zxingVersion"
     implementation "com.elvishew:xlog:$xlogVersion"
     implementation "androidx.preference:preference:$androidxPreferenceVersion"
-    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-beta01'
+    debugImplementation 'androidx.fragment:fragment-testing:1.2.0-alpha01'
 
     testImplementation "junit:junit:$junitVersion"
     //noinspection GradleDependency

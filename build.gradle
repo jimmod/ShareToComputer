@@ -20,7 +20,7 @@ buildscript {
         gsonVersion = '2.8.5'
         zxingVersion = '3.6.0'
         xlogVersion = '1.6.1'
-        androidxPreferenceVersion = '1.1.0-beta01'
+        androidxPreferenceVersion = '1.1.0-rc01'
 
         junitVersion = '4.12'
         robolectric = '4.2'

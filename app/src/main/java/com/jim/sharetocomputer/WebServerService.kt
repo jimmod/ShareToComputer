@@ -36,7 +36,7 @@ import org.koin.core.qualifier.named
 class WebServerService : Service() {
 
     private var webServer: WebServer? = null
-    private var stopTime: Long = Long.MAX_VALUE
+    private var stopper: StopperThread? = null
     private val port by inject<Int>(named(Module.PORT))
 
     override fun onCreate() {
@@ -49,13 +49,13 @@ class WebServerService : Service() {
         startForeground(NOTIFICATION_ID, createNotification())
         intent?.getParcelableExtra<ShareRequest>(EXTRA_REQUEST)?.let { request ->
             webServer?.stop()
+            stopper?.cancel()
             webServer = when (request) {
                 is ShareRequest.ShareRequestText -> get<WebServerText>().apply { setText(request.text) }
                 is ShareRequest.ShareRequestSingleFile -> get<WebServerSingleFile>().apply { setUri(request.uri) }
                 is ShareRequest.ShareRequestMultipleFile -> get<WebServerMultipleFiles>().apply { setUris(request.uris) }
             }
-            stopTime = System.currentTimeMillis() + TIME_AUTO_STOP
-            StopperThread(stopTime).start()
+            stopper = StopperThread(this, webServer!!).also { it.start() }
             webServer!!.start()
 
             return START_STICKY
@@ -93,23 +93,10 @@ class WebServerService : Service() {
         return builder.build()
     }
 
-
-    inner class StopperThread(private val stopTime: Long): Thread() {
-        override fun run() {
-            while (true) {
-                if (System.currentTimeMillis() >= stopTime) {
-                    MyLog.i("Auto stop service after ${TIME_AUTO_STOP}ms")
-                    stopSelf()
-                    break
-                }
-                sleep(stopTime-System.currentTimeMillis())
-            }
-        }
-    }
-
     override fun onDestroy() {
         MyLog.i("onDestroy")
         webServer?.stop()
+        stopper?.cancel()
         isRunning.value = false
         super.onDestroy()
     }
@@ -120,7 +107,6 @@ class WebServerService : Service() {
 
     companion object {
         private const val EXTRA_REQUEST = "request"
-        private const val TIME_AUTO_STOP = 5 * 60 * 1000
         private const val NOTIFICATION_ID = 1945
 
         var isRunning = MutableLiveData<Boolean>().apply { value = false }
@@ -132,4 +118,33 @@ class WebServerService : Service() {
         }
     }
 
+}
+
+class StopperThread(
+    private val service: Service,
+    private val webServer: WebServer,
+    private val autoStopTime: Int = TIME_AUTO_STOP
+) : Thread() {
+
+    var isStopped = false
+
+    override fun run() {
+        while (!isStopped) {
+            val autoStopTime = webServer.lastAccessTime + autoStopTime
+            if (System.currentTimeMillis() >= autoStopTime) {
+                MyLog.i("Auto stop service after ${autoStopTime}ms")
+                service.stopSelf()
+                break
+            }
+            sleep(autoStopTime - System.currentTimeMillis())
+        }
+    }
+
+    fun cancel() {
+        isStopped = true
+    }
+
+    companion object {
+        private const val TIME_AUTO_STOP = 5 * 60 * 1000
+    }
 }

@@ -34,6 +34,7 @@ class WebServerSingleFile(private val context: Context, port: Int) : WebServer(p
 
     override fun serve(session: IHTTPSession?): Response {
         MyLog.i("Incoming http request from ${session?.remoteIpAddress}(${session?.remoteHostName}) to ${session?.uri}")
+        notifyAccess()
         if (uri == null || session == null) {
             MyLog.w("Empty uri($uri) or session($session)")
             return newFixedLengthResponse(
@@ -49,7 +50,7 @@ class WebServerSingleFile(private val context: Context, port: Int) : WebServer(p
             return newFixedLengthResponse(
                 Response.Status.OK,
                 null,
-                fis,
+                InputStreamNotifyWebServer(fis!!, this),
                 -1
             ).apply {
                 addHeader("Content-Disposition", "filename=\"${context.getFileName(uri!!)}\"")

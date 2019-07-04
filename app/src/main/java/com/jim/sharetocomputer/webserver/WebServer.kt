@@ -24,15 +24,23 @@ import fi.iki.elonen.NanoHTTPD
 import java.io.ByteArrayInputStream
 
 open class WebServer(port: Int): NanoHTTPD(port) {
+
+    var lastAccessTime: Long = System.currentTimeMillis()
+        protected set
+
     protected fun infoResponse(total: Int, files: List<FileInfo>): Response {
         val shareInfo = ShareInfo(total, files)
         val inputStream = ByteArrayInputStream(Gson().toJson(shareInfo).toByteArray())
         return newFixedLengthResponse(
             Response.Status.OK,
             "application/json",
-            inputStream,
+            InputStreamNotifyWebServer(inputStream, this),
             -1
         )
+    }
+
+    open fun notifyAccess() {
+        lastAccessTime = System.currentTimeMillis()
     }
 
     override fun start() {

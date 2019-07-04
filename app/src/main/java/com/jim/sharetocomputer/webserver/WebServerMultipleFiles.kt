@@ -33,6 +33,7 @@ import java.io.ByteArrayInputStream
 import java.io.OutputStream
 import java.io.PipedInputStream
 import java.io.PipedOutputStream
+import java.util.zip.Deflater
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
@@ -46,6 +47,7 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
 
     override fun serve(session: IHTTPSession?): Response {
         MyLog.i("Incoming http request from ${session?.remoteIpAddress}(${session?.remoteHostName}) to ${session?.uri}")
+        notifyAccess()
         try {
             return if (uris == null || session == null) {
                 throw IllegalArgumentException()
@@ -87,7 +89,7 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
         return newFixedLengthResponse(
             Response.Status.OK,
             "text/html",
-            ByteArrayInputStream(content),
+            InputStreamNotifyWebServer(ByteArrayInputStream(content), this),
             -1
         )
     }
@@ -99,7 +101,7 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
         return newFixedLengthResponse(
             Response.Status.OK,
             "application/zip",
-            inputStream,
+            InputStreamNotifyWebServer(inputStream, this),
             -1
         ).apply {
             addHeader("Content-Disposition", "filename=\"${context.getAppName()}.zip\"")
@@ -115,7 +117,7 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
         return newFixedLengthResponse(
             Response.Status.OK,
             null,
-            fis,
+            InputStreamNotifyWebServer(fis!!, this),
             -1
         ).apply {
             addHeader("Content-Disposition", "filename=\"${context.getFileName(uri)}\"")
@@ -135,11 +137,23 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
     private suspend fun writeZip(outputStream: OutputStream) = withContext(Dispatchers.Default) {
         try {
             ZipOutputStream(outputStream).use { zip ->
+                zip.setLevel(Deflater.NO_COMPRESSION)
                 uris!!.forEach { uri ->
-                    val fis = context.contentResolver.openInputStream(uri)
-                    zip.putNextEntry(ZipEntry(context.getFileName(uri)))
-                    fis?.readBytes()?.let {
-                        zip.write(it)
+                    context.contentResolver.openInputStream(uri).use { inputStream ->
+                        inputStream.use {
+                            zip.putNextEntry(ZipEntry(context.getFileName(uri)))
+                            val size = inputStream!!.available().toLong()
+                            val bufferSize =
+                                minOf(size, availableMemory()).let {
+                                    if (it < Int.MAX_VALUE) return@let it.toInt()
+                                    else Int.MAX_VALUE
+                                }
+                            val buffer = ByteArray(bufferSize)
+                            var result: Int
+                            while (inputStream.read(buffer).also { result = it } >= 0) {
+                                zip.write(buffer, 0, result)
+                            }
+                        }
                     }
                 }
                 MyLog.i("Streaming zip file done")
@@ -151,6 +165,8 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
         }
     }
 
+    private fun availableMemory(): Long = Runtime.getRuntime().freeMemory()
+
     private fun tableBody(index: Int, filename: String) = """
         <tr>
         <td>${index + 1}</td>
@@ -158,5 +174,9 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
         <td><a href="/$index">${context.getString(R.string.download)}</a></td>
         </tr>
     """.trimIndent()
+
+    companion object {
+        const val BUFFER_SIZE = 1024 * 1024
+    }
 
 }

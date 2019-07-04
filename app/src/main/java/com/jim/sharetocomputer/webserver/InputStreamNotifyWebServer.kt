@@ -14,12 +14,31 @@
     You should have received a copy of the GNU General Public License
     along with Share To Computer.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.jim.sharetocomputer
+package com.jim.sharetocomputer.webserver
 
-import android.Manifest
-import androidx.test.rule.GrantPermissionRule
+import java.io.InputStream
 
-internal fun permissionGrant() = GrantPermissionRule.grant(
-    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-    Manifest.permission.READ_EXTERNAL_STORAGE
-)!!
+class InputStreamNotifyWebServer(private val wrappedInputStream: InputStream, private val webServer: WebServer) :
+    InputStream() {
+
+    override fun read(): Int {
+        notifyWebServer()
+        return wrappedInputStream.read()
+    }
+
+    override fun read(b: ByteArray?): Int {
+        notifyWebServer()
+        return wrappedInputStream.read(b)
+    }
+
+    override fun read(b: ByteArray?, off: Int, len: Int): Int {
+        notifyWebServer()
+        return wrappedInputStream.read(b, off, len)
+    }
+
+
+    private fun notifyWebServer() {
+        webServer.notifyAccess()
+    }
+
+}

@@ -27,6 +27,7 @@ class WebServerText(port: Int): WebServer(port) {
     private val filename = "${System.currentTimeMillis()}.txt"
 
     override fun serve(session: IHTTPSession?): Response {
+        notifyAccess()
         MyLog.i("Incoming http request from ${session?.remoteIpAddress}(${session?.remoteHostName}) to ${session?.uri}")
         return if (text==null || session==null) {
             newFixedLengthResponse(Response.Status.NOT_FOUND, ClipDescription.MIMETYPE_TEXT_PLAIN, Message.ERROR_CONTENT_NOT_SET)

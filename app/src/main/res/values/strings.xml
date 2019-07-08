@@ -42,5 +42,6 @@
     <string name="title_send_feedback_preference">Send Feedback</string>
     <string name="feedback_mail_title">[&appname;] Feedback</string>
     <string name="error_fail_send_feedback">Unable to open mail application</string>
+    <string name="error_wifi_required">Connection to Wi-Fi network is required</string>
     <string name="feedback_email_body"><![CDATA[<put your feedback here>]]></string>
 </resources>

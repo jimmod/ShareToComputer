@@ -17,8 +17,12 @@
 package com.jim.sharetocomputer
 
 import android.app.*
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.NetworkInfo
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
@@ -38,10 +42,21 @@ class WebServerService : Service() {
     private var webServer: WebServer? = null
     private var stopper: StopperThread? = null
     private val port by inject<Int>(named(Module.PORT))
+    private val wifiListener = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val info = intent?.getParcelableExtra<NetworkInfo>(WifiManager.EXTRA_NETWORK_INFO)
+            if (info == null || !info.isConnected) {
+                MyLog.i("Stopping service because Wi-Fi disconnected")
+                stopSelf()
+            }
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
         isRunning.value = true
+        val filter = IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION)
+        registerReceiver(wifiListener, filter)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -95,6 +110,7 @@ class WebServerService : Service() {
 
     override fun onDestroy() {
         MyLog.i("onDestroy")
+        unregisterReceiver(wifiListener)
         webServer?.stop()
         stopper?.cancel()
         isRunning.value = false

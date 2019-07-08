@@ -16,7 +16,6 @@
 */
 package com.jim.sharetocomputer
 
-import androidx.fragment.app.FragmentActivity
 import com.jim.sharetocomputer.webserver.WebServerMultipleFiles
 import com.jim.sharetocomputer.webserver.WebServerSingleFile
 import com.jim.sharetocomputer.webserver.WebServerText
@@ -30,7 +29,7 @@ val applicationModule = module {
     factory { WebServerText(get(named(Module.PORT))) }
     factory { WebServerSingleFile(get(), get(named(Module.PORT))) }
     factory { WebServerMultipleFiles(get(), get(named(Module.PORT))) }
-    viewModel { (activity: FragmentActivity) -> MainViewModel(activity, get(named(Module.PORT))) }
+    viewModel { MainViewModel(get(named(Module.PORT))) }
 }
 
 object Module {

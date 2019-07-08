@@ -32,14 +32,13 @@ import com.jim.sharetocomputer.logging.MyLog
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 
 
 class MainFragment : Fragment() {
 
     private val port by inject<Int>(named("PORT"))
-    private val mainViewModel: MainViewModel by viewModel(parameters = { parametersOf(activity) })
+    private val mainViewModel: MainViewModel by viewModel()
     private var qrCodeBitmap: Bitmap? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,7 +47,8 @@ class MainFragment : Fragment() {
         val binding = FragmentMainBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = mainViewModel
-        mainViewModel.qrcode.value = BitmapDrawable(activity?.resources, qrCodeBitmap)
+        mainViewModel.qrcode.value = BitmapDrawable(activity!!.resources, qrCodeBitmap)
+        mainViewModel.context = activity!!
 
         val request = arguments?.get(ARGS_REQUEST) as ShareRequest?
         mainViewModel.setRequest(request)

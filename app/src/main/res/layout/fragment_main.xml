@@ -72,7 +72,7 @@
                 android:layout_marginTop="5dp"
                 android:background="@android:color/darker_gray"
                 android:gravity="center"
-                android:text="@{@string/download_url(viewModel.deviceIp(), viewModel.devicePort())}"
+                android:text="@{@string/download_url(viewModel.deviceIp, viewModel.devicePort)}"
                 android:textIsSelectable="true"
                 android:textSize="20sp"
                 tools:text="http://192.168.0.2:8080" />
@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:background="@{viewModel.qrcode}"
+                android:background="@{viewModel.qrCode}"
                 android:contentDescription="@string/scan_qr_code"
                 tools:background="@mipmap/ic_launcher_round" />
 

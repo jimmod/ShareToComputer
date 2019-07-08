@@ -26,6 +26,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowLooper
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -39,6 +40,7 @@ class MainActivityTest {
 
     @Before
     fun before() {
+        ShadowLooper.pauseMainLooper()
         startKoin {
             androidContext(ApplicationProvider.getApplicationContext())
             modules(applicationModule)

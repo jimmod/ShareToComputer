@@ -51,6 +51,10 @@ android {
     useLibrary 'android.test.mock'
 }
 
+configurations.all {
+    resolutionStrategy.force "androidx.test:core:$testExtCore"
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
@@ -72,7 +76,7 @@ dependencies {
 
     testImplementation "junit:junit:$junitVersion"
     //noinspection GradleDependency
-    testImplementation "androidx.test:core:$testExtJunit"
+    testImplementation "androidx.test:core:$testExtCore"
     testImplementation "androidx.test.ext:junit:$testExtJunit"
     testImplementation "org.robolectric:robolectric:$robolectric"
     testImplementation "org.koin:koin-test:$koinVersion"

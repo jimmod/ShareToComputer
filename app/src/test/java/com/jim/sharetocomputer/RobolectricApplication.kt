@@ -17,12 +17,21 @@
 package com.jim.sharetocomputer
 
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.NetworkInfo
 import com.elvishew.xlog.LogConfiguration
 import com.elvishew.xlog.LogLevel
 import com.elvishew.xlog.XLog
 import com.elvishew.xlog.printer.ConsolePrinter
 import com.jim.sharetocomputer.coroutines.DirectDispatcher
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
+import org.robolectric.Shadows
+import org.robolectric.shadows.ShadowNetwork
+import org.robolectric.shadows.ShadowNetworkCapabilities
+import org.robolectric.shadows.ShadowNetworkInfo
+
 
 class RobolectricApplication: Application() {
 
@@ -34,6 +43,28 @@ class RobolectricApplication: Application() {
         setupCoroutinesDispatchers()
 
         WebServerService.isRunning.value = false
+
+        setupConnection()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun setupConnection() {
+        val wifiNetworkInfo = ShadowNetworkInfo.newInstance(
+            NetworkInfo.DetailedState.CONNECTED,
+            ConnectivityManager.TYPE_WIFI,
+            0,
+            true,
+            NetworkInfo.State.CONNECTED
+        )
+        val network = ShadowNetwork.newInstance(ConnectivityManager.TYPE_WIFI)
+        val networkCapabilities = ShadowNetworkCapabilities.newInstance()
+        Shadows.shadowOf(networkCapabilities).addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        Shadows.shadowOf(connectivityManager).apply {
+            addNetwork(network, wifiNetworkInfo)
+            setActiveNetworkInfo(wifiNetworkInfo)
+            setNetworkCapabilities(network, networkCapabilities)
+        }
     }
 
     private fun setupLogging() {

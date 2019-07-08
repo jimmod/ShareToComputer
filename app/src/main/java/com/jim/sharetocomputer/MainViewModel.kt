@@ -18,11 +18,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class MainViewModel(private val context: FragmentActivity, private val port: Int) : ViewModel() {
+class MainViewModel(private val port: Int) : ViewModel() {
 
     private var request: ShareRequest? = null
     val ip = MutableLiveData<String>().apply { value = "unknown" }
     var qrcode = MutableLiveData<Drawable>()
+    lateinit var context: FragmentActivity
 
     fun selectFile() {
         MyLog.i("Select File")

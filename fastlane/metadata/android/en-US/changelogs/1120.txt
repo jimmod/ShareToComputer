@@ -1,0 +1,6 @@
+V1.1.2:
+- Add Wi-Fi connection check
+- Fix IP address shown as 0.0.0.0
+- Fix web title
+- Fix download fail after 5 minutes
+- Fix application crashes #20, #31

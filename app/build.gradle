@@ -10,8 +10,8 @@ android {
         applicationId "com.jim.sharetocomputer"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 1110
-        versionName "1.1.1"
+        versionCode 1120
+        versionName "1.1.2"
         testInstrumentationRunner "com.jim.sharetocomputer.TestRunner"
     }
     dataBinding {

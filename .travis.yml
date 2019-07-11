@@ -1,4 +1,5 @@
 language: android
+dist: trusty
 
 jdk:
   - oraclejdk8
@@ -6,13 +7,13 @@ jdk:
 env:
   global:
     - ADB_INSTALL_TIMEOUT=8
-    - ABI=armeabi-v7a
+    - ABI=x86_64
     - EMU_FLAVOR=default
     - ANDROID_HOME=/usr/local/android-sdk
     - TOOLS=${ANDROID_HOME}/tools
     - PATH=${ANDROID_HOME}:${ANDROID_HOME}/emulator:${TOOLS}:${TOOLS}/bin:${ANDROID_HOME}/platform-tools:${PATH}
   matrix:
-    - API=27 ABI=x86_64
+    - API=23
 
 android:
   components:
@@ -30,9 +31,9 @@ install:
   - echo y | sdkmanager "build-tools;28.0.3" >/dev/null
   - echo y | sdkmanager "platforms;android-$API" >/dev/null
   - echo y | sdkmanager "platforms;android-28" >/dev/null
-  - echo y | sdkmanager --channel=4 "emulator"
+  - echo y | sdkmanager --channel=4 "emulator" >/dev/null
   - echo y | sdkmanager "extras;android;m2repository" >/dev/null
-  - echo y | sdkmanager "system-images;android-$API;$EMU_FLAVOR;$ABI"
+  - echo y | sdkmanager "system-images;android-$API;$EMU_FLAVOR;$ABI" >/dev/null
   - echo no | avdmanager create avd --force -n test -k "system-images;android-$API;$EMU_FLAVOR;$ABI" -c 10M
   - emulator -verbose -avd test -no-accel -no-snapshot -no-window $AUDIO -camera-back none -camera-front none -selinux permissive -qemu -m 2048 &
   - android-wait-for-emulator

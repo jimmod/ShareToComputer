@@ -94,8 +94,6 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
     androidTestImplementation 'tools.fastlane:screengrab:1.1.0'
     androidTestImplementation "androidx.test:runner:$testExtCore"
-
-    androidTestUtil 'com.android.support.test:orchestrator:1.0.2'
 }
 
 jacoco {

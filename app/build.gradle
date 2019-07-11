@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'jacoco'
 
 android {
     compileSdkVersion 28
@@ -13,6 +14,7 @@ android {
         versionCode 1120
         versionName "1.1.2"
         testInstrumentationRunner "com.jim.sharetocomputer.TestRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
     dataBinding {
         enabled = true
@@ -22,11 +24,16 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            testCoverageEnabled true
+        }
     }
     androidExtensions {
         experimental = true
     }
     testOptions {
+        animationsDisabled true
+
         unitTests {
             includeAndroidResources = true
         }
@@ -86,4 +93,33 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
     androidTestImplementation 'tools.fastlane:screengrab:1.1.0'
+    androidTestImplementation "androidx.test:runner:$testExtCore"
+
+    androidTestUtil 'com.android.support.test:orchestrator:1.0.2'
+}
+
+jacoco {
+    toolVersion = '0.8.0'
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = [ '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*' ]
+    def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
+    def mainSrc = "$project.projectDir/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = fileTree(dir: project.buildDir, includes: [
+            'jacoco/*.exec', 'outputs/code_coverage/debugAndroidTest/connected/*coverage.ec'
+    ])
 }

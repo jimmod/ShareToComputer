@@ -52,13 +52,11 @@ class DownloadServiceTest {
     }
 
     private fun cleanTempFile() {
-        fileTemp.forEach {
-            val result = it.delete()
-            if (!result) MyLog.e("Fail delete ${it.absolutePath}")
-            else MyLog.e("Success delete ${it.absolutePath}")
-        }
-        assertTimeout(1000) {
+        assertTimeout(TIMEOUT) {
             fileTemp.forEach {
+                val result = it.delete()
+                if (!result) MyLog.e("Fail delete ${it.absolutePath}")
+                else MyLog.e("Success delete ${it.absolutePath}")
                 Assert.assertEquals(false, it.exists())
             }
         }
@@ -72,7 +70,7 @@ class DownloadServiceTest {
         application.startService(intent)
 
         val actualFile = File(downloadFolder, FILENAME_PNG)
-        assertTimeout(2000) {
+        assertTimeout(TIMEOUT) {
             Assert.assertEquals(true, actualFile.exists())
         }
     }
@@ -85,7 +83,7 @@ class DownloadServiceTest {
         application.startService(intent)
 
         val actualFile = File(downloadFolder, FILENAME_TEXT)
-        assertTimeout(2000) {
+        assertTimeout(TIMEOUT) {
             Assert.assertEquals(true, actualFile.exists())
         }
     }
@@ -98,11 +96,11 @@ class DownloadServiceTest {
         application.startService(intent)
 
         val actualFile1 = File(downloadFolder, FILENAME_PNG)
-        assertTimeout(2000) {
+        assertTimeout(TIMEOUT) {
             Assert.assertEquals(true, actualFile1.exists())
         }
         val actualFile2 = File(downloadFolder, FILENAME_TEXT)
-        assertTimeout(2000) {
+        assertTimeout(TIMEOUT) {
             Assert.assertEquals(true, actualFile2.exists())
         }
     }
@@ -115,7 +113,7 @@ class DownloadServiceTest {
         application.startService(intent)
 
         val actualFile = File(downloadFolder, FILENAME_PNG)
-        assertTimeout(2000) {
+        assertTimeout(TIMEOUT) {
             Assert.assertEquals(true, actualFile.exists())
         }
 
@@ -123,7 +121,7 @@ class DownloadServiceTest {
         application.startService(intent2)
 
         val actualFile2 = File(downloadFolder, FILENAME_PNG2)
-        assertTimeout(2000) {
+        assertTimeout(TIMEOUT) {
             Assert.assertEquals(true, actualFile2.exists())
         }
     }
@@ -200,6 +198,8 @@ class DownloadServiceTest {
         private val INFO_RESPONSE_SINGLE_FILE = Gson().toJson(ShareInfo(1, listOf(FileInfo(FILENAME_PNG))))
         private val INFO_RESPONSE_MULTIPLE_FILES =
             Gson().toJson(ShareInfo(2, listOf(FileInfo(FILENAME_PNG), FileInfo(FILENAME_TEXT))))
+
+        private const val TIMEOUT = 20000
 
     }
 

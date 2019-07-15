@@ -52,13 +52,11 @@ class DownloadServiceTest {
     }
 
     private fun cleanTempFile() {
-        fileTemp.forEach {
-            val result = it.delete()
-            if (!result) MyLog.e("Fail delete ${it.absolutePath}")
-            else MyLog.e("Success delete ${it.absolutePath}")
-        }
         assertTimeout(TIMEOUT) {
             fileTemp.forEach {
+                val result = it.delete()
+                if (!result) MyLog.e("Fail delete ${it.absolutePath}")
+                else MyLog.e("Success delete ${it.absolutePath}")
                 Assert.assertEquals(false, it.exists())
             }
         }

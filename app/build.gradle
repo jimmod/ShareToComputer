@@ -14,7 +14,6 @@ android {
         versionCode 1120
         versionName "1.1.2"
         testInstrumentationRunner "com.jim.sharetocomputer.TestRunner"
-        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
     dataBinding {
         enabled = true
@@ -97,7 +96,7 @@ dependencies {
 }
 
 jacoco {
-    toolVersion = '0.8.0'
+    toolVersion = '0.8.2'
 }
 
 tasks.withType(Test) {

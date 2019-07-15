@@ -42,11 +42,16 @@ install:
   - adb shell "uiautomator dump /sdcard/view.xml; cat /sdcard/view.xml"
   - adb shell input touchscreen swipe 16 239 304 287
   - adb shell dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'
+  - adb shell "uiautomator dump /sdcard/view.xml; cat /sdcard/view.xml"
 
 script: ./gradlew clean app:lint jacocoTestReport app:assembleRelease
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+after_failure:
+  - adb shell dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'
+  - adb shell "uiautomator dump /sdcard/view.xml; cat /sdcard/view.xml"
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock

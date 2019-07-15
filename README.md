@@ -1,4 +1,7 @@
+![GitHub](https://img.shields.io/github/license/jimmod/ShareToComputer.svg)
 [![Build Status](https://travis-ci.org/jimmod/ShareToComputer.svg?branch=master)](https://travis-ci.org/jimmod/ShareToComputer)
+[![codecov](https://codecov.io/gh/jimmod/ShareToComputer/branch/master/graph/badge.svg)](https://codecov.io/gh/jimmod/ShareToComputer)
+[![GitHub release](https://img.shields.io/github/release/jimmod/ShareToComputer.svg)](https://github.com/jimmod/ShareToComputer/releases/latest)
 
 # ShareToComputer
 
@@ -10,6 +13,11 @@ Share any files from your phone to your computer & other phones through wifi
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=com.jim.sharetocomputer)
+[<img src="https://i.ibb.co/q0mdc4Z/get-it-on-github.png"
+     alt="Get it on Github"
+     height="80">](https://github.com/jimmod/ShareToComputer/releases/latest)
+
+
 
 # Description
 

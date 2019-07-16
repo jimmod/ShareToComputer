@@ -34,14 +34,14 @@ import com.jim.sharetocomputer.webserver.WebServerMultipleFiles
 import com.jim.sharetocomputer.webserver.WebServerSingleFile
 import com.jim.sharetocomputer.webserver.WebServerText
 import org.koin.android.ext.android.get
-import org.koin.android.ext.android.inject
-import org.koin.core.qualifier.named
+import org.koin.core.parameter.parametersOf
+import java.io.IOException
+import java.net.ServerSocket
 
 class WebServerService : Service() {
 
     private var webServer: WebServer? = null
     private var stopper: StopperThread? = null
-    private val port by inject<Int>(named(Module.PORT))
     private val wifiListener = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val info = intent?.getParcelableExtra<NetworkInfo>(WifiManager.EXTRA_NETWORK_INFO)
@@ -62,22 +62,57 @@ class WebServerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         MyLog.i("onStartCommand")
         startForeground(NOTIFICATION_ID, createNotification())
+        val port = findFreePort()
         intent?.getParcelableExtra<ShareRequest>(EXTRA_REQUEST)?.let { request ->
             webServer?.stop()
             stopper?.cancel()
             webServer = when (request) {
-                is ShareRequest.ShareRequestText -> get<WebServerText>().apply { setText(request.text) }
-                is ShareRequest.ShareRequestSingleFile -> get<WebServerSingleFile>().apply { setUri(request.uri) }
-                is ShareRequest.ShareRequestMultipleFile -> get<WebServerMultipleFiles>().apply { setUris(request.uris) }
+                is ShareRequest.ShareRequestText -> get<WebServerText>(parameters = { parametersOf(port) }).apply {
+                    setText(
+                        request.text
+                    )
+                }
+                is ShareRequest.ShareRequestSingleFile -> get<WebServerSingleFile>(parameters = { parametersOf(port) }).apply {
+                    setUri(
+                        request.uri
+                    )
+                }
+                is ShareRequest.ShareRequestMultipleFile -> get<WebServerMultipleFiles>(parameters = { parametersOf(port) }).apply {
+                    setUris(
+                        request.uris
+                    )
+                }
             }
             stopper = StopperThread(this, webServer!!).also { it.start() }
+            WebServerService.port.value = port
             webServer!!.start()
+            startForeground(NOTIFICATION_ID, createNotification())
 
             return START_STICKY
         }
 
         stopSelf()
         return START_NOT_STICKY
+    }
+
+    private fun findFreePort(): Int {
+        for (port in 8080..8100) {
+            var socket: ServerSocket? = null
+            try {
+                socket = ServerSocket(port)
+            } catch (ex: IOException) {
+                continue
+            } finally {
+                try {
+                    socket?.close()
+                } catch (ex: IOException) {
+                }
+            }
+            MyLog.i("free port: $port")
+            return port
+        }
+        MyLog.e("no free port found")
+        throw IOException("no free port found")
     }
 
     private fun createNotification(): Notification {
@@ -101,7 +136,13 @@ class WebServerService : Service() {
         val builder = NotificationCompat.Builder(this, Application.CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(getString(R.string.notification_title))
-            .setContentText(getString(R.string.notification_server_text, this.getIp(), port.toString()))
+            .setContentText(
+                getString(
+                    R.string.notification_server_text,
+                    this.getIp(),
+                    WebServerService.port.value.toString()
+                )
+            )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .addAction(R.mipmap.ic_launcher, getString(R.string.stop_share),
                 stopPendingIntent)
@@ -126,6 +167,7 @@ class WebServerService : Service() {
         private const val NOTIFICATION_ID = 1945
 
         var isRunning = MutableLiveData<Boolean>().apply { value = false }
+        var port = MutableLiveData<Int>().apply { value = 8080 }
 
         fun createIntent(context: Context, request: ShareRequest?): Intent {
             return Intent(context, WebServerService::class.java).apply {
@@ -142,7 +184,7 @@ class StopperThread(
     private val autoStopTime: Int = TIME_AUTO_STOP
 ) : Thread() {
 
-    var isStopped = false
+    private var isStopped = false
 
     override fun run() {
         while (!isStopped) {

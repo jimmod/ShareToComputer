@@ -62,10 +62,10 @@ class WebServerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         MyLog.i("onStartCommand")
         startForeground(NOTIFICATION_ID, createNotification())
-        val port = findFreePort()
         intent?.getParcelableExtra<ShareRequest>(EXTRA_REQUEST)?.let { request ->
             webServer?.stop()
             stopper?.cancel()
+            val port = findFreePort()
             webServer = when (request) {
                 is ShareRequest.ShareRequestText -> get<WebServerText>(parameters = { parametersOf(port) }).apply {
                     setText(

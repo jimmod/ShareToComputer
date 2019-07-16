@@ -17,7 +17,6 @@
 package com.jim.sharetocomputer.webserver
 
 import com.google.gson.Gson
-import com.jim.sharetocomputer.RobolectricApplication
 import com.jim.sharetocomputer.ShareInfo
 import org.junit.After
 import org.junit.Assert
@@ -25,7 +24,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -33,7 +31,6 @@ import java.net.URL
 
 
 @RunWith(RobolectricTestRunner::class)
-@Config(application = RobolectricApplication::class)
 class WebServerTextTest {
 
     private lateinit var webServer: WebServerText

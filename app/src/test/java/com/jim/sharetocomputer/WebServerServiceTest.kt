@@ -38,11 +38,9 @@ import org.mockito.Mockito
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows
-import org.robolectric.annotation.Config
 import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
-@Config(application = RobolectricApplication::class)
 class WebServerServiceTest: KoinTest {
 
     private val application by lazy { ApplicationProvider.getApplicationContext<Application>() }

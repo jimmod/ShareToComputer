@@ -76,9 +76,11 @@ internal fun Context.getAppVersionCode(): Long {
 }
 
 internal fun Context.isOnWifi(): Boolean {
-    val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    return connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        .hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+    val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager? ?: return false
+    connectivityManager.allNetworks.forEach {
+        if (connectivityManager.getNetworkCapabilities(it)?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true) return true
+    }
+    return false
 }
 
 internal fun Context.convertDpToPx(dp: Float): Float {

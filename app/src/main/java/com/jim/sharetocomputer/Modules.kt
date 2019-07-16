@@ -20,16 +20,14 @@ import com.jim.sharetocomputer.webserver.WebServerMultipleFiles
 import com.jim.sharetocomputer.webserver.WebServerSingleFile
 import com.jim.sharetocomputer.webserver.WebServerText
 import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 
 val applicationModule = module {
-    single(named(Module.PORT)) { 8080 }
-    factory { WebServerText(get(named(Module.PORT))) }
-    factory { WebServerSingleFile(get(), get(named(Module.PORT))) }
-    factory { WebServerMultipleFiles(get(), get(named(Module.PORT))) }
-    viewModel { MainViewModel(get(named(Module.PORT))) }
+    factory { (port: Int) -> WebServerText(port) }
+    factory { (port: Int) -> WebServerSingleFile(get(), port) }
+    factory { (port: Int) -> WebServerMultipleFiles(get(), port) }
+    viewModel { MainViewModel() }
 }
 
 object Module {

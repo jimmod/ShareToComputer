@@ -27,11 +27,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class MainViewModel(private val port: Int) : ViewModel() {
+class MainViewModel : ViewModel() {
 
     private var request: ShareRequest? = null
     val deviceIp = MutableLiveData<String>().apply { value = "unknown" }
-    val devicePort = MutableLiveData<Int>().apply { value = port }
+    val devicePort = WebServerService.port
     var qrCode = MutableLiveData<Drawable>()
     private var qrCodeBitmap: Bitmap? = null
     lateinit var context: FragmentActivity
@@ -101,7 +101,7 @@ class MainViewModel(private val port: Int) : ViewModel() {
         val barcodeContent = Gson().toJson(
             QrCodeInfo(
                 Application.QR_CODE_VERSION,
-                context.getString(R.string.qrcode_url, context.getIp(), port.toString())
+                context.getString(R.string.qrcode_url, context.getIp(), devicePort.value.toString())
             )
         )
         return barcodeEncoder.encodeBitmap(

@@ -29,7 +29,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
@@ -52,7 +51,6 @@ class WebServerServiceTest: KoinTest {
         single { webServerText }
         single { webServerSingleFile }
         single { webServerMultipleFiles }
-        single(named(Module.PORT)) { 8080 }
     }
 
     @Before
@@ -63,6 +61,9 @@ class WebServerServiceTest: KoinTest {
         declareMock<WebServerText>()
         declareMock<WebServerSingleFile>()
         declareMock<WebServerMultipleFiles>()
+        Mockito.`when`(webServerText.lastAccessTime).thenReturn(System.currentTimeMillis())
+        Mockito.`when`(webServerSingleFile.lastAccessTime).thenReturn(System.currentTimeMillis())
+        Mockito.`when`(webServerMultipleFiles.lastAccessTime).thenReturn(System.currentTimeMillis())
     }
 
     @After

@@ -20,7 +20,6 @@ import com.jim.sharetocomputer.R
 import com.jim.sharetocomputer.permissionGrant
 import org.junit.Rule
 import org.junit.Test
-import tools.fastlane.screengrab.Screengrab
 import java.io.File
 
 
@@ -36,13 +35,13 @@ class MainActivityUiTest {
     fun screen_sharing() {
         setupDummyImageSelect()
         assertMainScreenIsDisplayed()
-        Screengrab.screenshot("screen_main")
+        Screenshot.take("screen_main")
 
         clickShareImage()
 
         assertSharingScreenIsDisplayed()
 
-        Screengrab.screenshot("screen_sharing")
+        Screenshot.take("screen_sharing")
     }
 
     @Test
@@ -50,7 +49,7 @@ class MainActivityUiTest {
         clickDrawerMenu(R.id.fragment_about)
 
         assertAboutScreenIsDisplayed()
-        Screengrab.screenshot("screen_about")
+        Screenshot.take("screen_about")
     }
 
     @Test
@@ -58,7 +57,7 @@ class MainActivityUiTest {
         clickDrawerMenu(R.id.fragment_setting)
 
         assertSettingScreenIsDisplayed()
-        Screengrab.screenshot("screen_setting")
+        Screenshot.take("screen_setting")
     }
 
     private fun setupDummyImageSelect() {

@@ -21,7 +21,6 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.test.core.app.ApplicationProvider
 import com.google.gson.Gson
-import com.jim.sharetocomputer.RobolectricApplication
 import com.jim.sharetocomputer.ShareInfo
 import org.junit.After
 import org.junit.Assert
@@ -30,14 +29,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows
-import org.robolectric.annotation.Config
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.zip.ZipFile
 
 @RunWith(RobolectricTestRunner::class)
-@Config(application = RobolectricApplication::class)
 class WebServerMultipleFilesTest {
 
     private val webServer by lazy {

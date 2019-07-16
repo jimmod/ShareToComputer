@@ -25,12 +25,10 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.robolectric.Shadows
-import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowLooper
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
-@Config(application = RobolectricApplication::class)
 class MainActivityTest {
 
     @get:Rule

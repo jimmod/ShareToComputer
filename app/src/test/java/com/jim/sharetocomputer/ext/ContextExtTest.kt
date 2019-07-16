@@ -45,6 +45,13 @@ class ContextExtTest {
     }
 
     @Test
+    fun isOnWifi_no_connectivity_manager() {
+        @Suppress("DEPRECATION")
+        Shadows.shadowOf(application).setSystemService(Context.CONNECTIVITY_SERVICE, null)
+        assertEquals(false, application.isOnWifi())
+    }
+
+    @Test
     fun isOnWifi_no_network() {
         setupNoConnection()
         assertEquals(false, application.isOnWifi())

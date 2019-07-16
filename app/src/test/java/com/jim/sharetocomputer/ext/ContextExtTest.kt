@@ -60,6 +60,7 @@ class ContextExtTest {
     fun isOnWifi_connected_to_wifi_and_vpn() {
         setupWifiConnection()
         setupVpnConnection()
+        setupOtherConnection()
         assertEquals(true, application.isOnWifi())
     }
 
@@ -106,6 +107,26 @@ class ContextExtTest {
         Shadows.shadowOf(connectivityManager).apply {
             addNetwork(network, wifiNetworkInfo)
             setActiveNetworkInfo(wifiNetworkInfo)
+            setNetworkCapabilities(network, networkCapabilities)
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun setupOtherConnection() {
+        val connectivityManager = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val wifiNetworkInfo = ShadowNetworkInfo.newInstance(
+            NetworkInfo.DetailedState.CONNECTED,
+            ConnectivityManager.TYPE_MOBILE,
+            1,
+            true,
+            NetworkInfo.State.CONNECTED
+        )
+        val network = ShadowNetwork.newInstance(ConnectivityManager.TYPE_VPN)
+        val networkCapabilities = ShadowNetworkCapabilities.newInstance()
+        Shadows.shadowOf(networkCapabilities).addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+        Shadows.shadowOf(connectivityManager).apply {
+            addNetwork(network, wifiNetworkInfo)
             setNetworkCapabilities(network, networkCapabilities)
         }
     }

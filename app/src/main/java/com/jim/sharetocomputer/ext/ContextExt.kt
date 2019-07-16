@@ -78,7 +78,7 @@ internal fun Context.getAppVersionCode(): Long {
 internal fun Context.isOnWifi(): Boolean {
     val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     connectivityManager.allNetworks.forEach {
-        if (connectivityManager.getNetworkCapabilities(it).hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) return true
+        if (connectivityManager.getNetworkCapabilities(it)?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true) return true
     }
     return false
 }

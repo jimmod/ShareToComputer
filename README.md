@@ -31,3 +31,5 @@ Require no installation on your computer.
 3. It will open the app and display an URL, e.g http://192.168.0.100:8080
 4. Go to your computer browser and open the the URL
 5. it will download/display the content you shared
+
+XDA thread: https://forum.xda-developers.com/android/apps-games/app-share-to-computer-t3949212

@@ -42,6 +42,8 @@ class MainActivityUiTest {
         assertSharingScreenIsDisplayed()
 
         Screenshot.take("screen_sharing")
+
+        clickStopShare()
     }
 
     @Test
@@ -92,6 +94,11 @@ class MainActivityUiTest {
 
     private fun assertSettingScreenIsDisplayed() {
         onView(withText(R.string.title_send_feedback_preference)).check(matches(isDisplayed()))
+    }
+
+
+    private fun clickStopShare() {
+        onView(withId(R.id.stop_share)).perform(click())
     }
 
     companion object {

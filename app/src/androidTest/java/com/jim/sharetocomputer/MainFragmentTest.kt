@@ -20,6 +20,7 @@ package com.jim.sharetocomputer
 
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import org.hamcrest.Matchers
@@ -45,6 +46,7 @@ class MainFragmentTest {
         onView(withId(R.id.layout_main)).check(matches(withEffectiveVisibility(Visibility.GONE)))
         onView(withId(R.id.layout_sharing)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.url)).check(matches(withText(Matchers.not(Matchers.containsString("unknown")))))
+        onView(withId(R.id.stop_share)).perform(ViewActions.click())
     }
 
 }

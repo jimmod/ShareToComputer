@@ -1,0 +1,48 @@
+<!DOCTYPE resources [
+    <!ENTITY appname "Share to Computer">
+    ]>
+<resources>
+    <string name="app_name">&appname;</string>
+    <string name="version_name">1.1.4</string>
+    <string name="channel_name">Powiadomienia domyślne</string>
+    <string name="channel_description">Powiadomienia wspólne</string>
+    <string name="notification_title">&appname;</string>
+    <string name="notification_server_text">Otwórz w przeglądarce http://%1$s:%2$s</string>
+    <string name="download_url">http://%1$s:%2$s</string>
+    <string name="about">O aplikacji</string>
+    <string name="version">Wersja</string>
+    <string name="source_code">Kod źródłowy</string>
+    <string name="source_code_url">https://github.com/jimmod/ShareToComputer</string>
+    <string name="license">Licencja</string>
+    <string name="license_detail">Licencja GNU General Public License w wersji 3 lub nowszej.\nCopyright © 2019 Jimmy</string>
+    <string name="stop_share">Przerwij udostępnianie</string>
+    <string name="stop">Zatrzymaj</string>
+    <string name="download">Pobierz</string>
+    <string name="downloading">Pobieranie</string>
+    <plurals name="info_downloading">
+        <item quantity="one">Pobierz %1$d plik z %2$d</item>
+        <item quantity="few">Pobierz %1$d  pliki z %2$d</item>
+        <item quantity="other">Pobierz %1$d plików z %2$d</item>
+    </plurals>
+    <string name="qrcode_url">http://%1$s:%2$s</string>
+    <string name="scan_qr_code">Skanuj kod QR</string>
+
+    <string name="warning_newer_qrcode">[&appname;] Rozpocznij pobieranie\nOstrzeżenie: wykryto nowszą wersję kodu QR, zaktualizuj go do nowszej wersji</string>
+    <string name="warning_unknown_qrcode">Nieznany format kodu QR</string>
+
+    <string name="info_download_start">[&appname;] Rozpocznij pobieranie</string>
+    <string name="info_download_completed">[&appname;] Pobieranie zakończone</string>
+    <string name="share_image_video">Udostępnij Obraz/Wideo</string>
+    <string name="share_file">Udostępnij Plik</string>
+    <string name="download_instruction_qr_code">Pobierz za pomocą kodu QR</string>
+    <string name="download_instruction_browser">Pobierz za pomocą przeglądarki:</string>
+    <string name="setting">Ustawienia</string>
+    <string name="title_download_log_preference">Pobierz dziennik</string>
+    <string name="summary_download_log_preference">Skopiuj plik mylog.log do katalogu pobierania</string>
+    <string name="info_download_log_complete">Pobrano plik dziennika</string>
+    <string name="title_send_feedback_preference">Prześlij opinię</string>
+    <string name="feedback_mail_title">[&appname;] Opinia</string>
+    <string name="error_fail_send_feedback">Nie można otworzyć aplikacji pocztowej</string>
+	<string name="error_wifi_required">Wymagane połączenia z siecią Wi-Fi</string>
+    <string name="feedback_email_body"><![CDATA[<put your feedback here>]]></string>
+</resources>

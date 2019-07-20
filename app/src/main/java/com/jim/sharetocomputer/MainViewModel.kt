@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
 
-    private var request: ShareRequest? = null
     val deviceIp = MutableLiveData<String>().apply { value = "unknown" }
     val devicePort = WebServerService.port
     var qrCode = MutableLiveData<Drawable>()
@@ -113,9 +112,10 @@ class MainViewModel : ViewModel() {
 
 
     fun setRequest(request: ShareRequest?) {
-        this.request = request
         if (request != null) {
             MyLog.i("request found $request")
+            if (!checkWifi()) return
+            updateWebServerUi()
             startWebService(request)
         } else {
             MyLog.i("no request")
@@ -144,6 +144,7 @@ class MainViewModel : ViewModel() {
 
     private fun checkWifi(): Boolean {
         if (context.isOnWifi()) return true
+        MyLog.i("No Wi-Fi network detected")
         showToast(R.string.error_wifi_required)
         return false
     }

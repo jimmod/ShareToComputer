@@ -1,6 +1,7 @@
 package com.jim.sharetocomputer
 
 import android.app.Activity
+import android.app.Application
 import android.app.Instrumentation
 import android.content.ClipData
 import android.content.ClipDescription
@@ -35,6 +36,7 @@ class MainActivityTest {
     val uiRule = IntentsTestRule(MainActivity::class.java, false, false)
 
     private val activity by lazy {uiRule.activity}
+    private val application by lazy { ApplicationProvider.getApplicationContext<Application>() }
 
     @Before
     fun before() {
@@ -64,6 +66,15 @@ class MainActivityTest {
 
         val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestText(text))
         assertServiceStarted(expectedIntent)
+    }
+
+    @Test
+    fun share_text_no_wifi_should_not_start_service() {
+        application.setupNoConnection()
+
+        launchActivity(intentShareText)
+
+        assertServiceNotStarted()
     }
 
     @Test

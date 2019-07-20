@@ -20,19 +20,17 @@ package com.jim.sharetocomputer.ext
 
 import android.app.Application
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.net.NetworkInfo
 import androidx.test.core.app.ApplicationProvider
+import com.jim.sharetocomputer.setupNoConnection
+import com.jim.sharetocomputer.setupOtherConnection
+import com.jim.sharetocomputer.setupVpnConnection
+import com.jim.sharetocomputer.setupWifiConnection
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows
-import org.robolectric.shadows.ShadowNetwork
-import org.robolectric.shadows.ShadowNetworkCapabilities
-import org.robolectric.shadows.ShadowNetworkInfo
 
 @RunWith(RobolectricTestRunner::class)
 class ContextExtTest {
@@ -41,7 +39,7 @@ class ContextExtTest {
 
     @Before
     fun before() {
-        setupNoConnection()
+        application.setupNoConnection()
     }
 
     @Test
@@ -53,88 +51,22 @@ class ContextExtTest {
 
     @Test
     fun isOnWifi_no_network() {
-        setupNoConnection()
+        application.setupNoConnection()
         assertEquals(false, application.isOnWifi())
     }
 
     @Test
     fun isOnWifi_connected_to_wifi() {
-        setupWifiConnection()
+        application.setupWifiConnection()
         assertEquals(true, application.isOnWifi())
     }
 
     @Test
     fun isOnWifi_connected_to_wifi_and_vpn() {
-        setupWifiConnection()
-        setupVpnConnection()
-        setupOtherConnection()
+        application.setupWifiConnection()
+        application.setupVpnConnection()
+        application.setupOtherConnection()
         assertEquals(true, application.isOnWifi())
     }
 
-    private fun setupNoConnection() {
-        val connectivityManager = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        Shadows.shadowOf(connectivityManager).clearAllNetworks()
-    }
-
-    @Suppress("DEPRECATION")
-    private fun setupWifiConnection() {
-        val connectivityManager = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        val wifiNetworkInfo = ShadowNetworkInfo.newInstance(
-            NetworkInfo.DetailedState.CONNECTED,
-            ConnectivityManager.TYPE_WIFI,
-            0,
-            true,
-            NetworkInfo.State.CONNECTED
-        )
-        val network = ShadowNetwork.newInstance(ConnectivityManager.TYPE_WIFI)
-        val networkCapabilities = ShadowNetworkCapabilities.newInstance()
-        Shadows.shadowOf(networkCapabilities).addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-        Shadows.shadowOf(connectivityManager).apply {
-            addNetwork(network, wifiNetworkInfo)
-            setActiveNetworkInfo(wifiNetworkInfo)
-            setNetworkCapabilities(network, networkCapabilities)
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun setupVpnConnection() {
-        val connectivityManager = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        val wifiNetworkInfo = ShadowNetworkInfo.newInstance(
-            NetworkInfo.DetailedState.CONNECTED,
-            ConnectivityManager.TYPE_VPN,
-            1,
-            true,
-            NetworkInfo.State.CONNECTED
-        )
-        val network = ShadowNetwork.newInstance(ConnectivityManager.TYPE_VPN)
-        val networkCapabilities = ShadowNetworkCapabilities.newInstance()
-        Shadows.shadowOf(networkCapabilities).addTransportType(NetworkCapabilities.TRANSPORT_VPN)
-        Shadows.shadowOf(connectivityManager).apply {
-            addNetwork(network, wifiNetworkInfo)
-            setActiveNetworkInfo(wifiNetworkInfo)
-            setNetworkCapabilities(network, networkCapabilities)
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun setupOtherConnection() {
-        val connectivityManager = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        val wifiNetworkInfo = ShadowNetworkInfo.newInstance(
-            NetworkInfo.DetailedState.CONNECTED,
-            ConnectivityManager.TYPE_MOBILE,
-            1,
-            true,
-            NetworkInfo.State.CONNECTED
-        )
-        val network = ShadowNetwork.newInstance(ConnectivityManager.TYPE_VPN)
-        val networkCapabilities = ShadowNetworkCapabilities.newInstance()
-        Shadows.shadowOf(networkCapabilities).addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-        Shadows.shadowOf(connectivityManager).apply {
-            addNetwork(network, wifiNetworkInfo)
-            setNetworkCapabilities(network, networkCapabilities)
-        }
-    }
 }

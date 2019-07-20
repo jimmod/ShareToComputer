@@ -1,0 +1,2 @@
+V1.1.4:
+- Fix unknown IP when sharing file/media to STC app

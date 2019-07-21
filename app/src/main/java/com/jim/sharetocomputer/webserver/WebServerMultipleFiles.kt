@@ -171,7 +171,7 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
         <tr>
         <td>${index + 1}</td>
         <td>$filename</td>
-        <td><a href="/$index">${context.getString(R.string.download)}</a></td>
+        <td><a class="button float-right" href="/$index">${context.getString(R.string.download)}</a></td>
         </tr>
     """.trimIndent()
 

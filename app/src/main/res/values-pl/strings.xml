@@ -21,7 +21,8 @@
     <string name="downloading">Pobieranie</string>
     <plurals name="info_downloading">
         <item quantity="one">Pobierz %1$d plik z %2$d</item>
-        <item quantity="few">Pobierz %1$d  pliki z %2$d</item>
+        <item quantity="few">Pobierz %1$d pliki z %2$d</item>
+	<item quantity="many">Pobierz %1$d plików z %2$d</item>
         <item quantity="other">Pobierz %1$d plików z %2$d</item>
     </plurals>
     <string name="qrcode_url">http://%1$s:%2$s</string>

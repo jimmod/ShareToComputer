@@ -17,7 +17,6 @@
 package com.jim.sharetocomputer
 
 import androidx.fragment.app.Fragment
-import androidx.test.core.app.ApplicationProvider
 import com.jim.sharetocomputer.ui.main.MainViewModel
 import com.jim.sharetocomputer.ui.send.SendViewModel
 import com.jim.sharetocomputer.ui.setting.SettingNavigation
@@ -33,8 +32,8 @@ val applicationModule = module {
     factory { (port: Int) -> WebServerSingleFile(get(), port) }
     factory { (port: Int) -> WebServerMultipleFiles(get(), port) }
     factory { (fragment: Fragment) -> SettingNavigation(fragment) }
-    viewModel { SendViewModel(ApplicationProvider.getApplicationContext()) }
-    viewModel { MainViewModel(ApplicationProvider.getApplicationContext()) }
+    viewModel { SendViewModel(get()) }
+    viewModel { MainViewModel(get()) }
 }
 
 object Module {

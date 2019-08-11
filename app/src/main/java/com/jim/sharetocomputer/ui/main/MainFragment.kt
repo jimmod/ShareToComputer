@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.jim.sharetocomputer.ShareRequest
 import com.jim.sharetocomputer.databinding.FragmentMainBinding
+import com.jim.sharetocomputer.logging.MyLog
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
@@ -32,18 +33,23 @@ class MainFragment : Fragment() {
     private val mainViewModel: MainViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        MyLog.i("onCreate")
         val binding = FragmentMainBinding.inflate(inflater, container, false)
 
         val sectionsPagerAdapter = SectionsPagerAdapter(activity!!, activity!!.supportFragmentManager)
         binding.viewPager.adapter = sectionsPagerAdapter
         binding.tabs.setupWithViewPager(binding.viewPager)
 
-        mainViewModel.context = activity!!
         (arguments?.get(ARGS_REQUEST) as ShareRequest?)?.let {
             mainViewModel.setRequest(it)
         }
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        MyLog.i("onDestroy")
+        super.onDestroyView()
     }
 
     companion object {

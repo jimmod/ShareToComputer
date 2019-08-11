@@ -37,12 +37,13 @@ class SendFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         MyLog.i("onCreate")
+        sendViewModel.activity = activity!!
         val binding = FragmentSendBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = sendViewModel
-        sendViewModel.context = activity!!
         return binding.root
     }
+
     override fun onDestroyView() {
         MyLog.i("onDestroy")
         super.onDestroyView()

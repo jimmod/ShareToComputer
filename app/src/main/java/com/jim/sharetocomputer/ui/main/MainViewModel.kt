@@ -18,10 +18,10 @@
 
 package com.jim.sharetocomputer.ui.main
 
+import android.content.Context
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import com.jim.sharetocomputer.AllOpen
 import com.jim.sharetocomputer.R
@@ -34,9 +34,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @AllOpen
-class MainViewModel : ViewModel() {
-
-    lateinit var context: FragmentActivity
+class MainViewModel(val context: Context) : ViewModel() {
 
     fun setRequest(request: ShareRequest?) {
         if (request != null) {

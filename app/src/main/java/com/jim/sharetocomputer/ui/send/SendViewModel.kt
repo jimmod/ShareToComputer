@@ -20,12 +20,14 @@ package com.jim.sharetocomputer.ui.send
 
 import android.app.Activity
 import android.app.Instrumentation
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
@@ -41,12 +43,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class SendViewModel : MainViewModel() {
+class SendViewModel(context: Context) : MainViewModel(context) {
 
     private val deviceIp = MutableLiveData<String>().apply { value = "unknown" }
     private val devicePort = WebServerService.port
     private var qrCode = MutableLiveData<Drawable>()
     private var qrCodeBitmap: Bitmap? = null
+    lateinit var activity: FragmentActivity
 
     init {
         updateWebServerUi()
@@ -62,7 +65,7 @@ class SendViewModel : MainViewModel() {
                     type = "*/*"
                     putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 }
-            context.startActivityForResult(intent)?.let { result ->
+            activity.startActivityForResult(intent)?.let { result ->
                 handleSelectFileResult(result)
             }
         }
@@ -76,7 +79,7 @@ class SendViewModel : MainViewModel() {
                 type = "*/*"
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             }
-            context.startActivityForResult(intent)?.let { result ->
+            activity.startActivityForResult(intent)?.let { result ->
                 handleSelectFileResult(result)
             }
         }

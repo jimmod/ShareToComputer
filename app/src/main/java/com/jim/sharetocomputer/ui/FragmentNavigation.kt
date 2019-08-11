@@ -16,17 +16,16 @@
  *
  */
 
-package com.jim.sharetocomputer.screen
+package com.jim.sharetocomputer.ui
 
-import android.content.Context
-import tools.fastlane.screengrab.FileWritingScreenshotCallback
-import java.io.File
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.jim.sharetocomputer.ui.main.MainFragmentDirections
 
-class MyFileWritingScreenshotCallback(context: Context) : FileWritingScreenshotCallback(context) {
+class FragmentNavigation(val fragment: Fragment) {
 
-    override fun getScreenshotFile(screenshotDirectory: File, screenshotName: String): File {
-        val screenshotFileName = "$screenshotName.png"
-        return File(screenshotDirectory, screenshotFileName)
+    fun openAboutScreen() {
+        fragment.findNavController().navigate(MainFragmentDirections.actionFragmentMainToFragmentAbout())
     }
 
 }

@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#014357</color>
     <color name="colorAccent">#1F6CED</color>
     <color name="background">#FFFFFF</color>
+    <color name="titleBarText">#FFFFFF</color>
 </resources>

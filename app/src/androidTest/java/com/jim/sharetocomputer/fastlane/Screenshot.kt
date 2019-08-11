@@ -16,7 +16,7 @@
  *
  */
 
-package com.jim.sharetocomputer.screen
+package com.jim.sharetocomputer.fastlane
 
 import androidx.test.platform.app.InstrumentationRegistry
 import tools.fastlane.screengrab.Screengrab

@@ -19,6 +19,7 @@ package com.jim.sharetocomputer
 import android.app.Application
 import android.net.Uri
 import androidx.test.core.app.ApplicationProvider
+import com.jim.sharetocomputer.ui.setting.SettingNavigation
 import com.jim.sharetocomputer.webserver.WebServerMultipleFiles
 import com.jim.sharetocomputer.webserver.WebServerSingleFile
 import com.jim.sharetocomputer.webserver.WebServerText
@@ -121,6 +122,15 @@ class WebServerServiceTest: KoinTest {
         Assert.assertEquals(false, shadow.isStoppedBySelf)
         Mockito.verify(webServerMultipleFiles).setUris(uris)
         Mockito.verify(webServerMultipleFiles).start()
+    }
+
+    @Test
+    fun test() {
+
+        val test = Mockito.mock(SettingNavigation::class.java)
+        Mockito.doNothing().`when`(test).openAboutScreen()
+        test.openAboutScreen()
+
     }
 
 }

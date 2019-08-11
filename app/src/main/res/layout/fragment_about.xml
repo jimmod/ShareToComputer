@@ -2,12 +2,29 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+
     <LinearLayout
         android:id="@+id/layout_about"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:minHeight="?actionBarSize"
+                android:padding="16dp"
+                android:text="@string/app_name"
+                android:textAppearance="@style/AppTheme.ToolBar.Title"
+                tools:text="Share to Computer" />
+        </com.google.android.material.appbar.AppBarLayout>
 
         <ImageView
             android:id="@+id/logo"
@@ -21,71 +38,65 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            tools:text="Share to Computer"
-            android:textSize="24sp"
-            android:textColor="@color/colorPrimary"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
-            android:layout_marginBottom="20dp"/>
+            android:text="@string/app_name"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp"
+            tools:text="Share to Computer" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            android:layout_marginBottom="2dp"
             android:text="@string/version"
-            android:textSize="14sp"
             android:textColor="@android:color/darker_gray"
-            android:layout_marginBottom="2dp"
-            />
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="5dp"
+            android:autoLink="all"
             android:text="@string/version_name"
-            android:textSize="16sp"
-            android:autoLink="all"
-            />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="@string/source_code"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"
             android:layout_marginBottom="2dp"
-            />
+            android:text="@string/source_code"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="5dp"
+            android:autoLink="all"
             android:text="@string/source_code_url"
-            android:textSize="16sp"
-            android:autoLink="all"
-            />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="@string/license"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"
             android:layout_marginBottom="2dp"
-            />
+            android:text="@string/license"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="@string/license_detail"
-            android:textSize="16sp"
             android:autoLink="all"
-            />
+            android:text="@string/license_detail"
+            android:textSize="16sp" />
 
 
     </LinearLayout>

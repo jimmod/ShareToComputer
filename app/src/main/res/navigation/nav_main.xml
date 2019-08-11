@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/fragment_main"
-        android:name="com.jim.sharetocomputer.MainFragment"
+        android:name="com.jim.sharetocomputer.ui.main.MainFragment"
         android:label="@string/app_name">
         <action
             android:id="@+id/action_fragment_main_to_fragment_about"
@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/fragment_about"
-        android:name="com.jim.sharetocomputer.AboutFragment"
+        android:name="com.jim.sharetocomputer.ui.setting.AboutFragment"
         android:label="@string/about">
     </fragment>
     <fragment
@@ -33,7 +33,7 @@
         android:label="@string/scan_qr_code" />
     <fragment
         android:id="@+id/fragment_setting"
-        android:name="com.jim.sharetocomputer.SettingFragment"
+        android:name="com.jim.sharetocomputer.ui.setting.SettingFragment"
         android:label="@string/setting" />
 
 </navigation>

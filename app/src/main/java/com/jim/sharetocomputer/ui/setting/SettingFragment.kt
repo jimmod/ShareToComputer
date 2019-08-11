@@ -1,4 +1,22 @@
-package com.jim.sharetocomputer
+/*
+ *     This file is part of Share To Computer  Copyright (C) 2019  Jimmy <https://github.com/jimmod/ShareToComputer>.
+ *
+ *     Share To Computer is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Share To Computer is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Share To Computer.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
+package com.jim.sharetocomputer.ui.setting
 
 import android.content.Context
 import android.content.Intent
@@ -12,15 +30,21 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.jim.sharetocomputer.Application
+import com.jim.sharetocomputer.R
 import com.jim.sharetocomputer.ext.getAppVersionCode
 import com.jim.sharetocomputer.ext.getAppVersionName
 import com.jim.sharetocomputer.ext.getIp
 import com.jim.sharetocomputer.ext.isOnWifi
 import com.jim.sharetocomputer.logging.MyLog
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 import java.io.*
 
 
 class SettingFragment : PreferenceFragmentCompat() {
+
+    private val navigation by inject<SettingNavigation>(parameters = { parametersOf(this) })
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         MyLog.i("onCreate")
@@ -37,9 +61,10 @@ class SettingFragment : PreferenceFragmentCompat() {
     }
 
     override fun onPreferenceTreeClick(preference: Preference): Boolean {
-        when (preference.key) {
-            "download_log" -> copyLogFile()
-            "send_feedback" -> sendFeedback()
+        when (preference.title) {
+            getString(R.string.title_download_log_preference) -> copyLogFile()
+            getString(R.string.title_send_feedback_preference) -> sendFeedback()
+            getString(R.string.title_about_preference) -> navigation.openAboutScreen()
             else -> return super.onPreferenceTreeClick(preference)
         }
         return true
@@ -92,6 +117,12 @@ class SettingFragment : PreferenceFragmentCompat() {
                 output.write(data)
             }
         }
+    }
+
+    companion object {
+
+        fun newInstance() = SettingFragment()
+
     }
 
 }

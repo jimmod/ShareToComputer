@@ -13,4 +13,9 @@
         android:title="@string/title_send_feedback_preference"
         app:iconSpaceReserved="false" />
 
+    <Preference
+        android:key="about"
+        android:title="@string/title_about_preference"
+        app:iconSpaceReserved="false" />
+
 </PreferenceScreen>

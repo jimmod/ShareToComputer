@@ -1,110 +1,64 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~     This file is part of Share To Computer  Copyright (C) 2019  Jimmy <https://github.com/jimmod/ShareToComputer>.
+  ~
+  ~     Share To Computer is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     Share To Computer is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with Share To Computer.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  -->
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <import type="android.view.View" />
-
-        <variable
-            name="viewModel"
-            type="com.jim.sharetocomputer.MainViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp">
+        android:fitsSystemWindows="true">
 
-        <LinearLayout
-            android:id="@+id/layout_main"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="@{viewModel.isSharing() ? View.GONE : View.VISIBLE}"
-            android:gravity="center"
-            tools:visibility="gone">
-
-            <Button
-                android:id="@+id/share_media"
-                style="@style/AppTheme.Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/button_round_corner_primary"
-                android:onClick="@{() -> viewModel.selectMedia()}"
-                android:text="@string/share_image_video" />
-
-            <Button
-                android:id="@+id/share_file"
-                style="@style/AppTheme.Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_round_corner_primary"
-                android:onClick="@{() -> viewModel.selectFile()}"
-                android:text="@string/share_file" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_sharing"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="@{viewModel.isSharing() ? View.VISIBLE : View.GONE}"
-            tools:visibility="visible">
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <TextView
-                android:id="@+id/browser_instruction"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/download_instruction_browser"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/url"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/darker_gray"
-                android:gravity="center"
-                android:text="@{@string/download_url(viewModel.deviceIp, viewModel.devicePort)}"
-                android:textIsSelectable="true"
-                android:textSize="20sp"
-                tools:text="http://192.168.0.2:8080" />
-
-            <TextView
-                android:id="@+id/qrcode_instruction"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:gravity="start"
-                android:text="@string/download_instruction_qr_code"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/qrcode"
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="@{viewModel.qrCode}"
-                android:contentDescription="@string/scan_qr_code"
-                tools:background="@mipmap/ic_launcher_round" />
+                android:gravity="center"
+                android:minHeight="?actionBarSize"
+                android:padding="16dp"
+                android:text="@string/app_name"
+                android:textAppearance="@style/AppTheme.ToolBar.Title"
+                tools:text="Share to Computer" />
 
-            <Button
-                android:id="@+id/stop_share"
-                style="@style/AppTheme.Button"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/button_round_corner_primary"
-                android:onClick="@{() -> viewModel.stopShare()}"
-                android:text="@string/stop_share" />
-        </LinearLayout>
-    </FrameLayout>
+                android:background="?attr/colorPrimary" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -16,6 +16,10 @@
 */
 package com.jim.sharetocomputer
 
+import androidx.fragment.app.Fragment
+import com.jim.sharetocomputer.ui.main.MainViewModel
+import com.jim.sharetocomputer.ui.send.SendViewModel
+import com.jim.sharetocomputer.ui.setting.SettingNavigation
 import com.jim.sharetocomputer.webserver.WebServerMultipleFiles
 import com.jim.sharetocomputer.webserver.WebServerSingleFile
 import com.jim.sharetocomputer.webserver.WebServerText
@@ -27,6 +31,8 @@ val applicationModule = module {
     factory { (port: Int) -> WebServerText(port) }
     factory { (port: Int) -> WebServerSingleFile(get(), port) }
     factory { (port: Int) -> WebServerMultipleFiles(get(), port) }
+    factory { (fragment: Fragment) -> SettingNavigation(fragment) }
+    viewModel { SendViewModel() }
     viewModel { MainViewModel() }
 }
 

@@ -18,12 +18,6 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light"/>
-
-    <style name="AppTheme.Drawer" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="android:background">@color/colorPrimaryDark</item>
-    </style>
-
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
         <!--<item name="android:background">@color/colorPrimary</item>-->
         <item name="colorAccent">@color/colorPrimary</item>

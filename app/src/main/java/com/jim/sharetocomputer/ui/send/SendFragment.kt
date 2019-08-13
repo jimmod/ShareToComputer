@@ -25,14 +25,11 @@ import androidx.fragment.app.Fragment
 import com.jim.sharetocomputer.ShareRequest
 import com.jim.sharetocomputer.databinding.FragmentSendBinding
 import com.jim.sharetocomputer.logging.MyLog
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.qualifier.named
 
 
 class SendFragment : Fragment() {
 
-    private val port by inject<Int>(named("PORT"))
     private val sendViewModel: SendViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

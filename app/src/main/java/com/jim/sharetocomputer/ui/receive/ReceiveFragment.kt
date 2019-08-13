@@ -18,9 +18,32 @@
 
 package com.jim.sharetocomputer.ui.receive
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.jim.sharetocomputer.databinding.FragmentReceiveBinding
+import com.jim.sharetocomputer.logging.MyLog
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class ReceiveFragment : Fragment() {
+
+    private val viewModel: ReceiveViewModel by viewModel(parameters = { parametersOf(this) })
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        MyLog.i("onCreate")
+        val binding = FragmentReceiveBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        MyLog.i("onDestroy")
+        super.onDestroyView()
+    }
 
     companion object {
         fun newInstance() = ReceiveFragment()

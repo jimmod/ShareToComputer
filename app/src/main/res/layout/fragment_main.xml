@@ -50,7 +50,9 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary" />
+                android:background="?attr/colorPrimary"
+                app:tabIndicatorColor="@color/background"
+                app:tabIndicatorHeight="3dp" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

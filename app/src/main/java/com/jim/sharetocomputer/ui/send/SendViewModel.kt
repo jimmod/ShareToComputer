@@ -34,8 +34,8 @@ import com.google.zxing.BarcodeFormat
 import com.jim.sharetocomputer.*
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
 import com.jim.sharetocomputer.ext.convertDpToPx
-import com.jim.sharetocomputer.ext.getIp
-import com.jim.sharetocomputer.ext.startActivityForResult
+import com.jim.sharetocomputer.gateway.ActivityHelper
+import com.jim.sharetocomputer.gateway.WifiApi
 import com.jim.sharetocomputer.logging.MyLog
 import com.jim.sharetocomputer.ui.main.MainViewModel
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -43,7 +43,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class SendViewModel(context: Context) : MainViewModel(context) {
+class SendViewModel(context: Context, val wifiApi: WifiApi, val activityHelper: ActivityHelper) :
+    MainViewModel(context) {
 
     private val deviceIp = MutableLiveData<String>().apply { value = "unknown" }
     private val devicePort = WebServerService.port
@@ -65,7 +66,7 @@ class SendViewModel(context: Context) : MainViewModel(context) {
                     type = "*/*"
                     putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 }
-            activity.startActivityForResult(intent)?.let { result ->
+            activityHelper.startActivityForResult(activity, intent)?.let { result ->
                 handleSelectFileResult(result)
             }
         }
@@ -79,7 +80,7 @@ class SendViewModel(context: Context) : MainViewModel(context) {
                 type = "*/*"
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             }
-            activity.startActivityForResult(intent)?.let { result ->
+            activityHelper.startActivityForResult(activity, intent)?.let { result ->
                 handleSelectFileResult(result)
             }
         }
@@ -108,7 +109,7 @@ class SendViewModel(context: Context) : MainViewModel(context) {
 
     private fun updateWebServerUi() {
         GlobalScope.launch(TestableDispatchers.Main) {
-            deviceIp.value = context.getIp()
+            deviceIp.value = wifiApi.getIp()
             qrCodeBitmap?.recycle()
             qrCodeBitmap = generateQrCode()
             qrCode.value = BitmapDrawable(context.resources, qrCodeBitmap)
@@ -122,7 +123,7 @@ class SendViewModel(context: Context) : MainViewModel(context) {
                 Application.QR_CODE_VERSION,
                 context.getString(
                     R.string.qrcode_url,
-                    context.getIp(),
+                    wifiApi.getIp(),
                     devicePort.value.toString()
                 )
             )

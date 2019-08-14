@@ -22,7 +22,8 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
             <intent-filter>

@@ -16,17 +16,18 @@
  *
  */
 
-package com.jim.sharetocomputer.screen
+package com.jim.sharetocomputer.ui.receive
 
-import android.content.Context
-import tools.fastlane.screengrab.FileWritingScreenshotCallback
-import java.io.File
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.jim.sharetocomputer.AllOpen
+import com.jim.sharetocomputer.ui.main.MainFragmentDirections
 
-class MyFileWritingScreenshotCallback(context: Context) : FileWritingScreenshotCallback(context) {
+@AllOpen
+class ReceiveNavigation(val fragment: Fragment) {
 
-    override fun getScreenshotFile(screenshotDirectory: File, screenshotName: String): File {
-        val screenshotFileName = "$screenshotName.png"
-        return File(screenshotDirectory, screenshotFileName)
+    fun openScanQrCode() {
+        fragment.findNavController().navigate(MainFragmentDirections.actionFragmentMainToFragmentQrcode())
     }
 
 }

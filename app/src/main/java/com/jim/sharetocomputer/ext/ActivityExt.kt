@@ -14,32 +14,6 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "startActivityForResult"
 
-suspend fun FragmentActivity.startActivityForResult(intent: Intent): Instrumentation.ActivityResult? {
-    if (isFinishing) {
-        return null
-    }
-    val result = CompletableDeferred<Instrumentation.ActivityResult>()
-    val requestCode = Math.random().toInt()
-
-    var fragment = supportFragmentManager.findFragmentByTag(TAG) as FragmentHelper?
-    if (fragment==null) {
-        fragment = FragmentHelper()
-        GlobalScope.launch(TestableDispatchers.Main) {
-            MyLog.d("Add headless fragment")
-            supportFragmentManager
-                .beginTransaction()
-                .add(fragment, TAG)
-                .commitNowAllowingStateLoss()
-        }
-    }
-    fragment.addMapping(requestCode, result)
-
-    GlobalScope.launch(TestableDispatchers.Main) {
-        fragment.startActivityForResult(intent, requestCode)
-    }
-    return result.await()
-}
-
 suspend fun FragmentActivity.startQrCodeScan(): Instrumentation.ActivityResult? {
     if (isFinishing) {
         return null

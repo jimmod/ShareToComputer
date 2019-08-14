@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.jim.sharetocomputer.ui.send.SendViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/layout_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="@{viewModel.isSharing() ? View.GONE : View.VISIBLE}"
+            tools:visibility="gone">
+
+            <Button
+                android:id="@+id/share_media"
+                style="@style/AppTheme.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_round_corner_primary"
+                android:onClick="@{() -> viewModel.selectMedia()}"
+                android:text="@string/share_image_video" />
+
+            <Button
+                android:id="@+id/share_file"
+                style="@style/AppTheme.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_round_corner_primary"
+                android:onClick="@{() -> viewModel.selectFile()}"
+                android:text="@string/share_file" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_sharing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="@{viewModel.isSharing() ? View.VISIBLE : View.GONE}"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/browser_instruction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/download_instruction_browser"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray"
+                android:gravity="center"
+                android:text="@{@string/download_url(viewModel.deviceIp(), viewModel.devicePort())}"
+                android:textIsSelectable="true"
+                android:textSize="20sp"
+                tools:text="http://192.168.0.2:8080" />
+
+            <TextView
+                android:id="@+id/qrcode_instruction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="start"
+                android:text="@string/download_instruction_qr_code"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/qrcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@{viewModel.qrCode()}"
+                android:contentDescription="@string/scan_qr_code"
+                tools:background="@mipmap/ic_launcher_round" />
+
+            <Button
+                android:id="@+id/stop_share"
+                style="@style/AppTheme.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/button_round_corner_primary"
+                android:onClick="@{() -> viewModel.stopShare()}"
+                android:text="@string/stop_share" />
+        </LinearLayout>
+    </FrameLayout>
+</layout>

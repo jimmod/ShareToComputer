@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with Share To Computer.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.jim.sharetocomputer
+package com.jim.sharetocomputer.ui.setting
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -52,6 +52,13 @@ android {
             java.srcDir sharedTestDir
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 
     useLibrary 'android.test.runner'
     useLibrary 'android.test.base'

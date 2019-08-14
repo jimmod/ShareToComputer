@@ -6,11 +6,11 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'jacoco'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.jim.sharetocomputer"
-        minSdkVersion 23
-        targetSdkVersion 28
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1140
         versionName "1.1.4"
         testInstrumentationRunner "com.jim.sharetocomputer.TestRunner"
@@ -64,7 +64,7 @@ configurations.all {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    implementation "androidx.appcompat:appcompat:$ktxVersion"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.core:core-ktx:$ktxVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
     implementation "org.nanohttpd:nanohttpd:$nanohttpd"
@@ -78,7 +78,7 @@ dependencies {
     implementation "com.journeyapps:zxing-android-embedded:$zxingVersion"
     implementation "com.elvishew:xlog:$xlogVersion"
     implementation "androidx.preference:preference:$androidxPreferenceVersion"
-    debugImplementation 'androidx.fragment:fragment-testing:1.2.0-alpha01'
+    debugImplementation 'androidx.fragment:fragment-testing:1.2.0-alpha02'
 
     testImplementation "junit:junit:$junitVersion"
     //noinspection GradleDependency

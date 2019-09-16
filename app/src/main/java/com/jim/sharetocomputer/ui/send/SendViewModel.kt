@@ -28,6 +28,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
@@ -47,6 +48,11 @@ class SendViewModel(context: Context, val wifiApi: WifiApi, val activityHelper: 
     MainViewModel(context) {
 
     private val deviceIp = MutableLiveData<String>().apply { value = "unknown" }
+    private val isAbleToShareData = MediatorLiveData<Boolean>().apply {
+        addSource(WebUploadService.isRunning) {
+            this.value = !it
+        }
+    }
     private val devicePort = WebServerService.port
     private var qrCode = MutableLiveData<Drawable>()
     private var qrCodeBitmap: Bitmap? = null
@@ -85,6 +91,8 @@ class SendViewModel(context: Context, val wifiApi: WifiApi, val activityHelper: 
             }
         }
     }
+
+    fun isAbleToShare() = isAbleToShareData
 
     private fun handleSelectFileResult(result: Instrumentation.ActivityResult) {
         MyLog.i("*Result: ${result.resultCode}|${result.resultData?.extras?.keySet()}")

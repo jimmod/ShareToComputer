@@ -18,7 +18,10 @@
 
 package com.jim.sharetocomputer.ui.receive
 
+import android.app.Application
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.jim.sharetocomputer.gateway.WifiApi
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Test
@@ -28,7 +31,8 @@ import org.junit.runner.RunWith
 class ReceiveViewModelTest {
 
     private val navigation: ReceiveNavigation = mock()
-    private val viewModel = ReceiveViewModel(navigation)
+    private val application by lazy { ApplicationProvider.getApplicationContext<Application>() }
+    private val viewModel = ReceiveViewModel(application, WifiApi(application), navigation)
 
     @Test
     fun scan_qr_code() {

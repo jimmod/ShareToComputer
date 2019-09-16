@@ -1,3 +1,4 @@
+package com.jim.sharetocomputer
 /*
     This file is part of Share To Computer  Copyright (C) 2019  Jimmy <https://github.com/jimmod/ShareToComputer>.
 
@@ -16,10 +17,6 @@
 */
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
-import com.jim.sharetocomputer.ShareRequest
-import com.jim.sharetocomputer.StopperThread
-import com.jim.sharetocomputer.WebServerService
-import com.jim.sharetocomputer.assertTimeout
 import com.jim.sharetocomputer.webserver.WebServer
 import org.junit.Assert
 import org.junit.Test
@@ -31,7 +28,7 @@ import org.robolectric.Shadows
 @RunWith(RobolectricTestRunner::class)
 class StopperThreadTest {
 
-    private val application: Application by lazy { ApplicationProvider.getApplicationContext<Application>() }
+    private val application: Application by lazy { ApplicationProvider.getApplicationContext() }
 
     @Test
     fun service_stopself_automatically() {

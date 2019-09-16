@@ -18,16 +18,39 @@
 
 package com.jim.sharetocomputer.ui.receive
 
+import android.content.Intent
+import android.os.Build
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.jim.sharetocomputer.AllOpen
+import com.jim.sharetocomputer.WebUploadService
 import com.jim.sharetocomputer.ui.main.MainFragmentDirections
 
 @AllOpen
 class ReceiveNavigation(val fragment: Fragment) {
 
     fun openScanQrCode() {
-        fragment.findNavController().navigate(MainFragmentDirections.actionFragmentMainToFragmentQrcode())
+        fragment.findNavController()
+            .navigate(MainFragmentDirections.actionFragmentMainToFragmentQrcode())
+    }
+
+    fun startWebUploadService() {
+        fragment.context?.run {
+            val intent = Intent(this, WebUploadService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                this.startForegroundService(intent)
+            } else {
+                this.startService(intent)
+            }
+        }
+    }
+
+    fun stopWebUploadService() {
+        fragment.context?.run {
+            stopService(
+                Intent(this, WebUploadService::class.java)
+            )
+        }
     }
 
 }

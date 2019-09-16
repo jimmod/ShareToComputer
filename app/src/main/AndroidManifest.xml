@@ -63,6 +63,7 @@
         <service
             android:name=".DownloadService"
             android:enabled="true" />
+        <service android:name=".WebUploadService" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

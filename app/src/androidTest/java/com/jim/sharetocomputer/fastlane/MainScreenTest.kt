@@ -81,7 +81,7 @@ class MainScreenTest {
     }
 
     private fun assertSharingScreenIsDisplayed() {
-        onView(withId(R.id.layout_sharing)).check(matches(isDisplayed()))
+        onView(withId(R.id.layout_sharing_send)).check(matches(isDisplayed()))
     }
 
     private fun assertSettingScreenIsDisplayed() {

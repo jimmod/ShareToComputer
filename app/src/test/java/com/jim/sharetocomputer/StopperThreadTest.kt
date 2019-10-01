@@ -28,7 +28,7 @@ import org.robolectric.Shadows
 @RunWith(RobolectricTestRunner::class)
 class StopperThreadTest {
 
-    private val application: Application by lazy { ApplicationProvider.getApplicationContext() }
+    private val application: Application by lazy { ApplicationProvider.getApplicationContext<Application>() }
 
     @Test
     fun service_stopself_automatically() {

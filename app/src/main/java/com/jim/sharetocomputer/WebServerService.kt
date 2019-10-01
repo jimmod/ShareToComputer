@@ -14,6 +14,8 @@
     You should have received a copy of the GNU General Public License
     along with Share To Computer.  If not, see <https://www.gnu.org/licenses/>.
 */
+@file:Suppress("DEPRECATION")
+
 package com.jim.sharetocomputer
 
 import android.app.*

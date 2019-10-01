@@ -35,7 +35,7 @@ class ReceiveViewModel(
     val navigation: ReceiveNavigation
 ) : ViewModel() {
 
-    private val isSharing = MutableLiveData(false)
+    private val isSharing = MutableLiveData<Boolean>().apply { value = false }
     private val deviceIp = MutableLiveData<String>().apply { value = "unknown" }
     private val isAbleToReceiveData = MediatorLiveData<Boolean>().apply {
         addSource(WebServerService.isRunning) {

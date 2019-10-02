@@ -119,20 +119,22 @@ class DownloadService : Service() {
     }
 
     private suspend fun onHandleIntent(intent: Intent?) = withContext(TestableDispatchers.Default) {
-        val url = intent!!.getStringExtra(EXTRA_URL)
-        val shareInfo = downloadInfo(url)
-        if (shareInfo == null) {
-            stopSelf()
+        intent!!.getStringExtra(EXTRA_URL)?.let { url ->
+            val shareInfo = downloadInfo(url)
+            if (shareInfo == null) {
+                stopSelf()
+            }
+            val requests = getDownloadRequests(url, shareInfo!!)
+            MyLog.d("Prepare to download $shareInfo")
+            getSystemService(DownloadManager::class.java)?.let { downloadManager ->
+                requests.forEachIndexed { index, request ->
+                    val id = downloadManager.enqueue(request)
+                    queuedIds.add(id)
+                    MyLog.i("*enqueue[$index]: $id")
+                }
+                updateNotification()
+            }
         }
-        val requests = getDownloadRequests(url, shareInfo!!)
-        MyLog.d("Prepare to download $shareInfo")
-        val downloadManager = getSystemService(DownloadManager::class.java)
-        requests.forEachIndexed { index, request ->
-            val id = downloadManager.enqueue(request)
-            queuedIds.add(id)
-            MyLog.i("*enqueue[$index]: $id")
-        }
-        updateNotification()
     }
 
     private fun getDownloadRequests(url: String, shareInfo: ShareInfo): List<DownloadManager.Request> {

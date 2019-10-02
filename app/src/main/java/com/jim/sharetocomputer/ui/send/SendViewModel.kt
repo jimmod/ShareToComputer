@@ -28,6 +28,8 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
@@ -42,11 +44,16 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-
+@AllOpen
 class SendViewModel(context: Context, val wifiApi: WifiApi, val activityHelper: ActivityHelper) :
     MainViewModel(context) {
 
     private val deviceIp = MutableLiveData<String>().apply { value = "unknown" }
+    private val isAbleToShareData = MediatorLiveData<Boolean>().apply {
+        addSource(WebUploadService.isRunning) {
+            this.value = !it
+        }
+    }
     private val devicePort = WebServerService.port
     private var qrCode = MutableLiveData<Drawable>()
     private var qrCodeBitmap: Bitmap? = null
@@ -85,6 +92,8 @@ class SendViewModel(context: Context, val wifiApi: WifiApi, val activityHelper: 
             }
         }
     }
+
+    fun isAbleToShare(): LiveData<Boolean> = isAbleToShareData
 
     private fun handleSelectFileResult(result: Instrumentation.ActivityResult) {
         MyLog.i("*Result: ${result.resultCode}|${result.resultData?.extras?.keySet()}")

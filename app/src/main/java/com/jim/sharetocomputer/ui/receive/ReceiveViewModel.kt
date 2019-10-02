@@ -18,14 +18,53 @@
 
 package com.jim.sharetocomputer.ui.receive
 
+import android.content.Context
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jim.sharetocomputer.AllOpen
+import com.jim.sharetocomputer.WebServerService
+import com.jim.sharetocomputer.WebUploadService
+import com.jim.sharetocomputer.gateway.WifiApi
+import com.jim.sharetocomputer.logging.MyLog
 
 @AllOpen
-class ReceiveViewModel(val navigation: ReceiveNavigation) : ViewModel() {
+class ReceiveViewModel(
+    val context: Context,
+    val wifiApi: WifiApi,
+    val navigation: ReceiveNavigation
+) : ViewModel() {
+
+    private val isSharing = MutableLiveData<Boolean>().apply { value = false }
+    private val deviceIp = MutableLiveData<String>().apply { value = "unknown" }
+    private val isAbleToReceiveData = MediatorLiveData<Boolean>().apply {
+        addSource(WebServerService.isRunning) {
+            this.value = !it
+        }
+    }
+    private val devicePort = WebUploadService.port
 
     fun scanQrCode() {
+        MyLog.i("Select QrCode")
         navigation.openScanQrCode()
     }
+
+    fun receiveFromComputer() {
+        MyLog.i("Select start web")
+        navigation.startWebUploadService()
+        deviceIp.value = wifiApi.getIp()
+        isSharing.value = true
+    }
+
+    fun stopWeb() {
+        navigation.stopWebUploadService()
+        isSharing.value = false
+    }
+
+    fun isAbleToReceive() = isAbleToReceiveData
+
+    fun isSharing() = isSharing
+    fun deviceIp() = deviceIp
+    fun devicePort() = devicePort
 
 }

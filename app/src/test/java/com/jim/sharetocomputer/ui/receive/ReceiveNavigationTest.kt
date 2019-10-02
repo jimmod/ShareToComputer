@@ -18,15 +18,21 @@
 
 package com.jim.sharetocomputer.ui.receive
 
+import android.app.Application
 import androidx.fragment.app.testing.launchFragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.jim.sharetocomputer.WebUploadService
 import com.jim.sharetocomputer.ui.main.MainFragmentDirections
 import com.jim.sharetocomputer.ui.setting.SettingFragment
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
+import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
 class ReceiveNavigationTest {
@@ -44,6 +50,25 @@ class ReceiveNavigationTest {
 
             Mockito.verify(controller).navigate(MainFragmentDirections.actionFragmentMainToFragmentQrcode())
         }
+    }
+
+    @Test
+    fun start_web_upload_service() {
+        val fragmentScenario = launchFragment<SettingFragment>()
+        fragmentScenario.onFragment { fragment ->
+            val navigation = ReceiveNavigation(fragment)
+
+            navigation.startWebUploadService()
+
+            val app = ApplicationProvider.getApplicationContext<Application>()
+            val startedService = Shadows.shadowOf(app).peekNextStartedService()
+
+            Assert.assertThat(
+                startedService,
+                IntentMatchers.hasComponent(WebUploadService::class.java.name)
+            )
+        }
+
     }
 
 }

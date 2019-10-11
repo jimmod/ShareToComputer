@@ -1,12 +1,12 @@
 package com.jim.sharetocomputer
 
-import android.app.Activity
 import android.app.Application
 import android.app.Instrumentation
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -163,7 +163,7 @@ class MainActivityTest {
         val resultIntent = Intent().apply {
             data = uri
         }
-        val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent)
+        val result = Instrumentation.ActivityResult(AppCompatActivity.RESULT_OK, resultIntent)
         Intents.intending(IntentMatchers.hasAction(Intent.ACTION_OPEN_DOCUMENT)).respondWith(result)
     }
 
@@ -174,7 +174,7 @@ class MainActivityTest {
                 addItem(ClipData.Item(uris[1]))
             }
         }
-        val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent)
+        val result = Instrumentation.ActivityResult(AppCompatActivity.RESULT_OK, resultIntent)
         Intents.intending(IntentMatchers.hasAction(Intent.ACTION_OPEN_DOCUMENT)).respondWith(result)
     }
 
@@ -183,7 +183,7 @@ class MainActivityTest {
             val item = ClipData.Item(uri)
             clipData = ClipData("", emptyArray(), item)
         }
-        val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent)
+        val result = Instrumentation.ActivityResult(AppCompatActivity.RESULT_OK, resultIntent)
         Intents.intending(IntentMatchers.hasAction(Intent.ACTION_PICK)).respondWith(result)
     }
 
@@ -194,7 +194,7 @@ class MainActivityTest {
                 addItem(ClipData.Item(uris[1]))
             }
         }
-        val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent)
+        val result = Instrumentation.ActivityResult(AppCompatActivity.RESULT_OK, resultIntent)
         Intents.intending(IntentMatchers.hasAction(Intent.ACTION_PICK)).respondWith(result)
     }
 

@@ -18,7 +18,6 @@
 
 package com.jim.sharetocomputer.ui.send
 
-import android.app.Activity
 import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
@@ -27,6 +26,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -98,7 +98,7 @@ class SendViewModel(context: Context, val wifiApi: WifiApi, val activityHelper: 
 
     private fun handleSelectFileResult(result: Instrumentation.ActivityResult) {
         MyLog.i("*Result: ${result.resultCode}|${result.resultData?.extras?.keySet()}")
-        if (result.resultCode == Activity.RESULT_OK) {
+        if (result.resultCode == AppCompatActivity.RESULT_OK) {
             updateWebServerUi()
             result.resultData.data?.run {
                 startWebService(ShareRequest.ShareRequestSingleFile(this))

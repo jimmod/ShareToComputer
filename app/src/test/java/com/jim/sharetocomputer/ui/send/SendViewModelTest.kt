@@ -18,11 +18,11 @@
 
 package com.jim.sharetocomputer.ui.send
 
-import android.app.Activity
 import android.app.Application
 import android.app.Instrumentation
 import android.content.ClipData
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.test.core.app.ApplicationProvider
@@ -74,7 +74,7 @@ class SendViewModelTest {
         val activity = activityController.get()
         val intentResult = Intent()
         val activityResult = Instrumentation.ActivityResult(
-            Activity.RESULT_CANCELED,
+            AppCompatActivity.RESULT_CANCELED,
             intentResult
         )
         whenever(activityHelper.startActivityForResult(any(), any())).thenReturn(activityResult)
@@ -95,7 +95,7 @@ class SendViewModelTest {
             data = fileUri
         }
         val activityResult = Instrumentation.ActivityResult(
-            Activity.RESULT_OK,
+            AppCompatActivity.RESULT_OK,
             intentResult
         )
         whenever(activityHelper.startActivityForResult(any(), any())).thenReturn(activityResult)
@@ -124,7 +124,7 @@ class SendViewModelTest {
             clipData = ClipData.newRawUri("1", fileUri)
         }
         val activityResult = Instrumentation.ActivityResult(
-            Activity.RESULT_OK,
+            AppCompatActivity.RESULT_OK,
             intentResult
         )
         whenever(activityHelper.startActivityForResult(any(), any())).thenReturn(activityResult)
@@ -156,7 +156,7 @@ class SendViewModelTest {
             }
         }
         val activityResult = Instrumentation.ActivityResult(
-            Activity.RESULT_OK,
+            AppCompatActivity.RESULT_OK,
             intentResult
         )
         whenever(activityHelper.startActivityForResult(any(), any())).thenReturn(activityResult)
@@ -186,7 +186,7 @@ class SendViewModelTest {
         val activity = activityController.get()
         val intentResult = Intent()
         val activityResult = Instrumentation.ActivityResult(
-            Activity.RESULT_CANCELED,
+            AppCompatActivity.RESULT_CANCELED,
             intentResult
         )
         whenever(activityHelper.startActivityForResult(any(), any())).thenReturn(activityResult)
@@ -208,7 +208,7 @@ class SendViewModelTest {
             data = fileUri
         }
         val activityResult = Instrumentation.ActivityResult(
-            Activity.RESULT_OK,
+            AppCompatActivity.RESULT_OK,
             intentResult
         )
         whenever(activityHelper.startActivityForResult(any(), any())).thenReturn(activityResult)
@@ -237,7 +237,7 @@ class SendViewModelTest {
             clipData = ClipData.newRawUri("1", fileUri)
         }
         val activityResult = Instrumentation.ActivityResult(
-            Activity.RESULT_OK,
+            AppCompatActivity.RESULT_OK,
             intentResult
         )
         whenever(activityHelper.startActivityForResult(any(), any())).thenReturn(activityResult)
@@ -269,7 +269,7 @@ class SendViewModelTest {
             }
         }
         val activityResult = Instrumentation.ActivityResult(
-            Activity.RESULT_OK,
+            AppCompatActivity.RESULT_OK,
             intentResult
         )
         whenever(activityHelper.startActivityForResult(any(), any())).thenReturn(activityResult)

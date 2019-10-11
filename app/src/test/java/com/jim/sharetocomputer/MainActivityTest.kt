@@ -36,7 +36,7 @@ class MainActivityTest {
     @get:Rule
     val uiRule = IntentsTestRule(MainActivity::class.java, false, false)
 
-    private val activity by lazy {uiRule.activity}
+    private val activity by lazy { uiRule.activity }
     private val application by lazy { ApplicationProvider.getApplicationContext<Application>() }
 
     @Before
@@ -65,7 +65,10 @@ class MainActivityTest {
     fun share_text_should_start_service() {
         launchActivity(intentShareText)
 
-        val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestText(text))
+        val expectedIntent = WebServerService.createIntent(
+            ApplicationProvider.getApplicationContext(),
+            ShareRequest.ShareRequestText(text)
+        )
         assertServiceStarted(expectedIntent)
     }
 
@@ -82,7 +85,10 @@ class MainActivityTest {
     fun share_single_file_should_start_service() {
         launchActivity(intentShareUri)
 
-        val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestSingleFile(uri))
+        val expectedIntent = WebServerService.createIntent(
+            ApplicationProvider.getApplicationContext(),
+            ShareRequest.ShareRequestSingleFile(uri)
+        )
         assertServiceStarted(expectedIntent)
     }
 
@@ -90,7 +96,10 @@ class MainActivityTest {
     fun share_multiple_file_should_start_service() {
         launchActivity(intentShareUris)
 
-        val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestMultipleFile(uris))
+        val expectedIntent = WebServerService.createIntent(
+            ApplicationProvider.getApplicationContext(),
+            ShareRequest.ShareRequestMultipleFile(uris)
+        )
         assertServiceStarted(expectedIntent)
     }
 
@@ -101,7 +110,10 @@ class MainActivityTest {
 
         pressShareFileButton()
 
-        val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestSingleFile(uri))
+        val expectedIntent = WebServerService.createIntent(
+            ApplicationProvider.getApplicationContext(),
+            ShareRequest.ShareRequestSingleFile(uri)
+        )
         assertServiceStarted(expectedIntent)
     }
 
@@ -140,7 +152,10 @@ class MainActivityTest {
 
         pressShareImageVideoButton()
 
-        val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), ShareRequest.ShareRequestMultipleFile(uris))
+        val expectedIntent = WebServerService.createIntent(
+            ApplicationProvider.getApplicationContext(),
+            ShareRequest.ShareRequestMultipleFile(uris)
+        )
         assertServiceStarted(expectedIntent)
     }
 
@@ -213,15 +228,15 @@ class MainActivityTest {
             type = ClipDescription.MIMETYPE_TEXT_PLAIN
             putExtra(Intent.EXTRA_TEXT, text)
         }
-        val uri = Uri.fromFile(File.createTempFile("temp","del"))!!
+        val uri = Uri.fromFile(File.createTempFile("temp", "del"))!!
         val intentShareUri = Intent().apply {
             action = Intent.ACTION_SEND
             type = "image/png"
             putExtra(Intent.EXTRA_STREAM, uri)
         }
         val uris = arrayListOf(
-            Uri.fromFile(File.createTempFile("temp","del")),
-            Uri.fromFile(File.createTempFile("temp2","del"))
+            Uri.fromFile(File.createTempFile("temp", "del")),
+            Uri.fromFile(File.createTempFile("temp2", "del"))
         )
         val intentShareUris = Intent().apply {
             action = Intent.ACTION_SEND_MULTIPLE

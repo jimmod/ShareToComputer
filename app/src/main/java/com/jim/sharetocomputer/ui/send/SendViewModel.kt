@@ -83,10 +83,11 @@ class SendViewModel(context: Context, val wifiApi: WifiApi, val activityHelper: 
         MyLog.i("Select Media")
         if (!checkWifi()) return
         GlobalScope.launch(TestableDispatchers.Default) {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-                type = "*/*"
-                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            }
+            val intent =
+                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+                    type = "*/*"
+                    putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                }
             activityHelper.startActivityForResult(activity, intent)?.let { result ->
                 handleSelectFileResult(result)
             }

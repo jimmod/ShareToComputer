@@ -48,7 +48,8 @@ class ReceiveNavigationTest {
 
             navigation.openScanQrCode()
 
-            Mockito.verify(controller).navigate(MainFragmentDirections.actionFragmentMainToFragmentQrcode())
+            Mockito.verify(controller)
+                .navigate(MainFragmentDirections.actionFragmentMainToFragmentQrcode())
         }
     }
 

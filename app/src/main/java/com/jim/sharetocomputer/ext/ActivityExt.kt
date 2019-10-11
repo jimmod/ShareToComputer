@@ -22,7 +22,7 @@ suspend fun FragmentActivity.startQrCodeScan(): Instrumentation.ActivityResult? 
     val requestCode = IntentIntegrator.REQUEST_CODE
 
     var fragment = supportFragmentManager.findFragmentByTag(TAG) as FragmentHelper?
-    if (fragment==null) {
+    if (fragment == null) {
         fragment = FragmentHelper()
         GlobalScope.launch(TestableDispatchers.Main) {
             MyLog.d("Add headless fragment")

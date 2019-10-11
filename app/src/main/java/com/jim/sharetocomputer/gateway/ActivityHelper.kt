@@ -33,7 +33,10 @@ import kotlinx.coroutines.runBlocking
 @AllOpen
 class ActivityHelper {
 
-    fun startActivityForResult(activity: FragmentActivity, intent: Intent): Instrumentation.ActivityResult? {
+    fun startActivityForResult(
+        activity: FragmentActivity,
+        intent: Intent
+    ): Instrumentation.ActivityResult? {
         if (activity.isFinishing) {
             return null
         }

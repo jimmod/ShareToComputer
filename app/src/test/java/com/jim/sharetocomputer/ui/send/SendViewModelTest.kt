@@ -103,7 +103,8 @@ class SendViewModelTest {
         sendViewModel.activity = activity
         sendViewModel.selectFile()
 
-        val expectedIntent = WebServerService.createIntent(activity, ShareRequest.ShareRequestSingleFile(fileUri))
+        val expectedIntent =
+            WebServerService.createIntent(activity, ShareRequest.ShareRequestSingleFile(fileUri))
         val serviceStarted = applicationShadow.peekNextStartedService()
         assertThat(serviceStarted?.component, Matchers.equalTo(expectedIntent.component))
         expectedIntent.extras!!.keySet().forEach {
@@ -131,7 +132,8 @@ class SendViewModelTest {
         sendViewModel.activity = activity
         sendViewModel.selectFile()
 
-        val expectedIntent = WebServerService.createIntent(activity, ShareRequest.ShareRequestSingleFile(fileUri))
+        val expectedIntent =
+            WebServerService.createIntent(activity, ShareRequest.ShareRequestSingleFile(fileUri))
         val serviceStarted = applicationShadow.peekNextStartedService()
         assertThat(serviceStarted?.component, Matchers.equalTo(expectedIntent.component))
         expectedIntent.extras!!.keySet().forEach {
@@ -163,7 +165,10 @@ class SendViewModelTest {
         sendViewModel.selectFile()
 
         val expectedIntent =
-            WebServerService.createIntent(activity, ShareRequest.ShareRequestMultipleFile(listOf(fileUri, fileUri2)))
+            WebServerService.createIntent(
+                activity,
+                ShareRequest.ShareRequestMultipleFile(listOf(fileUri, fileUri2))
+            )
         val serviceStarted = applicationShadow.peekNextStartedService()
         assertThat(serviceStarted?.component, Matchers.equalTo(expectedIntent.component))
         expectedIntent.extras!!.keySet().forEach {
@@ -211,7 +216,8 @@ class SendViewModelTest {
         sendViewModel.activity = activity
         sendViewModel.selectMedia()
 
-        val expectedIntent = WebServerService.createIntent(activity, ShareRequest.ShareRequestSingleFile(fileUri))
+        val expectedIntent =
+            WebServerService.createIntent(activity, ShareRequest.ShareRequestSingleFile(fileUri))
         val serviceStarted = applicationShadow.peekNextStartedService()
         assertThat(serviceStarted?.component, Matchers.equalTo(expectedIntent.component))
         expectedIntent.extras!!.keySet().forEach {
@@ -239,7 +245,8 @@ class SendViewModelTest {
         sendViewModel.activity = activity
         sendViewModel.selectMedia()
 
-        val expectedIntent = WebServerService.createIntent(activity, ShareRequest.ShareRequestSingleFile(fileUri))
+        val expectedIntent =
+            WebServerService.createIntent(activity, ShareRequest.ShareRequestSingleFile(fileUri))
         val serviceStarted = applicationShadow.peekNextStartedService()
         assertThat(serviceStarted?.component, Matchers.equalTo(expectedIntent.component))
         expectedIntent.extras!!.keySet().forEach {
@@ -271,7 +278,10 @@ class SendViewModelTest {
         sendViewModel.selectMedia()
 
         val expectedIntent =
-            WebServerService.createIntent(activity, ShareRequest.ShareRequestMultipleFile(listOf(fileUri, fileUri2)))
+            WebServerService.createIntent(
+                activity,
+                ShareRequest.ShareRequestMultipleFile(listOf(fileUri, fileUri2))
+            )
         val serviceStarted = applicationShadow.peekNextStartedService()
         assertThat(serviceStarted?.component, Matchers.equalTo(expectedIntent.component))
         expectedIntent.extras!!.keySet().forEach {

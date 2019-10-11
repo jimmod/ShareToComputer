@@ -25,7 +25,7 @@ import com.jim.sharetocomputer.coroutines.DirectDispatcher
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
 
 
-class RobolectricApplication: Application() {
+class RobolectricApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()

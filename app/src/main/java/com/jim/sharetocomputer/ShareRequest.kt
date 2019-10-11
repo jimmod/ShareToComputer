@@ -20,20 +20,20 @@ import android.net.Uri
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
-sealed class ShareRequest: Parcelable {
+sealed class ShareRequest : Parcelable {
 
     @Parcelize
     data class ShareRequestText(
         val text: String
-    ): ShareRequest()
+    ) : ShareRequest()
 
     @Parcelize
     data class ShareRequestSingleFile(
         val uri: Uri
-    ): ShareRequest()
+    ) : ShareRequest()
 
     @Parcelize
     data class ShareRequestMultipleFile(
         val uris: List<Uri>
-    ): ShareRequest()
+    ) : ShareRequest()
 }

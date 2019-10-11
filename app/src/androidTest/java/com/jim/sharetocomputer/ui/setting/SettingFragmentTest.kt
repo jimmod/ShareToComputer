@@ -98,7 +98,10 @@ class SettingFragmentTest : KoinTest {
 
     @Test
     fun download_log() {
-        val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "mylog.log")
+        val file = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            "mylog.log"
+        )
         file.delete()
         assertTimeout(2000) {
             Assert.assertFalse(file.exists())

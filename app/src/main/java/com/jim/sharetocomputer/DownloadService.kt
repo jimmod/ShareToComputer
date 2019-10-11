@@ -48,7 +48,11 @@ class DownloadService : Service() {
             completeIds.add(id)
             if (queuedIds.size == completeIds.size) {
                 MyLog.i("All download completed")
-                Toast.makeText(this@DownloadService, R.string.info_download_completed, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@DownloadService,
+                    R.string.info_download_completed,
+                    Toast.LENGTH_LONG
+                ).show()
                 stopSelf()
             } else {
                 updateNotification()
@@ -137,14 +141,20 @@ class DownloadService : Service() {
         }
     }
 
-    private fun getDownloadRequests(url: String, shareInfo: ShareInfo): List<DownloadManager.Request> {
+    private fun getDownloadRequests(
+        url: String,
+        shareInfo: ShareInfo
+    ): List<DownloadManager.Request> {
         return shareInfo.files.mapIndexed { index, fileInfo ->
             val uri = Uri.parse("$url/$index")
             return@mapIndexed DownloadManager.Request(uri).apply {
                 this.setTitle(fileInfo.filename)
                 this.setDescription(getString(R.string.downloading))
                 this.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
-                this.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileInfo.filename)
+                this.setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS,
+                    fileInfo.filename
+                )
             }
         }
     }

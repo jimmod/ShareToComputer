@@ -117,7 +117,7 @@ class WebServerMultipleFilesTest {
         val shareInfo = Gson().fromJson(FileReader(file), ShareInfo::class.java)
         Assert.assertEquals(uris.size, shareInfo.total)
         Assert.assertEquals(uris.size, shareInfo.files.size)
-        uris.forEachIndexed { index, uri ->
+        uris.forEachIndexed { index, _ ->
             Assert.assertEquals((index + 21).toString(), shareInfo.files[index].filename)
         }
     }

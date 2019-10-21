@@ -21,17 +21,38 @@ package com.jim.sharetocomputer.ui.receive
 import android.content.Intent
 import android.os.Build
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
+import com.google.zxing.integration.android.IntentIntegrator
+import com.google.zxing.integration.android.IntentResult
 import com.jim.sharetocomputer.AllOpen
+import com.jim.sharetocomputer.QrCodeInfo
 import com.jim.sharetocomputer.WebUploadService
-import com.jim.sharetocomputer.ui.main.MainFragmentDirections
+import com.jim.sharetocomputer.gateway.ActivityHelper
+import com.jim.sharetocomputer.logging.MyLog
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @AllOpen
-class ReceiveNavigation(val fragment: Fragment) {
+class ReceiveNavigation(val fragment: Fragment, val activityHelper: ActivityHelper): KoinComponent {
 
-    fun openScanQrCode() {
-        fragment.findNavController()
-            .navigate(MainFragmentDirections.actionFragmentMainToFragmentQrcode())
+    suspend fun openScanQrCode() = suspendCoroutine<QrCodeInfo?> { cont ->
+        activityHelper.startQrCodeScan(fragment.activity!!)?.let { result ->
+            val resultQrCode: IntentResult? = IntentIntegrator.parseActivityResult(
+                IntentIntegrator.REQUEST_CODE,
+                result.resultCode,
+                result.resultData
+            )
+            try {
+                cont.resume(Gson().fromJson(resultQrCode!!.contents, QrCodeInfo::class.java))
+                return@suspendCoroutine
+            } catch (e: JsonSyntaxException) {
+                MyLog.w("Error on parsing QR Code result", e)
+            }
+        }
+        cont.resume(null)
     }
 
     fun startWebUploadService() {

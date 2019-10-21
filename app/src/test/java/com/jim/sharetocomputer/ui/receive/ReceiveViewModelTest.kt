@@ -24,6 +24,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.jim.sharetocomputer.gateway.WifiApi
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -39,7 +40,10 @@ class ReceiveViewModelTest {
 
         viewModel.scanQrCode()
 
-        verify(navigation).openScanQrCode()
+        runBlocking {
+            verify(navigation).openScanQrCode()
+        }
+
     }
 
 

@@ -42,17 +42,20 @@ suspend fun FragmentActivity.startQrCodeScan(): Instrumentation.ActivityResult? 
 
 class FragmentHelper : Fragment() {
 
-    private val map = SparseArray<CompletableDeferred<Instrumentation.ActivityResult>>()
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         MyLog.i("onActivityResult $requestCode|$resultCode|${data?.extras?.keySet()}")
         map[requestCode].complete(Instrumentation.ActivityResult(resultCode, data))
+        map.remove(requestCode)
     }
 
     fun addMapping(requestCode: Int, result: CompletableDeferred<Instrumentation.ActivityResult>) {
         MyLog.d("Add result code mapping $requestCode|")
         map.put(requestCode, result)
+    }
+
+    companion object {
+        private val map = SparseArray<CompletableDeferred<Instrumentation.ActivityResult>>()
     }
 
 }

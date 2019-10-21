@@ -33,7 +33,6 @@
     <string name="share_file">Share File</string>
     <string name="download_instruction_qr_code">Download with QR code</string>
     <string name="download_instruction_browser">Download from browser:</string>
-    <string name="setting">Setting</string>
     <string name="title_download_log_preference">Download log</string>
     <string name="summary_download_log_preference">Copy mylog.log to download directory</string>
     <string name="info_download_log_complete">Log file downloaded</string>

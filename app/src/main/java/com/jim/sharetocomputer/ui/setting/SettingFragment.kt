@@ -98,6 +98,7 @@ class SettingFragment : PreferenceFragmentCompat() {
         return info.toString()
     }
 
+    @Suppress("DEPRECATION")
     private fun copyLogFile() {
         val source = File(MyLog.logFilePath())
         val target =

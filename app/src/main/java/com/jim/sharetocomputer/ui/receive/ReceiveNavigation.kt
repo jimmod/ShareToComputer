@@ -20,6 +20,7 @@ package com.jim.sharetocomputer.ui.receive
 
 import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -27,11 +28,14 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import com.jim.sharetocomputer.AllOpen
 import com.jim.sharetocomputer.QrCodeInfo
+import com.jim.sharetocomputer.R
 import com.jim.sharetocomputer.WebUploadService
+import com.jim.sharetocomputer.coroutines.TestableDispatchers
 import com.jim.sharetocomputer.gateway.ActivityHelper
 import com.jim.sharetocomputer.logging.MyLog
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -50,6 +54,13 @@ class ReceiveNavigation(val fragment: Fragment, val activityHelper: ActivityHelp
                 return@suspendCoroutine
             } catch (e: JsonSyntaxException) {
                 MyLog.w("Error on parsing QR Code result", e)
+                GlobalScope.launch(TestableDispatchers.Main) {
+                    Toast.makeText(
+                        fragment.activity!!,
+                        R.string.warning_unknown_qrcode,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         }
         cont.resume(null)

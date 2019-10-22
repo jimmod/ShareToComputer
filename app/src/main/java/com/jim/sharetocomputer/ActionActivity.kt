@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.jim.sharetocomputer.logging.MyLog
 
-class ActionActivity: AppCompatActivity() {
+class ActionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,13 +26,14 @@ class ActionActivity: AppCompatActivity() {
         const val ACTION_STOP_SHARE = "com.jim.sharetocomputer.STOP_SHARE"
         const val ACTION_STOP_DOWNLOAD = "com.jim.sharetocomputer.STOP_DOWNLOAD"
 
-        fun stopShareIntent(context:Context) = Intent(context, ActionActivity::class.java).apply {
+        fun stopShareIntent(context: Context) = Intent(context, ActionActivity::class.java).apply {
             action = ACTION_STOP_SHARE
         }
 
-        fun stopDownloadIntent(context: Context) = Intent(context, ActionActivity::class.java).apply {
-            action = ACTION_STOP_DOWNLOAD
-        }
+        fun stopDownloadIntent(context: Context) =
+            Intent(context, ActionActivity::class.java).apply {
+                action = ACTION_STOP_DOWNLOAD
+            }
 
     }
 

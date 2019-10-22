@@ -31,6 +31,7 @@ class DownloadServiceTest {
 
     private val application by lazy { ApplicationProvider.getApplicationContext<Application>() }
     private lateinit var webserver: NanoHTTPD
+    @Suppress("DEPRECATION")
     private val downloadFolder by lazy { Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) }
     private val fileTemp by lazy {
         arrayOf(
@@ -131,7 +132,11 @@ class DownloadServiceTest {
         override fun serve(session: IHTTPSession): Response {
             MyLog.d("$TAG incoming request")
             return if (session.uri == "/info") {
-                newFixedLengthResponse(Response.Status.OK, "application/json", INFO_RESPONSE_SINGLE_FILE)
+                newFixedLengthResponse(
+                    Response.Status.OK,
+                    "application/json",
+                    INFO_RESPONSE_SINGLE_FILE
+                )
             } else {
                 val inputStream = application.assets.open("web/logo.png")
                 newFixedLengthResponse(Response.Status.OK, "image/png", inputStream, -1).apply {
@@ -194,8 +199,10 @@ class DownloadServiceTest {
         private const val FILENAME_TEXT = "sharetocomputer_sample.html"
         private const val FILENAME_PNG = "sharetocomputer_sample.png"
         private const val FILENAME_PNG2 = "sharetocomputer_sample-1.png"
-        private val INFO_RESPONSE_TEXT = Gson().toJson(ShareInfo(1, listOf(FileInfo(FILENAME_TEXT))))
-        private val INFO_RESPONSE_SINGLE_FILE = Gson().toJson(ShareInfo(1, listOf(FileInfo(FILENAME_PNG))))
+        private val INFO_RESPONSE_TEXT =
+            Gson().toJson(ShareInfo(1, listOf(FileInfo(FILENAME_TEXT))))
+        private val INFO_RESPONSE_SINGLE_FILE =
+            Gson().toJson(ShareInfo(1, listOf(FileInfo(FILENAME_PNG))))
         private val INFO_RESPONSE_MULTIPLE_FILES =
             Gson().toJson(ShareInfo(2, listOf(FileInfo(FILENAME_PNG), FileInfo(FILENAME_TEXT))))
 

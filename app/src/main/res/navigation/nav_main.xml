@@ -18,7 +18,6 @@
     <fragment
         android:id="@+id/fragment_about"
         android:name="com.jim.sharetocomputer.ui.setting.AboutFragment"
-        android:label="@string/about">
-    </fragment>
+        android:label="@string/about" />
 
 </navigation>

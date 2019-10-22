@@ -36,13 +36,15 @@ class ActionActivityTest {
     }
 
     private fun assertWebServerServiceStopped() {
-        val expectedIntent = WebServerService.createIntent(ApplicationProvider.getApplicationContext(), null)
+        val expectedIntent =
+            WebServerService.createIntent(ApplicationProvider.getApplicationContext(), null)
         val serviceIntent = Shadows.shadowOf(uiRule.activity).nextStoppedService
         assertThat(serviceIntent, ExtraMatchers.sameComponentAs(expectedIntent))
     }
 
     private fun assertDownloadServiceStopped() {
-        val expectedIntent = DownloadService.createIntent(ApplicationProvider.getApplicationContext(), null)
+        val expectedIntent =
+            DownloadService.createIntent(ApplicationProvider.getApplicationContext(), null)
         val serviceIntent = Shadows.shadowOf(uiRule.activity).nextStoppedService
         assertThat(serviceIntent, ExtraMatchers.sameComponentAs(expectedIntent))
     }

@@ -53,7 +53,10 @@ class WebServerSingleFileTest {
     @Before
     fun setup() {
         webServer.start()
-        shadowContentResolver.registerInputStream(uri, ByteArrayInputStream(SAMPLE_TEXT.toByteArray(Charsets.UTF_8)))
+        shadowContentResolver.registerInputStream(
+            uri,
+            ByteArrayInputStream(SAMPLE_TEXT.toByteArray(Charsets.UTF_8))
+        )
     }
 
     @After

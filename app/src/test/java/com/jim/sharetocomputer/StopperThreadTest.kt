@@ -1,4 +1,5 @@
 package com.jim.sharetocomputer
+
 /*
     This file is part of Share To Computer  Copyright (C) 2019  Jimmy <https://github.com/jimmod/ShareToComputer>.
 
@@ -32,8 +33,10 @@ class StopperThreadTest {
 
     @Test
     fun service_stopself_automatically() {
-        val intent = WebServerService.createIntent(application, ShareRequest.ShareRequestText("Hello"))
-        val serviceController = Robolectric.buildService(WebServerService::class.java, intent).create()
+        val intent =
+            WebServerService.createIntent(application, ShareRequest.ShareRequestText("Hello"))
+        val serviceController =
+            Robolectric.buildService(WebServerService::class.java, intent).create()
         val service = Shadows.shadowOf(serviceController.get())
         val webServer = WebServerMock()
 

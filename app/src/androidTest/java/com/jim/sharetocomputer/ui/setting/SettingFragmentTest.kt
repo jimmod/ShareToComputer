@@ -18,10 +18,10 @@
 
 package com.jim.sharetocomputer.ui.setting
 
-import android.app.Activity
 import android.app.Instrumentation.ActivityResult
 import android.content.Intent
 import android.os.Environment
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
@@ -83,7 +83,8 @@ class SettingFragmentTest : KoinTest {
     @Test
     fun send_feedback() {
         launchFragment()
-        Intents.intending(anyIntent()).respondWith(ActivityResult(Activity.RESULT_OK, null))
+        Intents.intending(anyIntent())
+            .respondWith(ActivityResult(AppCompatActivity.RESULT_OK, null))
 
         sendFeedback().click()
 
@@ -98,7 +99,10 @@ class SettingFragmentTest : KoinTest {
 
     @Test
     fun download_log() {
-        val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "mylog.log")
+        val file = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            "mylog.log"
+        )
         file.delete()
         assertTimeout(2000) {
             Assert.assertFalse(file.exists())

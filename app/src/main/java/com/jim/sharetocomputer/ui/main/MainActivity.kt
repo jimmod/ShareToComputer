@@ -62,7 +62,10 @@ class MainActivity : AppCompatActivity() {
         ) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ),
                 1
             )
         }
@@ -74,14 +77,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun Intent.generateShareRequest(): ShareRequest? {
-        if (action== Intent.ACTION_SEND && type?.startsWith("text")==true) {
+        if (action == Intent.ACTION_SEND && type?.startsWith("text") == true) {
             return ShareRequest.ShareRequestText(getStringExtra(Intent.EXTRA_TEXT) ?: "")
-        } else if (action== Intent.ACTION_SEND) {
-            getParcelableExtra<Uri>(Intent.EXTRA_STREAM)?.let {uri ->
+        } else if (action == Intent.ACTION_SEND) {
+            getParcelableExtra<Uri>(Intent.EXTRA_STREAM)?.let { uri ->
                 return ShareRequest.ShareRequestSingleFile(uri)
             }
-        } else if (action== Intent.ACTION_SEND_MULTIPLE) {
-            getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)?.let {uris ->
+        } else if (action == Intent.ACTION_SEND_MULTIPLE) {
+            getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)?.let { uris ->
                 return ShareRequest.ShareRequestMultipleFile(uris)
             }
         } else {

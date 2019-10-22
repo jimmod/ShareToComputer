@@ -18,7 +18,10 @@ package com.jim.sharetocomputer.webserver
 
 import java.io.InputStream
 
-class InputStreamNotifyWebServer(private val wrappedInputStream: InputStream, private val webServer: WebServer) :
+class InputStreamNotifyWebServer(
+    private val wrappedInputStream: InputStream,
+    private val webServer: WebServer
+) :
     InputStream() {
 
     override fun read(): Int {

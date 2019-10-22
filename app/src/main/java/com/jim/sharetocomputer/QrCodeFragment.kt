@@ -39,7 +39,11 @@ import kotlinx.coroutines.launch
 
 class QrCodeFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         MyLog.i("onCreate")
         GlobalScope.launch(TestableDispatchers.Default) {
             activity?.startQrCodeScan()?.let { result ->

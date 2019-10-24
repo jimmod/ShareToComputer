@@ -97,6 +97,7 @@ class SettingFragmentTest : KoinTest {
         )
     }
 
+    @Suppress("DEPRECATION")
     @Test
     fun download_log() {
         val file = File(

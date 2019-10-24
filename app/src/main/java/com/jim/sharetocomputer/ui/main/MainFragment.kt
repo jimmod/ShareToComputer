@@ -37,11 +37,11 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        MyLog.i("onCreate")
+        MyLog.i("onCreateView")
         val binding = FragmentMainBinding.inflate(inflater, container, false)
 
         val sectionsPagerAdapter =
-            SectionsPagerAdapter(activity!!, activity!!.supportFragmentManager)
+            SectionsPagerAdapter(activity!!, childFragmentManager)
         binding.viewPager.adapter = sectionsPagerAdapter
         binding.tabs.setupWithViewPager(binding.viewPager)
 
@@ -53,7 +53,7 @@ class MainFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        MyLog.i("onDestroy")
+        MyLog.i("onDestroyView")
         super.onDestroyView()
     }
 

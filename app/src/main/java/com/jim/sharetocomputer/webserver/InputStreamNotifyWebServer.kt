@@ -29,12 +29,12 @@ class InputStreamNotifyWebServer(
         return wrappedInputStream.read()
     }
 
-    override fun read(b: ByteArray?): Int {
+    override fun read(b: ByteArray): Int {
         notifyWebServer()
         return wrappedInputStream.read(b)
     }
 
-    override fun read(b: ByteArray?, off: Int, len: Int): Int {
+    override fun read(b: ByteArray, off: Int, len: Int): Int {
         notifyWebServer()
         return wrappedInputStream.read(b, off, len)
     }

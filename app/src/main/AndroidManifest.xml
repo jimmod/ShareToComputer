@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.jim.sharetocomputer.Application"
+        android:name=".Application"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,7 +24,6 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,10 +55,11 @@
             android:screenOrientation="portrait"
             tools:replace="screenOrientation" />
 
+        <activity android:name=".ui.DummyActivity" />
+
         <service
             android:name=".WebServerService"
             android:enabled="true" />
-
         <service
             android:name=".DownloadService"
             android:enabled="true" />

@@ -19,14 +19,18 @@
 package com.jim.sharetocomputer.ui.receive
 
 import android.content.Context
+import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.jim.sharetocomputer.AllOpen
-import com.jim.sharetocomputer.WebServerService
-import com.jim.sharetocomputer.WebUploadService
+import com.jim.sharetocomputer.*
+import com.jim.sharetocomputer.coroutines.TestableDispatchers
 import com.jim.sharetocomputer.gateway.WifiApi
 import com.jim.sharetocomputer.logging.MyLog
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @AllOpen
 class ReceiveViewModel(
@@ -46,7 +50,20 @@ class ReceiveViewModel(
 
     fun scanQrCode() {
         MyLog.i("Select QrCode")
-        navigation.openScanQrCode()
+        GlobalScope.launch(TestableDispatchers.Default) {
+            navigation.openScanQrCode()?.let { qrCodeInfo ->
+                MyLog.i("Start download service to download from: $qrCodeInfo")
+                ContextCompat.startForegroundService(
+                    context, DownloadService.createIntent(context, qrCodeInfo.url)
+                )
+                if (qrCodeInfo.version > Application.QR_CODE_VERSION) {
+                    showToast(R.string.warning_newer_qrcode)
+                } else {
+                    showToast(R.string.info_download_start)
+                }
+
+            }
+        }
     }
 
     fun receiveFromComputer() {
@@ -60,6 +77,12 @@ class ReceiveViewModel(
         navigation.stopWebUploadService()
         isSharing.value = false
     }
+
+    private fun showToast(@StringRes id: Int, duration: Int = Toast.LENGTH_LONG) =
+        GlobalScope.launch(TestableDispatchers.Main) {
+            Toast.makeText(context, id, duration).show()
+        }
+
 
     fun isAbleToReceive() = isAbleToReceiveData
 

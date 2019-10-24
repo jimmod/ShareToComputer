@@ -35,7 +35,6 @@
     <string name="share_file">Udostępnij Plik</string>
     <string name="download_instruction_qr_code">Pobierz za pomocą kodu QR</string>
     <string name="download_instruction_browser">Pobierz za pomocą przeglądarki:</string>
-    <string name="setting">Ustawienia</string>
     <string name="title_download_log_preference">Pobierz dziennik</string>
     <string name="summary_download_log_preference">Skopiuj plik mylog.log do katalogu pobierania</string>
     <string name="info_download_log_complete">Pobrano plik dziennika</string>
@@ -44,4 +43,5 @@
     <string name="error_fail_send_feedback">Nie można otworzyć aplikacji pocztowej</string>
     <string name="error_wifi_required">Wymagane połączenia z siecią Wi-Fi</string>
     <string name="feedback_email_body"><![CDATA[<put your feedback here>]]></string>
+    <string name="tab_title_setting">Ustawienia</string>
 </resources>

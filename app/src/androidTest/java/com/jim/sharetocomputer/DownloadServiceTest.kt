@@ -31,6 +31,7 @@ class DownloadServiceTest {
 
     private val application by lazy { ApplicationProvider.getApplicationContext<Application>() }
     private lateinit var webserver: NanoHTTPD
+    @Suppress("DEPRECATION")
     private val downloadFolder by lazy { Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) }
     private val fileTemp by lazy {
         arrayOf(

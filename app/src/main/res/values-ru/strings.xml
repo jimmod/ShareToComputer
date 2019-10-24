@@ -27,7 +27,6 @@
     <string name="source_code">Исходные коды</string>
     <string name="share_image_video">Поделиться фото или видео</string>
     <string name="share_file">Поделиться файлом</string>
-    <string name="setting">Настройки</string>
     <string name="scan_qr_code">Сканировать QR-код</string>
     <string name="notification_title">Поделиться на ПК</string>
     <string name="notification_server_text">Открыть через браузер http://%1$s:%2$s</string>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about">О приложении</string>
+    <string name="channel_description">Общие уведомления</string>
+    <string name="channel_name">Уведомление по умолчанию</string>
+    <string name="download">Скачать</string>
+    <string name="download_instruction_browser">Скачать через браузер</string>
+    <string name="download_instruction_qr_code">Скачать через QR-код</string>
+    <string name="downloading">Скачивание</string>
+    <string name="error_fail_send_feedback">Не возможно открыть приложение почты</string>
+    <string name="error_wifi_required">Необходимо соединение по Wi-Fi</string>
+    <string name="feedback_email_body"><![CDATA[<оставьте Ваш отзыв здесь>]]></string>
+    <string name="feedback_mail_title">[Share to Computer] Отзыв</string>
+    <string name="info_download_completed">[Share to Computer] Скачивание завершено</string>
+    <string name="warning_unknown_qrcode">Неизвестный формат QR-кода</string>
+    <string name="warning_newer_qrcode">[Share to Computer] Начало скачивания</string>
+    <string name="version">Версия</string>
+    <string name="title_send_feedback_preference">Отправить отзыв</string>
+    <string name="title_download_log_preference">Скачать лог</string>
+    <string name="title_about_preference">О приложении</string>
+    <string name="tab_title_setting">Настройки</string>
+    <string name="tab_title_send">Отправить</string>
+    <string name="tab_title_receive">Получить</string>
+    <string name="summary_download_log_preference">Скопировать mylog.log в папку загрузок</string>
+    <string name="stop_share">Остановить раздачу</string>
+    <string name="stop">Остановить</string>
+    <string name="source_code">Исходные коды</string>
+    <string name="share_image_video">Поделиться фото или видео</string>
+    <string name="share_file">Поделиться файлом</string>
+    <string name="scan_qr_code">Сканировать QR-код</string>
+    <string name="notification_title">Поделиться на ПК</string>
+    <string name="notification_server_text">Открыть через браузер http://%1$s:%2$s</string>
+    <string name="license">Лицензия</string>
+    <string name="info_download_log_complete">Лог файл скачан</string>
+    <string name="info_download_start">[Share to Computer] Начало скачивания</string>
+</resources>

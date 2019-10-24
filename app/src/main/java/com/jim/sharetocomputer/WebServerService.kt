@@ -69,17 +69,29 @@ class WebServerService : Service() {
             stopper?.cancel()
             val port = findFreePort()
             webServer = when (request) {
-                is ShareRequest.ShareRequestText -> get<WebServerText>(parameters = { parametersOf(port) }).apply {
+                is ShareRequest.ShareRequestText -> get<WebServerText>(parameters = {
+                    parametersOf(
+                        port
+                    )
+                }).apply {
                     setText(
                         request.text
                     )
                 }
-                is ShareRequest.ShareRequestSingleFile -> get<WebServerSingleFile>(parameters = { parametersOf(port) }).apply {
+                is ShareRequest.ShareRequestSingleFile -> get<WebServerSingleFile>(parameters = {
+                    parametersOf(
+                        port
+                    )
+                }).apply {
                     setUri(
                         request.uri
                     )
                 }
-                is ShareRequest.ShareRequestMultipleFile -> get<WebServerMultipleFiles>(parameters = { parametersOf(port) }).apply {
+                is ShareRequest.ShareRequestMultipleFile -> get<WebServerMultipleFiles>(parameters = {
+                    parametersOf(
+                        port
+                    )
+                }).apply {
                     setUris(
                         request.uris
                     )
@@ -146,8 +158,10 @@ class WebServerService : Service() {
                 )
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .addAction(R.mipmap.ic_launcher, getString(R.string.stop_share),
-                stopPendingIntent)
+            .addAction(
+                R.mipmap.ic_launcher, getString(R.string.stop_share),
+                stopPendingIntent
+            )
         return builder.build()
     }
 

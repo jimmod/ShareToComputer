@@ -114,10 +114,10 @@ class WebServerMultipleFilesTest {
 
         val (code, file) = httpGetFile(TEST_URL_INFO)
         Assert.assertEquals(200, code)
-        val shareInfo = Gson().fromJson(FileReader(file), ShareInfo::class.java)
+        val shareInfo = Gson().fromJson(FileReader(file!!), ShareInfo::class.java)
         Assert.assertEquals(uris.size, shareInfo.total)
         Assert.assertEquals(uris.size, shareInfo.files.size)
-        uris.forEachIndexed { index, uri ->
+        uris.forEachIndexed { index, _ ->
             Assert.assertEquals((index + 21).toString(), shareInfo.files[index].filename)
         }
     }
@@ -142,12 +142,13 @@ class WebServerMultipleFilesTest {
                 content = it.readBytes()
             }
             BufferedOutputStream(FileOutputStream(file)).use {
-                it.write(content)
+                it.write(content!!)
             }
         } catch (e: Exception) {
         }
         return Pair(code, file)
     }
+
     private fun httpGetContent(url: String): Pair<Int, ByteArray?> {
         val obj = URL(url)
         val con = obj.openConnection() as HttpURLConnection

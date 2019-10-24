@@ -82,6 +82,4 @@ class ReceiveNavigationTest {
             IntentMatchers.hasComponent(WebUploadService::class.java.name)
         )
     }
-
-
 }

@@ -18,7 +18,10 @@ package com.jim.sharetocomputer.webserver
 
 import java.io.InputStream
 
-class InputStreamNotifyWebServer(private val wrappedInputStream: InputStream, private val webServer: WebServer) :
+class InputStreamNotifyWebServer(
+    private val wrappedInputStream: InputStream,
+    private val webServer: WebServer
+) :
     InputStream() {
 
     override fun read(): Int {
@@ -26,12 +29,12 @@ class InputStreamNotifyWebServer(private val wrappedInputStream: InputStream, pr
         return wrappedInputStream.read()
     }
 
-    override fun read(b: ByteArray?): Int {
+    override fun read(b: ByteArray): Int {
         notifyWebServer()
         return wrappedInputStream.read(b)
     }
 
-    override fun read(b: ByteArray?, off: Int, len: Int): Int {
+    override fun read(b: ByteArray, off: Int, len: Int): Int {
         notifyWebServer()
         return wrappedInputStream.read(b, off, len)
     }

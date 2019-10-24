@@ -42,7 +42,8 @@ class SettingNavigationTest {
 
             navigation.openAboutScreen()
 
-            Mockito.verify(controller).navigate(MainFragmentDirections.actionFragmentMainToFragmentAbout())
+            Mockito.verify(controller)
+                .navigate(MainFragmentDirections.actionFragmentMainToFragmentAbout())
         }
     }
 

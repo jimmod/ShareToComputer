@@ -60,7 +60,7 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
                 zipResponse()
             } else if (session.uri.matches("/[0-9]+".toRegex())) {
                 val index = session.uri.split("/")[1].toInt()
-                if (index >= uris!!.size) throw IllegalArgumentException()
+                require(index < uris!!.size)
                 val uri = uris!!.elementAt(index)
                 MyLog.d("*Response uris[$index]:$uri")
                 contentUriResponse(uri)

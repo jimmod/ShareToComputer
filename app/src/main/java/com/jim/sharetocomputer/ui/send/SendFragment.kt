@@ -32,7 +32,11 @@ class SendFragment : Fragment() {
 
     private val sendViewModel: SendViewModel by viewModel()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         MyLog.i("onCreate")
         sendViewModel.activity = activity!!
         val binding = FragmentSendBinding.inflate(inflater, container, false)

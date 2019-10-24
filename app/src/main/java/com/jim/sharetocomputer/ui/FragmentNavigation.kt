@@ -25,7 +25,8 @@ import com.jim.sharetocomputer.ui.main.MainFragmentDirections
 class FragmentNavigation(val fragment: Fragment) {
 
     fun openAboutScreen() {
-        fragment.findNavController().navigate(MainFragmentDirections.actionFragmentMainToFragmentAbout())
+        fragment.findNavController()
+            .navigate(MainFragmentDirections.actionFragmentMainToFragmentAbout())
     }
 
 }

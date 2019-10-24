@@ -21,7 +21,7 @@ import com.jim.sharetocomputer.FileInfo
 import com.jim.sharetocomputer.Message
 import com.jim.sharetocomputer.logging.MyLog
 
-class WebServerText(port: Int): WebServer(port) {
+class WebServerText(port: Int) : WebServer(port) {
 
     private var text: String? = null
     private val filename = "${System.currentTimeMillis()}.txt"
@@ -29,12 +29,20 @@ class WebServerText(port: Int): WebServer(port) {
     override fun serve(session: IHTTPSession?): Response {
         notifyAccess()
         MyLog.i("Incoming http request from ${session?.remoteIpAddress}(${session?.remoteHostName}) to ${session?.uri}")
-        return if (text==null || session==null) {
-            newFixedLengthResponse(Response.Status.NOT_FOUND, ClipDescription.MIMETYPE_TEXT_PLAIN, Message.ERROR_CONTENT_NOT_SET)
+        return if (text == null || session == null) {
+            newFixedLengthResponse(
+                Response.Status.NOT_FOUND,
+                ClipDescription.MIMETYPE_TEXT_PLAIN,
+                Message.ERROR_CONTENT_NOT_SET
+            )
         } else if (session.uri == "/info") {
             infoResponse(1, listOf(FileInfo(filename)))
         } else {
-            newFixedLengthResponse(Response.Status.OK, ClipDescription.MIMETYPE_TEXT_PLAIN, text).apply {
+            newFixedLengthResponse(
+                Response.Status.OK,
+                ClipDescription.MIMETYPE_TEXT_PLAIN,
+                text
+            ).apply {
                 addHeader("Content-Disposition", "filename=\"$filename\"")
             }
         }

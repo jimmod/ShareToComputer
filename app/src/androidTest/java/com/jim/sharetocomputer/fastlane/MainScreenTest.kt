@@ -1,10 +1,10 @@
 package com.jim.sharetocomputer.fastlane
 
-import android.app.Activity
 import android.app.Instrumentation
 import android.content.ClipData
 import android.content.Intent
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -60,7 +60,7 @@ class MainScreenTest {
             val item = ClipData.Item(uri)
             clipData = ClipData("", emptyArray(), item)
         }
-        val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent)
+        val result = Instrumentation.ActivityResult(AppCompatActivity.RESULT_OK, resultIntent)
         Intents.intending(IntentMatchers.hasAction(Intent.ACTION_PICK)).respondWith(result)
     }
 

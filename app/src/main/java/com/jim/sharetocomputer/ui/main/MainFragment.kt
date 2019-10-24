@@ -32,11 +32,16 @@ class MainFragment : Fragment() {
 
     private val mainViewModel: MainViewModel by viewModel()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         MyLog.i("onCreateView")
         val binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        val sectionsPagerAdapter = SectionsPagerAdapter(activity!!, childFragmentManager)
+        val sectionsPagerAdapter =
+            SectionsPagerAdapter(activity!!, childFragmentManager)
         binding.viewPager.adapter = sectionsPagerAdapter
         binding.tabs.setupWithViewPager(binding.viewPager)
 

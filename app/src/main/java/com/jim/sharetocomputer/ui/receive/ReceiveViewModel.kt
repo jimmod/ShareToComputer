@@ -29,7 +29,6 @@ import com.jim.sharetocomputer.*
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
 import com.jim.sharetocomputer.gateway.WifiApi
 import com.jim.sharetocomputer.logging.MyLog
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -51,7 +50,7 @@ class ReceiveViewModel(
 
     fun scanQrCode() {
         MyLog.i("Select QrCode")
-        GlobalScope.launch(Dispatchers.Default) {
+        GlobalScope.launch(TestableDispatchers.Default) {
             navigation.openScanQrCode()?.let { qrCodeInfo ->
                 MyLog.i("Start download service to download from: $qrCodeInfo")
                 ContextCompat.startForegroundService(

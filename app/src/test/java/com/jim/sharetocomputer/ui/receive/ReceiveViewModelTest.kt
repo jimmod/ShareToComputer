@@ -20,13 +20,19 @@ package com.jim.sharetocomputer.ui.receive
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.jim.sharetocomputer.DownloadService
+import com.jim.sharetocomputer.QrCodeInfo
 import com.jim.sharetocomputer.gateway.WifiApi
+import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
 class ReceiveViewModelTest {
@@ -37,6 +43,11 @@ class ReceiveViewModelTest {
 
     @Test
     fun scan_qr_code() {
+        val qrCodeInfo =
+            QrCodeInfo(com.jim.sharetocomputer.Application.QR_CODE_VERSION, "http://localhost:8080")
+        runBlocking {
+            given(navigation.openScanQrCode()).willReturn(qrCodeInfo)
+        }
 
         viewModel.scanQrCode()
 
@@ -44,7 +55,33 @@ class ReceiveViewModelTest {
             verify(navigation).openScanQrCode()
         }
 
+        val startedService = Shadows.shadowOf(application).peekNextStartedService()
+
+        Assert.assertThat(
+            startedService,
+            IntentMatchers.hasComponent(DownloadService::class.java.name)
+        )
     }
 
+    @Test
+    fun scan_qr_code_older_version() {
+        val qrCodeInfo = QrCodeInfo(1, "http://localhost:8080")
+        runBlocking {
+            given(navigation.openScanQrCode()).willReturn(qrCodeInfo)
+        }
+
+        viewModel.scanQrCode()
+
+        runBlocking {
+            verify(navigation).openScanQrCode()
+        }
+
+        val startedService = Shadows.shadowOf(application).peekNextStartedService()
+
+        Assert.assertThat(
+            startedService,
+            IntentMatchers.hasComponent(DownloadService::class.java.name)
+        )
+    }
 
 }

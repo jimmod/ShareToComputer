@@ -19,14 +19,22 @@
 package com.jim.sharetocomputer.ui.receive
 
 import android.app.Application
-import androidx.fragment.app.testing.launchFragment
+import android.app.Instrumentation
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.zxing.client.android.Intents.Scan
 import com.jim.sharetocomputer.WebUploadService
 import com.jim.sharetocomputer.gateway.ActivityHelper
-import com.jim.sharetocomputer.ui.setting.SettingFragment
+import com.jim.sharetocomputer.ui.DummyActivity
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Shadows
@@ -34,23 +42,46 @@ import org.robolectric.Shadows
 @RunWith(AndroidJUnit4::class)
 class ReceiveNavigationTest {
 
+    @get:Rule
+    val rule = IntentsTestRule(DummyActivity::class.java)
+
+    private val fragment = Fragment()
+
+    @Before
+    fun before() {
+        rule.activity.supportFragmentManager.beginTransaction().apply {
+            add(fragment, "fragment")
+            commitNowAllowingStateLoss()
+        }
+    }
+
     @Test
-    fun start_web_upload_service() {
-        val fragmentScenario = launchFragment<SettingFragment>()
-        fragmentScenario.onFragment { fragment ->
-            val navigation = ReceiveNavigation(fragment, ActivityHelper())
+    fun `openScanQrCode start zxing camera activity`() {
+        val navigation = ReceiveNavigation(fragment, ActivityHelper())
+        Intents.intending(IntentMatchers.anyIntent())
+            .respondWith(Instrumentation.ActivityResult(AppCompatActivity.RESULT_CANCELED, null))
 
-            navigation.startWebUploadService()
-
-            val app = ApplicationProvider.getApplicationContext<Application>()
-            val startedService = Shadows.shadowOf(app).peekNextStartedService()
-
-            Assert.assertThat(
-                startedService,
-                IntentMatchers.hasComponent(WebUploadService::class.java.name)
-            )
+        runBlocking {
+            navigation.openScanQrCode()
         }
 
+        Intents.intended(IntentMatchers.hasAction(Scan.ACTION))
     }
+
+    @Test
+    fun start_web_upload_service() {
+        val navigation = ReceiveNavigation(fragment, ActivityHelper())
+
+        navigation.startWebUploadService()
+
+        val app = ApplicationProvider.getApplicationContext<Application>()
+        val startedService = Shadows.shadowOf(app).peekNextStartedService()
+
+        Assert.assertThat(
+            startedService,
+            IntentMatchers.hasComponent(WebUploadService::class.java.name)
+        )
+    }
+
 
 }

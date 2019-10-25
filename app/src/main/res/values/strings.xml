@@ -52,4 +52,5 @@
     <string name="upload_another_file">Upload another file</string>
     <string name="stop_receiving">Stop receiving</string>
     <string name="upload_from_your_browser">Upload from your browser</string>
+    <string name="info_success_web_upload">File successfully received. Click to open</string>
 </resources>

@@ -18,9 +18,21 @@
 
 package com.jim.sharetocomputer.webserver
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.os.Environment.getExternalStoragePublicDirectory
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.FileProvider
+import com.jim.sharetocomputer.Application
 import com.jim.sharetocomputer.R
 import com.jim.sharetocomputer.ext.getAppName
 import com.jim.sharetocomputer.logging.MyLog
@@ -85,6 +97,10 @@ class WebServerReceive(val context: Context, port: Int) : WebServer(port) {
                 out.close()
             } catch (ioe: IOException) {
             }
+            val fileUri = FileProvider.getUriForFile(
+                context, "com.jim.sharetocomputer.provider", File(dst.absolutePath)
+            )
+            createSuccessNotification(fileUri)
             return generateHtmlFileResponse("web/upload_success.html", Status.OK) {
                 it.replace("[[title]]", context.getAppName())
                     .replace(
@@ -106,6 +122,45 @@ class WebServerReceive(val context: Context, port: Int) : WebServer(port) {
         return super.serve(session)
     }
 
+    private fun createSuccessNotification(uri: Uri) {
+        val notificationManager: NotificationManagerCompat = NotificationManagerCompat.from(context)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = context.getString(R.string.channel_name)
+            val descriptionText = context.getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(Application.CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            notificationManager.createNotificationChannel(channel)
+        }
+        val openFileIntent = Intent(Intent.ACTION_VIEW, uri).apply {
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+        context.packageManager.queryIntentActivities(
+            openFileIntent,
+            PackageManager.MATCH_DEFAULT_ONLY
+        ).forEach {
+            context.grantUriPermission(
+                it.activityInfo.packageName,
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        }
+        val openFilePendingIntent = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(openFileIntent)
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+        val builder = NotificationCompat.Builder(context, Application.CHANNEL_ID)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(context.getString(R.string.notification_title))
+            .setContentText(context.getString(R.string.info_success_web_upload))
+            .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(openFilePendingIntent)
+        notificationManager.notify(NOTIFICATION_ID, builder.build())
+    }
+
     private fun generateHtmlFileResponse(
         filename: String,
         status: IStatus,
@@ -121,6 +176,10 @@ class WebServerReceive(val context: Context, port: Int) : WebServer(port) {
             InputStreamNotifyWebServer(ByteArrayInputStream(content), this),
             -1
         )
+    }
+
+    companion object {
+        private const val NOTIFICATION_ID = 5001
     }
 
 }

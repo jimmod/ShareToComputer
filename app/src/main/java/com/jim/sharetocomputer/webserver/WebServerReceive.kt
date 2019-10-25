@@ -24,6 +24,8 @@ import android.os.Environment.getExternalStoragePublicDirectory
 import com.jim.sharetocomputer.R
 import com.jim.sharetocomputer.ext.getAppName
 import com.jim.sharetocomputer.logging.MyLog
+import fi.iki.elonen.NanoHTTPD.Response.IStatus
+import fi.iki.elonen.NanoHTTPD.Response.Status
 import java.io.*
 
 class WebServerReceive(val context: Context, port: Int) : WebServer(port) {
@@ -33,7 +35,7 @@ class WebServerReceive(val context: Context, port: Int) : WebServer(port) {
 
         if (session?.uri == "/upload") {
             if (session.method != Method.POST) return newFixedLengthResponse(
-                Response.Status.METHOD_NOT_ALLOWED,
+                Status.METHOD_NOT_ALLOWED,
                 "text/html",
                 "HTTP POST ONLY"
             )
@@ -45,7 +47,7 @@ class WebServerReceive(val context: Context, port: Int) : WebServer(port) {
             val tmpFilePath = files["fileToUpload"]
             if (null == filename || null == tmpFilePath) {
                 return newFixedLengthResponse(
-                    Response.Status.BAD_REQUEST,
+                    Status.BAD_REQUEST,
                     "text/html",
                     "No file uploaded"
                 )
@@ -54,11 +56,21 @@ class WebServerReceive(val context: Context, port: Int) : WebServer(port) {
             @Suppress("DEPRECATION") val dst =
                 File(getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS), filename[0])
             if (dst.exists()) {
-                return newFixedLengthResponse(
-                    Response.Status.BAD_REQUEST,
-                    "text/html",
-                    "File exist in phone download folder"
-                )
+                return generateHtmlFileResponse(
+                    "web/upload_failed_file_exist.html",
+                    Status.BAD_REQUEST
+                ) {
+                    it.replace("[[title]]", context.getAppName())
+                        .replace(
+                            "[[error_failed_web_upload]]",
+                            context.getString(R.string.error_failed_web_upload)
+                        )
+                        .replace(
+                            "[[upload_another_file]]",
+                            context.getString(R.string.upload_another_file)
+                        )
+                        .toByteArray()
+                }
             }
             val src = File(tmpFilePath)
             try {
@@ -73,22 +85,42 @@ class WebServerReceive(val context: Context, port: Int) : WebServer(port) {
                 out.close()
             } catch (ioe: IOException) {
             }
-            return newFixedLengthResponse(context.getString(R.string.success_web_upload))
-        } else if (session?.uri == "/") {
-            var content: ByteArray? = null
-            context.assets.open("web/receive.html").use {
-                content = String(it.readBytes())
-                    .replace("[[title]]", context.getAppName())
+            return generateHtmlFileResponse("web/upload_success.html", Status.OK) {
+                it.replace("[[title]]", context.getAppName())
+                    .replace(
+                        "[[success_web_upload]]",
+                        context.getString(R.string.success_web_upload)
+                    )
+                    .replace(
+                        "[[upload_another_file]]",
+                        context.getString(R.string.upload_another_file)
+                    )
                     .toByteArray()
             }
-            return newFixedLengthResponse(
-                Response.Status.OK,
-                "text/html",
-                InputStreamNotifyWebServer(ByteArrayInputStream(content), this),
-                -1
-            )
+        } else if (session?.uri == "/") {
+            return generateHtmlFileResponse("web/receive.html", Status.OK) {
+                it.replace("[[title]]", context.getAppName()).toByteArray()
+            }
+
         }
         return super.serve(session)
+    }
+
+    private fun generateHtmlFileResponse(
+        filename: String,
+        status: IStatus,
+        contentModifier: (String) -> ByteArray
+    ): Response {
+        var content: ByteArray? = null
+        context.assets.open(filename).use {
+            content = contentModifier(String(it.readBytes()))
+        }
+        return newFixedLengthResponse(
+            status,
+            "text/html",
+            InputStreamNotifyWebServer(ByteArrayInputStream(content), this),
+            -1
+        )
     }
 
 }

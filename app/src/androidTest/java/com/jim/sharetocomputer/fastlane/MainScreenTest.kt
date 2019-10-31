@@ -48,11 +48,23 @@ class MainScreenTest {
     }
 
     @Test
+    fun screen_receive() {
+        clickReceiveTab()
+
+        assertReceiveScreenIsDisplayed()
+        Screenshot.take("screen_receive")
+    }
+
+    @Test
     fun screen_setting() {
         clickSettingTab()
 
         assertSettingScreenIsDisplayed()
         Screenshot.take("screen_setting")
+
+        clickAbout()
+        assertAboutScreenIsDisplayed()
+        Screenshot.take("screen_about")
     }
 
     private fun setupDummyImageSelect() {
@@ -72,12 +84,20 @@ class MainScreenTest {
         onView(withText(R.string.tab_title_setting)).perform(click())
     }
 
+    private fun clickReceiveTab() {
+        onView(withText(R.string.tab_title_receive)).perform(click())
+    }
+
+    private fun clickAbout() {
+        onView(withText(R.string.about)).perform(click())
+    }
+
     private fun assertAboutScreenIsDisplayed() {
         onView(withId(R.id.layout_about)).check(matches(isDisplayed()))
     }
 
     private fun assertMainScreenIsDisplayed() {
-        onView(withId(R.id.layout_main)).check(matches(isDisplayed()))
+        onView(withText(R.string.share_image_video)).check(matches(isDisplayed()))
     }
 
     private fun assertSharingScreenIsDisplayed() {
@@ -88,6 +108,9 @@ class MainScreenTest {
         onView(withText(R.string.title_send_feedback_preference)).check(matches(isDisplayed()))
     }
 
+    private fun assertReceiveScreenIsDisplayed() {
+        onView(withText(R.string.receive_from_computer)).check(matches(isDisplayed()))
+    }
 
     private fun clickStopShare() {
         onView(withId(R.id.stop_share)).perform(click())

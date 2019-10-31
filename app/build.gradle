@@ -12,8 +12,8 @@ android {
         applicationId "com.jim.sharetocomputer"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 1140
-        versionName "1.1.4"
+        versionCode 2000
+        versionName "2.0.0"
         testInstrumentationRunner "com.jim.sharetocomputer.TestRunner"
     }
 

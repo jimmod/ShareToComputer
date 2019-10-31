@@ -28,6 +28,7 @@ import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.MutableLiveData
 import com.jim.sharetocomputer.ext.getIp
 import com.jim.sharetocomputer.logging.MyLog
@@ -138,8 +139,7 @@ class WebServerService : Service() {
                 description = descriptionText
             }
             // Register the channel with the system
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = NotificationManagerCompat.from(this)
             notificationManager.createNotificationChannel(channel)
         }
         val stopIntent = ActionActivity.stopShareIntent(this)

@@ -27,6 +27,7 @@ import android.os.Environment
 import android.os.IBinder
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.google.gson.Gson
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
 import com.jim.sharetocomputer.logging.MyLog
@@ -88,8 +89,7 @@ class DownloadService : Service() {
                 description = descriptionText
             }
             // Register the channel with the system
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = NotificationManagerCompat.from(this)
             notificationManager.createNotificationChannel(channel)
         }
         val stopIntent = ActionActivity.stopDownloadIntent(this)

@@ -48,6 +48,9 @@
     <string name="title_about_preference">About</string>
     <string name="receive_from_computer">From computer</string>
     <string name="success_web_upload">File successfully uploaded. Check on your phone</string>
+    <string name="error_failed_web_upload">Upload failed, file exists on your phone</string>
+    <string name="upload_another_file">Upload another file</string>
     <string name="stop_receiving">Stop receiving</string>
-    <string name="send_from_your_browser">Send from your browser</string>
+    <string name="upload_from_your_browser">Upload from your browser</string>
+    <string name="info_success_web_upload">File successfully received. Click to open</string>
 </resources>

@@ -3,4 +3,4 @@ tests_apk_path "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.ap
 test_instrumentation_runner "com.jim.sharetocomputer.TestRunner"
 locales(['en-GB'])
 clear_previous_screenshots(true)
-use_tests_in_packages(['com.jim.sharetocomputer.screen'])
+use_tests_in_packages(['com.jim.sharetocomputer.fastlane'])

@@ -36,6 +36,7 @@ import java.io.PipedOutputStream
 import java.util.zip.Deflater
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import android.content.res.AssetManager
 
 class WebServerMultipleFiles(private val context: Context, port: Int) : WebServer(port) {
 
@@ -58,6 +59,8 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
                 )
             } else if (session.uri == "/zip") {
                 zipResponse()
+            } else if (session.uri == "/favicon") {
+                faviconResponse()
             } else if (session.uri.matches("/[0-9]+".toRegex())) {
                 val index = session.uri.split("/")[1].toInt()
                 require(index < uris!!.size)
@@ -109,6 +112,21 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
             GlobalScope.launch {
                 writeZip(outputStream)
             }
+        }
+    }
+
+    private fun faviconResponse(): Response {
+        val mgr = this.context.assets
+        val filename = "web/favicon.ico"
+        val fis = mgr.open(filename, AssetManager.ACCESS_BUFFER)
+
+        return newFixedLengthResponse(
+            Response.Status.OK,
+            null,
+            InputStreamNotifyWebServer(fis, this),
+            -1
+        ).apply {
+            addHeader("Content-Disposition", "filename=\"$filename\"")
         }
     }
 

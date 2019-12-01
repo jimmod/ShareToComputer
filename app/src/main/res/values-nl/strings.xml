@@ -1,0 +1,56 @@
+<!DOCTYPE resources [<!ENTITY appname "Share to Computer">]>
+<resources>
+    <string name="app_name">&appname;</string>
+    <string name="version_name">1.1.5</string>
+    <string name="channel_name">Standaardmelding</string>
+    <string name="channel_description">Algemene melding</string>
+    <string name="notification_title">&appname;</string>
+    <string name="notification_server_text">Open in je browserQ http://%1$s:%2$s</string>
+    <string name="download_url">http://%1$s:%2$s</string>
+    <string name="about">Over</string>
+    <string name="version">Versie</string>
+    <string name="source_code">Broncode</string>
+    <string name="source_code_url">https://github.com/jimmod/ShareToComputer</string>
+    <string name="license">Licentie</string>
+    <string name="license_detail">GNU General Public License versie 3 of hoger.\nCopyright © 2019 Jimmy</string>
+    <string name="stop_share">Stoppen met delen</string>
+    <string name="stop">Stoppen</string>
+    <string name="download">Downloaden</string>
+    <string name="downloading">Bezig met downloaden</string>
+    <plurals name="info_downloading">
+        <item quantity="one">Downloaden: %1$d van %2$d bestand</item>
+        <item quantity="other">Downloaden: %1$d van %2$d bestanden</item>
+    </plurals>
+    <string name="qrcode_url">http://%1$s:%2$s</string>
+    <string name="scan_qr_code">QR-code scannen</string>
+
+    <string name="warning_newer_qrcode">[&appname;] Downloaden starten\nWaarschuwing: nieuwere versie van de QR-code aangetroffen - installeer een nieuwere versie van de app</string>
+    <string name="warning_unknown_qrcode">Onbekende QR-code-indeling</string>
+
+    <string name="info_download_start">[&appname;] Downloaden starten</string>
+    <string name="info_download_completed">[&appname;] Downloaden voltooid</string>
+    <string name="share_image_video">Afbeelding/Video delen</string>
+    <string name="share_file">Bestand delen</string>
+    <string name="download_instruction_qr_code">Downloaden middels QR-code</string>
+    <string name="download_instruction_browser">Download middels browser:</string>
+    <string name="title_download_log_preference">Downloadlog</string>
+    <string name="summary_download_log_preference">mylog.log kopiëren naar downloadmap</string>
+    <string name="info_download_log_complete">Logbestand gedownload</string>
+    <string name="title_send_feedback_preference">Feedback versturen</string>
+    <string name="feedback_mail_title">[&appname;] Feedback</string>
+    <string name="error_fail_send_feedback">Kan e-mailapp niet openen</string>
+    <string name="error_wifi_required">Je moet verbonden zijn met een Wi-Fi-netwerk</string>
+    <string name="feedback_email_body"><![CDATA[<plaats hier je feedback>]]></string>
+
+    <string name="tab_title_send">Versturen</string>
+    <string name="tab_title_receive">Ontvangen</string>
+    <string name="tab_title_setting">Instellingen</string>
+    <string name="title_about_preference">Over</string>
+    <string name="receive_from_computer">Van computer</string>
+    <string name="success_web_upload">Het bestand is geüpload - pak je telefoon.</string>
+    <string name="error_failed_web_upload">Het uploaden is mislukt: het bestand staat al op je telefoon.</string>
+    <string name="upload_another_file">Ander bestand uploaden</string>
+    <string name="stop_receiving">Stoppen met ontvangen</string>
+    <string name="upload_from_your_browser">Uploaden middels je browser</string>
+    <string name="info_success_web_upload">Het bestand is ontvangen - druk om te openen.</string>
+</resources>

@@ -22,9 +22,11 @@ import android.net.Uri
 import com.jim.sharetocomputer.FileInfo
 import com.jim.sharetocomputer.Message
 import com.jim.sharetocomputer.R
+import com.jim.sharetocomputer.WebServerService
 import com.jim.sharetocomputer.ext.getAppName
 import com.jim.sharetocomputer.ext.getFileName
 import com.jim.sharetocomputer.logging.MyLog
+import com.jim.sharetocomputer.ui.main.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -36,6 +38,7 @@ import java.io.PipedOutputStream
 import java.util.zip.Deflater
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import kotlin.system.exitProcess
 
 class WebServerMultipleFiles(private val context: Context, port: Int) : WebServer(port) {
 
@@ -55,6 +58,14 @@ class WebServerMultipleFiles(private val context: Context, port: Int) : WebServe
                 infoResponse(
                     uris?.size ?: 0,
                     uris?.map { FileInfo(context.getFileName(it)) } ?: emptyList()
+                )
+            } else if (session.uri == "/kill") {
+                context.stopService(WebServerService.createIntent(context, null))
+                return newFixedLengthResponse(
+                    Response.Status.OK,
+                    "text/html",
+                    InputStreamNotifyWebServer(ByteArrayInputStream("".toByteArray()), this),
+                    -1
                 )
             } else if (session.uri == "/zip") {
                 zipResponse()

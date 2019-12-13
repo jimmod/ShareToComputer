@@ -1,0 +1,56 @@
+<!DOCTYPE resources [<!ENTITY appname "Bagikan ke Komputer">]>
+<resources>
+    <string name="app_name">&appname;</string>
+    <string name="version_name">1.1.5</string>
+    <string name="channel_name">Notifikasi default</string>
+    <string name="channel_description">Notifikasi umum</string>
+    <string name="notification_title">&appname;</string>
+    <string name="notification_server_text">Buka dari peramban web anda http://%1$s:%2$s</string>
+    <string name="download_url">http://%1$s:%2$s</string>
+    <string name="about">Tentang</string>
+    <string name="version">Versi</string>
+    <string name="source_code">Kode Sumber</string>
+    <string name="source_code_url">https://github.com/jimmod/ShareToComputer</string>
+    <string name="license">Lisensi</string>
+    <string name="license_detail">Lisensi Publik Umum GNU versi 3 atau yang lebih tinggi.\nHak Cipta © 2019 Jimmy</string>
+    <string name="stop_share">Setop berbagi</string>
+    <string name="stop">Setop</string>
+    <string name="download">Unduh</string>
+    <string name="downloading">Mengunduh</string>
+    <plurals name="info_downloading">
+        <item quantity="one">Mengunduh %1$d dari %2$d berkas</item>
+        <item quantity="other">Download %1$d dari %2$d berkas</item>
+    </plurals>
+    <string name="qrcode_url">http://%1$s:%2$s</string>
+    <string name="scan_qr_code">Pindai kode QR</string>
+
+    <string name="warning_newer_qrcode">[&appname;] Mulai mengunduh\Peringatan: mendeteksi versi kode QR yang lebih baru, silakan perbarui ke versi yang lebih baru</string>
+    <string name="warning_unknown_qrcode">Format kode QR tidak diketahui</string>
+
+    <string name="info_download_start">[&appname;] Mulai mengunduh</string>
+    <string name="info_download_completed">[&appname;] Selesai mengunduh</string>
+    <string name="share_image_video">Bagikan Gambar/Video</string>
+    <string name="share_file">Bagikan Berkas</string>
+    <string name="download_instruction_qr_code">Unduh menggunakan kode QR</string>
+    <string name="download_instruction_browser">Unduh dari peramban web:</string>
+    <string name="title_download_log_preference">Log unduhan</string>
+    <string name="summary_download_log_preference">Salin mylog.log ke direktori unduh</string>
+    <string name="info_download_log_complete">Berkas log diunduh</string>
+    <string name="title_send_feedback_preference">Kirim Umpanbalik</string>
+    <string name="feedback_mail_title">Umpanbalik [&appname;]</string>
+    <string name="error_fail_send_feedback">Tidak bisa membuka aplikasi surel</string>
+    <string name="error_wifi_required">Membutuhkan akses sambungan ke jaringan Wi-Fi</string>
+    <string name="feedback_email_body"><![CDATA[<masukkan umpanbalik anda di sini>]]></string>
+
+    <string name="tab_title_send">Kirim</string>
+    <string name="tab_title_receive">Terima</string>
+    <string name="tab_title_setting">Pengaturan</string>
+    <string name="title_about_preference">Tentang</string>
+    <string name="receive_from_computer">Dari komputer</string>
+    <string name="success_web_upload">Berkas berhasil diunggah. Silakan periksa telepon anda</string>
+    <string name="error_failed_web_upload">Gagal mengunggah, berkas sudah tersedia di telepon anda</string>
+    <string name="upload_another_file">Unggah berkas lainnya</string>
+    <string name="stop_receiving">Setop menerima</string>
+    <string name="upload_from_your_browser">Unggah dari peramban anda</string>
+    <string name="info_success_web_upload">Berkas berhasil diterima. Klik untuk membuka</string>
+</resources>

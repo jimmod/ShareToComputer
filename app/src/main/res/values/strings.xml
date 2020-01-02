@@ -29,6 +29,7 @@
 
     <string name="info_download_start">[&appname;] Start downloading</string>
     <string name="info_download_completed">[&appname;] Download complete</string>
+    <string name="error_download_fail">[&appname;] Download failed</string>
     <string name="share_image_video">Share Image/Video</string>
     <string name="share_file">Share File</string>
     <string name="download_instruction_qr_code">Download with QR code</string>

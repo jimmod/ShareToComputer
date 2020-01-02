@@ -26,18 +26,26 @@ import android.os.Build
 import android.os.Environment
 import android.os.IBinder
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.gson.Gson
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
+import com.jim.sharetocomputer.downloader.StcApi
 import com.jim.sharetocomputer.logging.MyLog
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.core.KoinComponent
+import org.koin.core.get
+import org.koin.core.parameter.parametersOf
+import java.io.File
+import java.io.FileOutputStream
 import java.io.InputStreamReader
 import java.net.URL
 
-class DownloadService : Service() {
+
+class DownloadService : Service(), KoinComponent {
 
     private val queuedIds = mutableSetOf<Long>()
     private val completeIds = mutableSetOf<Long>()
@@ -49,17 +57,24 @@ class DownloadService : Service() {
             completeIds.add(id)
             if (queuedIds.size == completeIds.size) {
                 MyLog.i("All download completed")
-                Toast.makeText(
-                    this@DownloadService,
-                    R.string.info_download_completed,
-                    Toast.LENGTH_LONG
-                ).show()
+                showToast(R.string.info_download_completed)
                 stopSelf()
             } else {
                 updateNotification()
             }
         }
     }
+
+    private fun showToast(@StringRes stringId: Int, length: Int = Toast.LENGTH_LONG) =
+        GlobalScope.launch(TestableDispatchers.Main) {
+            Toast.makeText(
+                this@DownloadService,
+                stringId,
+                length
+            ).show()
+        }
+
+    private lateinit var api: StcApi
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         MyLog.i("onStartCommand")
@@ -122,21 +137,54 @@ class DownloadService : Service() {
         startForeground(NOTIFICATION_ID, notification)
     }
 
-    private suspend fun onHandleIntent(intent: Intent?) = withContext(TestableDispatchers.Default) {
+    private suspend fun onHandleIntent(intent: Intent?) = withContext(TestableDispatchers.IO) {
         intent!!.getStringExtra(EXTRA_URL)?.let { url ->
-            val shareInfo = downloadInfo(url)
-            if (shareInfo == null) {
-                stopSelf()
-            }
-            val requests = getDownloadRequests(url, shareInfo!!)
-            MyLog.d("Prepare to download $shareInfo")
-            getSystemService(DownloadManager::class.java)?.let { downloadManager ->
-                requests.forEachIndexed { index, request ->
-                    val id = downloadManager.enqueue(request)
-                    queuedIds.add(id)
-                    MyLog.i("*enqueue[$index]: $id")
+            api = get(parameters = { parametersOf(url) })
+            try {
+                val shareInfo = api.info()
+
+                if (shareInfo == null) {
+                    stopSelf()
+                    throw NullPointerException("No share info data")
                 }
-                updateNotification()
+
+                MyLog.d("Prepare to download $shareInfo")
+                shareInfo.files.forEachIndexed { index, request ->
+                    val response = api.file(index)
+
+                    val path = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                    val file = File(path, "share_${System.currentTimeMillis()}").run {
+                        this.mkdirs()
+                        return@run File(path, request.filename)
+                    }
+                    MyLog.d("Writing to ${file.absolutePath}")
+
+                    response.byteStream().use { input ->
+                        FileOutputStream(file).use { output ->
+                            val fileData = ByteArray(1024000)
+                            var count = 1
+                            while (count > 0) {
+                                count = input.read(fileData)
+                                if (count > 0)
+                                    output.write(fileData, 0, count)
+                            }
+                        }
+                    }
+
+
+                }
+//                getSystemService(DownloadManager::class.java)?.let { downloadManager ->
+//                    requests.forEachIndexed { index, request ->
+//                        val id = downloadManager.enqueue(request)
+//                        queuedIds.add(id)
+//                        MyLog.i("*enqueue[$index]: $id")
+//                    }
+//                    updateNotification()
+//                }
+            } catch (e: Exception) {
+                MyLog.e(e.message ?: "", e)
+                showToast(R.string.error_failed_web_upload)
+                stopSelf()
             }
         }
     }

@@ -17,6 +17,8 @@
 package com.jim.sharetocomputer
 
 import androidx.fragment.app.Fragment
+import com.google.gson.Gson
+import com.jim.sharetocomputer.downloader.StcApi
 import com.jim.sharetocomputer.gateway.ActivityHelper
 import com.jim.sharetocomputer.gateway.WifiApi
 import com.jim.sharetocomputer.ui.main.MainViewModel
@@ -27,8 +29,12 @@ import com.jim.sharetocomputer.ui.setting.SettingNavigation
 import com.jim.sharetocomputer.webserver.WebServerMultipleFiles
 import com.jim.sharetocomputer.webserver.WebServerSingleFile
 import com.jim.sharetocomputer.webserver.WebServerText
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 val applicationModule = module {
@@ -38,6 +44,24 @@ val applicationModule = module {
     factory { (fragment: Fragment) -> SettingNavigation(fragment) }
     factory { WifiApi(get()) }
     factory { ActivityHelper() }
+
+    single { Gson() }
+
+    factory { (baseUrl: String) ->
+        Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create(get()))
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BASIC
+                    })
+                    .build()
+            )
+            .build()
+            .create(StcApi::class.java)
+    }
+
     viewModel { SendViewModel(get(), get(), get()) }
     viewModel { MainViewModel(get()) }
     viewModel { (fragment: Fragment) ->

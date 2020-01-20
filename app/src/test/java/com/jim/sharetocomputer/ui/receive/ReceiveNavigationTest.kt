@@ -21,6 +21,7 @@ package com.jim.sharetocomputer.ui.receive
 import android.app.Application
 import android.app.Instrumentation
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.intent.Intents
@@ -38,6 +39,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Shadows
+import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class ReceiveNavigationTest {
@@ -72,7 +74,7 @@ class ReceiveNavigationTest {
     fun start_web_upload_service() {
         val navigation = ReceiveNavigation(fragment, ActivityHelper())
 
-        navigation.startWebUploadService()
+        navigation.startWebUploadService(File("test").toUri())
 
         val app = ApplicationProvider.getApplicationContext<Application>()
         val startedService = Shadows.shadowOf(app).peekNextStartedService()

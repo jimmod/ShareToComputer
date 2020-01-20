@@ -27,20 +27,21 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.os.Environment.DIRECTORY_DOWNLOADS
-import android.os.Environment.getExternalStoragePublicDirectory
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.FileProvider
+import androidx.documentfile.provider.DocumentFile
 import com.jim.sharetocomputer.Application
 import com.jim.sharetocomputer.R
 import com.jim.sharetocomputer.ext.getAppName
 import com.jim.sharetocomputer.logging.MyLog
 import fi.iki.elonen.NanoHTTPD.Response.IStatus
 import fi.iki.elonen.NanoHTTPD.Response.Status
-import java.io.*
+import java.io.ByteArrayInputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
 
-class WebServerReceive(val context: Context, port: Int) : WebServer(port) {
+class WebServerReceive(val context: Context, port: Int, val uri: Uri) : WebServer(port) {
 
     override fun serve(session: IHTTPSession?): Response {
         MyLog.i("${session?.uri}")
@@ -64,30 +65,14 @@ class WebServerReceive(val context: Context, port: Int) : WebServer(port) {
                     "No file uploaded"
                 )
             }
-            //TODO check Android 10 compatibility (getExternalStoragePublicDirectory is deprecated)
-            @Suppress("DEPRECATION") val dst =
-                File(getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS), filename[0])
-            if (dst.exists()) {
-                return generateHtmlFileResponse(
-                    "web/upload_failed_file_exist.html",
-                    Status.BAD_REQUEST
-                ) {
-                    it.replace("[[title]]", context.getAppName())
-                        .replace(
-                            "[[error_failed_web_upload]]",
-                            context.getString(R.string.error_failed_web_upload)
-                        )
-                        .replace(
-                            "[[upload_another_file]]",
-                            context.getString(R.string.upload_another_file)
-                        )
-                        .toByteArray()
-                }
-            }
+            val dst = DocumentFile.fromTreeUri(context, uri)!!.createFile(
+                "*/*",
+                filename[0]
+            )!!
             val src = File(tmpFilePath)
             try {
                 val ins = FileInputStream(src)
-                val out = FileOutputStream(dst)
+                val out = context.contentResolver.openOutputStream(dst.uri)!!
                 val buf = ByteArray(65536)
                 var len: Int
                 while (ins.read(buf).also { len = it } >= 0) {
@@ -97,10 +82,7 @@ class WebServerReceive(val context: Context, port: Int) : WebServer(port) {
                 out.close()
             } catch (ioe: IOException) {
             }
-            val fileUri = FileProvider.getUriForFile(
-                context, "com.jim.sharetocomputer.provider", File(dst.absolutePath)
-            )
-            createSuccessNotification(fileUri)
+            createSuccessNotification(dst.uri)
             return generateHtmlFileResponse("web/upload_success.html", Status.OK) {
                 it.replace("[[title]]", context.getAppName())
                     .replace(

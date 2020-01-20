@@ -18,7 +18,9 @@
 
 package com.jim.sharetocomputer.ui.receive
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -40,7 +42,8 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @AllOpen
-class ReceiveNavigation(val fragment: Fragment, val activityHelper: ActivityHelper): KoinComponent {
+class ReceiveNavigation(val fragment: Fragment, val activityHelper: ActivityHelper) :
+    KoinComponent {
 
     suspend fun openScanQrCode() = suspendCoroutine<QrCodeInfo?> { cont ->
         activityHelper.startQrCodeScan(fragment.activity!!)?.let { result ->
@@ -66,9 +69,10 @@ class ReceiveNavigation(val fragment: Fragment, val activityHelper: ActivityHelp
         cont.resume(null)
     }
 
-    fun startWebUploadService() {
+    fun startWebUploadService(uri: Uri) {
         fragment.context?.run {
             val intent = Intent(this, WebUploadService::class.java)
+            intent.putExtra(WebUploadService.EXTRA_KEY_URI, uri)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 this.startForegroundService(intent)
             } else {
@@ -83,6 +87,21 @@ class ReceiveNavigation(val fragment: Fragment, val activityHelper: ActivityHelp
                 Intent(this, WebUploadService::class.java)
             )
         }
+    }
+
+    fun getSaveFolder(): Uri {
+        val result = activityHelper.startActivityForResult(
+            fragment.activity!!,
+            Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+                addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+            }
+        )
+
+        if (result?.resultCode == Activity.RESULT_OK) {
+            return result.resultData?.data!!
+        }
+        throw IllegalAccessException()
     }
 
 }

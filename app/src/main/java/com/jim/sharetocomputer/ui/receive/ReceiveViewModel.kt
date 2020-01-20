@@ -25,12 +25,14 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.jim.sharetocomputer.*
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
 import com.jim.sharetocomputer.gateway.WifiApi
 import com.jim.sharetocomputer.logging.MyLog
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AllOpen
 class ReceiveViewModel(
@@ -50,7 +52,7 @@ class ReceiveViewModel(
 
     fun scanQrCode() {
         MyLog.i("Select QrCode")
-        GlobalScope.launch(TestableDispatchers.Default) {
+        viewModelScope.launch(TestableDispatchers.IO) {
             navigation.openScanQrCode()?.let { qrCodeInfo ->
                 MyLog.i("Start download service to download from: $qrCodeInfo")
                 ContextCompat.startForegroundService(
@@ -68,9 +70,14 @@ class ReceiveViewModel(
 
     fun receiveFromComputer() {
         MyLog.i("Select start web")
-        navigation.startWebUploadService()
-        deviceIp.value = wifiApi.getIp()
-        isSharing.value = true
+        viewModelScope.launch(TestableDispatchers.IO) {
+            val uri = navigation.getSaveFolder()
+            navigation.startWebUploadService(uri)
+            withContext(TestableDispatchers.Main) {
+                deviceIp.value = wifiApi.getIp()
+                isSharing.value = true
+            }
+        }
     }
 
     fun stopWeb() {

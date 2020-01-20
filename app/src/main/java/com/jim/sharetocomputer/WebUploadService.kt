@@ -27,6 +27,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.NetworkInfo
+import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.IBinder
@@ -52,6 +53,7 @@ class WebUploadService : Service() {
             }
         }
     }
+    private lateinit var folderUri: Uri
 
     override fun onCreate() {
         super.onCreate()
@@ -66,7 +68,8 @@ class WebUploadService : Service() {
         webServer?.stop()
         val port = findFreePort()
         WebUploadService.port.value = port
-        webServer = WebServerReceive(this, port)
+        folderUri = intent!!.getParcelableExtra(EXTRA_KEY_URI)!!
+        webServer = WebServerReceive(this, port, folderUri)
         webServer!!.start()
         startForeground(NOTIFICATION_ID, createNotification())
 
@@ -117,7 +120,7 @@ class WebUploadService : Service() {
                 getString(
                     R.string.notification_server_text,
                     this.getIp(),
-                    WebUploadService.port.value.toString()
+                    port.value.toString()
                 )
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -142,6 +145,7 @@ class WebUploadService : Service() {
 
     companion object {
         private const val NOTIFICATION_ID = 1946
+        const val EXTRA_KEY_URI = "URI"
 
         var isRunning = MutableLiveData<Boolean>().apply { value = false }
         var port = MutableLiveData<Int>().apply { value = 8080 }

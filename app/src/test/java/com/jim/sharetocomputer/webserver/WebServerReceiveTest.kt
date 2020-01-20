@@ -19,6 +19,7 @@
 package com.jim.sharetocomputer.webserver
 
 import android.app.Application
+import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -28,6 +29,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows
 import java.io.BufferedInputStream
+import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -36,7 +38,7 @@ import java.net.URL
 class WebServerReceiveTest {
 
     private val webServer by lazy {
-        WebServerReceive(application, TEST_PORT)
+        WebServerReceive(application, TEST_PORT, File("").toUri())
     }
     private val application by lazy {
         ApplicationProvider.getApplicationContext<Application>()

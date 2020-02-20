@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">&appname;</string>
+    <string name="version_name">1.1.5</string>
+    <string name="channel_name">Notificaçao padrão</string>
+    <string name="channel_description">Notificação comum</string>
+    <string name="notification_title">&appname;</string>
+    <string name="notification_server_text">Abrir do navegadoor http://%1$s:%2$s</string>
+    <string name="download_url">http://%1$s:%2$s</string>
+    <string name="about">Sobre</string>
+    <string name="version">Versão</string>
+    <string name="source_code">Código fonte</string>
+    <string name="source_code_url">https://github.com/jimmod/ShareToComputer</string>
+    <string name="license">Licença</string>
+    <string name="license_detail">GNU General Public License version 3 or later.\nCopyright © 2019 Jimmy</string>
+    <string name="stop_share">Parar de compartilhar</string>
+    <string name="stop">Stop</string>
+    <string name="download">Baixar</string>
+    <string name="downloading">Baixando</string>
+    <plurals name="info_downloading">
+        <item quantity="one">Baixar %1$d do %2$d arquivo</item>
+        <item quantity="other">Baixar %1$d dos %2$d arquivos</item>
+    </plurals>
+    <string name="qrcode_url">http://%1$s:%2$s</string>
+    <string name="scan_qr_code">Escanear código QR</string>
+
+    <string name="warning_newer_qrcode">[&appname;] Baixando\nAtenção: nova versão do código QR detectada, por favor atualize para uma nova versão</string>
+    <string name="warning_unknown_qrcode">Formato código QR desconhecido</string>
+
+    <string name="info_download_start">[&appname;] Baixando</string>
+    <string name="info_download_completed">[&appname;] Download completo</string>
+    <string name="share_image_video">Compartilhar Imagem/Vídeo</string>
+    <string name="share_file">Compartilhar arquivo</string>
+    <string name="download_instruction_qr_code">Baixar com o código QR</string>
+    <string name="download_instruction_browser">Baixar do navegador de internet:</string>
+    <string name="title_download_log_preference">Baixar log</string>
+    <string name="summary_download_log_preference">Copiar meulog.log para a pasta de download</string>
+    <string name="info_download_log_complete">Arquivo de log baixado</string>
+    <string name="title_send_feedback_preference">Enviar feedback</string>
+    <string name="feedback_mail_title">[&appname;] Feedback</string>
+    <string name="error_fail_send_feedback">Impossível abrir aplicação de e-mail</string>
+    <string name="error_wifi_required">Conexão para rede Wi-Fi requerida</string>
+    <string name="feedback_email_body"><![CDATA[<put your feedback here>]]></string>
+
+    <string name="tab_title_send">Enviar</string>
+    <string name="tab_title_receive">Receber</string>
+    <string name="tab_title_setting">Configurações</string>
+    <string name="title_about_preference">Sobre</string>
+    <string name="receive_from_computer">Do computador</string>
+    <string name="success_web_upload">Arquivo carregado com sucesso. Verifique seu telefone</string>
+    <string name="error_failed_web_upload">Falha de carregamento, arquivo existente em seu aparelho</string>
+    <string name="upload_another_file">Carregar outro arquivo</string>
+    <string name="stop_receiving">Para de receber</string>
+    <string name="upload_from_your_browser">Carregar do seu navegador de internet</string>
+    <string name="info_success_web_upload">Arquivo recebido com sucesso. Clique para abrir</string>
+</resources>

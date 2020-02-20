@@ -32,7 +32,11 @@ class ReceiveFragment : Fragment() {
 
     private val viewModel: ReceiveViewModel by viewModel(parameters = { parametersOf(this) })
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         MyLog.i("onCreate")
         val binding = FragmentReceiveBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this

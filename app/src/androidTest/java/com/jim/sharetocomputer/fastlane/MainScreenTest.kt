@@ -1,10 +1,10 @@
 package com.jim.sharetocomputer.fastlane
 
-import android.app.Activity
 import android.app.Instrumentation
 import android.content.ClipData
 import android.content.Intent
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -48,11 +48,23 @@ class MainScreenTest {
     }
 
     @Test
+    fun screen_receive() {
+        clickReceiveTab()
+
+        assertReceiveScreenIsDisplayed()
+        Screenshot.take("screen_receive")
+    }
+
+    @Test
     fun screen_setting() {
         clickSettingTab()
 
         assertSettingScreenIsDisplayed()
         Screenshot.take("screen_setting")
+
+        clickAbout()
+        assertAboutScreenIsDisplayed()
+        Screenshot.take("screen_about")
     }
 
     private fun setupDummyImageSelect() {
@@ -60,7 +72,7 @@ class MainScreenTest {
             val item = ClipData.Item(uri)
             clipData = ClipData("", emptyArray(), item)
         }
-        val result = Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent)
+        val result = Instrumentation.ActivityResult(AppCompatActivity.RESULT_OK, resultIntent)
         Intents.intending(IntentMatchers.hasAction(Intent.ACTION_PICK)).respondWith(result)
     }
 
@@ -72,22 +84,33 @@ class MainScreenTest {
         onView(withText(R.string.tab_title_setting)).perform(click())
     }
 
+    private fun clickReceiveTab() {
+        onView(withText(R.string.tab_title_receive)).perform(click())
+    }
+
+    private fun clickAbout() {
+        onView(withText(R.string.about)).perform(click())
+    }
+
     private fun assertAboutScreenIsDisplayed() {
         onView(withId(R.id.layout_about)).check(matches(isDisplayed()))
     }
 
     private fun assertMainScreenIsDisplayed() {
-        onView(withId(R.id.layout_main)).check(matches(isDisplayed()))
+        onView(withText(R.string.share_image_video)).check(matches(isDisplayed()))
     }
 
     private fun assertSharingScreenIsDisplayed() {
-        onView(withId(R.id.layout_sharing)).check(matches(isDisplayed()))
+        onView(withId(R.id.layout_sharing_send)).check(matches(isDisplayed()))
     }
 
     private fun assertSettingScreenIsDisplayed() {
         onView(withText(R.string.title_send_feedback_preference)).check(matches(isDisplayed()))
     }
 
+    private fun assertReceiveScreenIsDisplayed() {
+        onView(withText(R.string.receive_from_computer)).check(matches(isDisplayed()))
+    }
 
     private fun clickStopShare() {
         onView(withId(R.id.stop_share)).perform(click())

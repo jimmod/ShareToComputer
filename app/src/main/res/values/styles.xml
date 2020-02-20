@@ -9,14 +9,14 @@
         <item name="android:windowBackground">@color/background</item>
     </style>
 
-    <style name="AppTheme" parent="@style/BaseAppTheme"/>
+    <style name="AppTheme" parent="@style/BaseAppTheme" />
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
         <!--<item name="android:background">@color/colorPrimary</item>-->

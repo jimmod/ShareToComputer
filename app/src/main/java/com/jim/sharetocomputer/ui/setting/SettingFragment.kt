@@ -46,7 +46,11 @@ class SettingFragment : PreferenceFragmentCompat() {
 
     private val navigation by inject<SettingNavigation>(parameters = { parametersOf(this) })
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         MyLog.i("onCreate")
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -91,17 +95,22 @@ class SettingFragment : PreferenceFragmentCompat() {
     }
 
     private fun getDeviceInfo(context: Context): String? {
-        val info = StringBuilder("${context.getString(R.string.feedback_email_body)}\n\n--------------------\n")
+        val info =
+            StringBuilder("${context.getString(R.string.feedback_email_body)}\n\n--------------------\n")
         info.append("Version: ${context.getAppVersionName()}(${context.getAppVersionCode()})\n")
         info.append("Phone: ${Build.BRAND}|${Build.MODEL}|${Build.BOARD}|${Build.DEVICE}\n")
         info.append("Wifi: ${context.isOnWifi()}|${context.getIp()}\n")
         return info.toString()
     }
 
+    @Suppress("DEPRECATION")
     private fun copyLogFile() {
         val source = File(MyLog.logFilePath())
         val target =
-            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), MyLog.LOG_FILE)
+            File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                MyLog.LOG_FILE
+            )
         try {
             copyFile(source, target)
             Toast.makeText(activity, R.string.info_download_log_complete, Toast.LENGTH_SHORT).show()

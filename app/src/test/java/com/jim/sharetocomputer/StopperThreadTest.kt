@@ -1,3 +1,5 @@
+package com.jim.sharetocomputer
+
 /*
     This file is part of Share To Computer  Copyright (C) 2019  Jimmy <https://github.com/jimmod/ShareToComputer>.
 
@@ -16,10 +18,6 @@
 */
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
-import com.jim.sharetocomputer.ShareRequest
-import com.jim.sharetocomputer.StopperThread
-import com.jim.sharetocomputer.WebServerService
-import com.jim.sharetocomputer.assertTimeout
 import com.jim.sharetocomputer.webserver.WebServer
 import org.junit.Assert
 import org.junit.Test
@@ -35,8 +33,10 @@ class StopperThreadTest {
 
     @Test
     fun service_stopself_automatically() {
-        val intent = WebServerService.createIntent(application, ShareRequest.ShareRequestText("Hello"))
-        val serviceController = Robolectric.buildService(WebServerService::class.java, intent).create()
+        val intent =
+            WebServerService.createIntent(application, ShareRequest.ShareRequestText("Hello"))
+        val serviceController =
+            Robolectric.buildService(WebServerService::class.java, intent).create()
         val service = Shadows.shadowOf(serviceController.get())
         val webServer = WebServerMock()
 

@@ -20,10 +20,10 @@ import org.koin.core.logger.Level
 import org.koin.core.logger.Logger
 import org.koin.core.logger.MESSAGE
 
-class KoinLogger: Logger() {
+class KoinLogger : Logger() {
 
     override fun log(level: Level, msg: MESSAGE) {
-        when(level) {
+        when (level) {
             Level.DEBUG -> MyLog.d(msg)
             Level.INFO -> MyLog.i(msg)
             Level.ERROR -> MyLog.e(msg)

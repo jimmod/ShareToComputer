@@ -41,7 +41,7 @@ import org.robolectric.Shadows
 import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
-class WebServerServiceTest: KoinTest {
+class WebServerServiceTest : KoinTest {
 
     private val application by lazy { ApplicationProvider.getApplicationContext<Application>() }
     private val webServerText by inject<WebServerText>()
@@ -75,7 +75,7 @@ class WebServerServiceTest: KoinTest {
     @Test
     fun intent_doesnt_contain_request() {
         val service = Robolectric.buildService(WebServerService::class.java).create()
-        service.startCommand(0,0)
+        service.startCommand(0, 0)
 
         val shadow = Shadows.shadowOf(service.get())
         Assert.assertEquals(true, shadow.isStoppedBySelf)
@@ -85,8 +85,11 @@ class WebServerServiceTest: KoinTest {
     fun intent_request_text() {
         val text = "Hello World"
         val request = ShareRequest.ShareRequestText(text)
-        val service = Robolectric.buildService(WebServerService::class.java, WebServerService.createIntent(application, request)).create()
-        service.startCommand(0,0)
+        val service = Robolectric.buildService(
+            WebServerService::class.java,
+            WebServerService.createIntent(application, request)
+        ).create()
+        service.startCommand(0, 0)
 
         val shadow = Shadows.shadowOf(service.get())
         Assert.assertEquals(false, shadow.isStoppedBySelf)
@@ -96,10 +99,13 @@ class WebServerServiceTest: KoinTest {
 
     @Test
     fun intent_request_single_file() {
-        val uri = Uri.fromFile(File.createTempFile("temp","del"))
+        val uri = Uri.fromFile(File.createTempFile("temp", "del"))
         val request = ShareRequest.ShareRequestSingleFile(uri)
-        val service = Robolectric.buildService(WebServerService::class.java, WebServerService.createIntent(application, request)).create()
-        service.startCommand(0,0)
+        val service = Robolectric.buildService(
+            WebServerService::class.java,
+            WebServerService.createIntent(application, request)
+        ).create()
+        service.startCommand(0, 0)
 
         val shadow = Shadows.shadowOf(service.get())
         Assert.assertEquals(false, shadow.isStoppedBySelf)
@@ -110,13 +116,16 @@ class WebServerServiceTest: KoinTest {
     @Test
     fun intent_request_multiple_files() {
         val uris = listOf<Uri>(
-            Uri.fromFile(File.createTempFile("temp","del")),
-            Uri.fromFile(File.createTempFile("temp","del")),
-            Uri.fromFile(File.createTempFile("temp","del"))
+            Uri.fromFile(File.createTempFile("temp", "del")),
+            Uri.fromFile(File.createTempFile("temp", "del")),
+            Uri.fromFile(File.createTempFile("temp", "del"))
         )
         val request = ShareRequest.ShareRequestMultipleFile(uris)
-        val service = Robolectric.buildService(WebServerService::class.java, WebServerService.createIntent(application, request)).create()
-        service.startCommand(0,0)
+        val service = Robolectric.buildService(
+            WebServerService::class.java,
+            WebServerService.createIntent(application, request)
+        ).create()
+        service.startCommand(0, 0)
 
         val shadow = Shadows.shadowOf(service.get())
         Assert.assertEquals(false, shadow.isStoppedBySelf)

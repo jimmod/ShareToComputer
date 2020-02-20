@@ -13,27 +13,11 @@
         <action
             android:id="@+id/action_fragment_main_to_fragment_about"
             app:destination="@id/fragment_about" />
-        <action
-            android:id="@+id/action_fragment_main_to_fragment_qrcode"
-            app:destination="@id/fragment_qrcode" />
-        <action
-            android:id="@+id/action_fragment_main_to_fragment_setting"
-            app:destination="@id/fragment_setting" />
     </fragment>
-
 
     <fragment
         android:id="@+id/fragment_about"
         android:name="com.jim.sharetocomputer.ui.setting.AboutFragment"
-        android:label="@string/about">
-    </fragment>
-    <fragment
-        android:id="@+id/fragment_qrcode"
-        android:name="com.jim.sharetocomputer.QrCodeFragment"
-        android:label="@string/scan_qr_code" />
-    <fragment
-        android:id="@+id/fragment_setting"
-        android:name="com.jim.sharetocomputer.ui.setting.SettingFragment"
-        android:label="@string/setting" />
+        android:label="@string/about" />
 
 </navigation>

@@ -23,7 +23,7 @@ import com.jim.sharetocomputer.logging.MyLog
 import fi.iki.elonen.NanoHTTPD
 import java.io.ByteArrayInputStream
 
-open class WebServer(port: Int): NanoHTTPD(port) {
+open class WebServer(port: Int) : NanoHTTPD(port) {
 
     var lastAccessTime: Long = System.currentTimeMillis()
         protected set

@@ -57,6 +57,7 @@ class SendFragmentTest {
     private val deviceIp = MutableLiveData<String>()
     private val devicePort = MutableLiveData<Int>()
     private val qrCodeDrawable = MutableLiveData<Drawable>()
+    private val isAbleToShare = MutableLiveData<Boolean>()
     private val ip = "1.1.1.1"
     private val port = 1111
     private val address = "http://1.1.1.1:1111"
@@ -71,8 +72,10 @@ class SendFragmentTest {
         Mockito.doReturn(deviceIp).`when`(sendViewModel).deviceIp()
         Mockito.doReturn(devicePort).`when`(sendViewModel).devicePort()
         Mockito.doReturn(qrCodeDrawable).`when`(sendViewModel).qrCode()
+        Mockito.doReturn(isAbleToShare).`when`(sendViewModel).isAbleToShare()
         UiThreadStatement.runOnUiThread {
             isSharing.value = false
+            isAbleToShare.value = true
         }
     }
 
@@ -108,7 +111,6 @@ class SendFragmentTest {
 
     @Test
     fun share_media_button_click() {
-
         launchFragment()
         shareMediaButton().click()
 
@@ -117,7 +119,6 @@ class SendFragmentTest {
 
     @Test
     fun share_file_button_click() {
-
         launchFragment()
         shareFileButton().click()
 
@@ -136,7 +137,7 @@ class SendFragmentTest {
         Mockito.verify(sendViewModel).stopShare()
     }
 
-    private fun shareMediaButton() = onView(withText(R.string.share_image_video))
+    private fun shareMediaButton() = onView(withId(R.id.share_media))
     private fun shareFileButton() = onView(withText(R.string.share_file))
     private fun stopShareButton() = onView(withText(R.string.stop_share))
     private fun qrCode() = onView(withId(R.id.qrcode))

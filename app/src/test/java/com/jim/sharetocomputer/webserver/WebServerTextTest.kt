@@ -87,7 +87,8 @@ class WebServerTextTest {
                     sb.append(line)
                 }
             }
-        } catch (e: Exception) {}
+        } catch (e: Exception) {
+        }
         val body = sb.toString()
         return Pair(code, body)
     }

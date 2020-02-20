@@ -18,7 +18,6 @@
 
 package com.jim.sharetocomputer.ui.send
 
-import android.app.Activity
 import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
@@ -27,7 +26,10 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
@@ -42,11 +44,16 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-
+@AllOpen
 class SendViewModel(context: Context, val wifiApi: WifiApi, val activityHelper: ActivityHelper) :
     MainViewModel(context) {
 
     private val deviceIp = MutableLiveData<String>().apply { value = "unknown" }
+    private val isAbleToShareData = MediatorLiveData<Boolean>().apply {
+        addSource(WebUploadService.isRunning) {
+            this.value = !it
+        }
+    }
     private val devicePort = WebServerService.port
     private var qrCode = MutableLiveData<Drawable>()
     private var qrCodeBitmap: Bitmap? = null
@@ -76,19 +83,22 @@ class SendViewModel(context: Context, val wifiApi: WifiApi, val activityHelper: 
         MyLog.i("Select Media")
         if (!checkWifi()) return
         GlobalScope.launch(TestableDispatchers.Default) {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-                type = "*/*"
-                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            }
+            val intent =
+                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+                    type = "*/*"
+                    putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                }
             activityHelper.startActivityForResult(activity, intent)?.let { result ->
                 handleSelectFileResult(result)
             }
         }
     }
 
+    fun isAbleToShare(): LiveData<Boolean> = isAbleToShareData
+
     private fun handleSelectFileResult(result: Instrumentation.ActivityResult) {
         MyLog.i("*Result: ${result.resultCode}|${result.resultData?.extras?.keySet()}")
-        if (result.resultCode == Activity.RESULT_OK) {
+        if (result.resultCode == AppCompatActivity.RESULT_OK) {
             updateWebServerUi()
             result.resultData.data?.run {
                 startWebService(ShareRequest.ShareRequestSingleFile(this))

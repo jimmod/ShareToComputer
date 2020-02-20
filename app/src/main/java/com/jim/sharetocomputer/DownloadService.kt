@@ -27,6 +27,7 @@ import android.os.Environment
 import android.os.IBinder
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.google.gson.Gson
 import com.jim.sharetocomputer.coroutines.TestableDispatchers
 import com.jim.sharetocomputer.logging.MyLog
@@ -48,7 +49,11 @@ class DownloadService : Service() {
             completeIds.add(id)
             if (queuedIds.size == completeIds.size) {
                 MyLog.i("All download completed")
-                Toast.makeText(this@DownloadService, R.string.info_download_completed, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@DownloadService,
+                    R.string.info_download_completed,
+                    Toast.LENGTH_LONG
+                ).show()
                 stopSelf()
             } else {
                 updateNotification()
@@ -84,8 +89,7 @@ class DownloadService : Service() {
                 description = descriptionText
             }
             // Register the channel with the system
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = NotificationManagerCompat.from(this)
             notificationManager.createNotificationChannel(channel)
         }
         val stopIntent = ActionActivity.stopDownloadIntent(this)
@@ -119,30 +123,38 @@ class DownloadService : Service() {
     }
 
     private suspend fun onHandleIntent(intent: Intent?) = withContext(TestableDispatchers.Default) {
-        val url = intent!!.getStringExtra(EXTRA_URL)
-        val shareInfo = downloadInfo(url)
-        if (shareInfo == null) {
-            stopSelf()
+        intent!!.getStringExtra(EXTRA_URL)?.let { url ->
+            val shareInfo = downloadInfo(url)
+            if (shareInfo == null) {
+                stopSelf()
+            }
+            val requests = getDownloadRequests(url, shareInfo!!)
+            MyLog.d("Prepare to download $shareInfo")
+            getSystemService(DownloadManager::class.java)?.let { downloadManager ->
+                requests.forEachIndexed { index, request ->
+                    val id = downloadManager.enqueue(request)
+                    queuedIds.add(id)
+                    MyLog.i("*enqueue[$index]: $id")
+                }
+                updateNotification()
+            }
         }
-        val requests = getDownloadRequests(url, shareInfo!!)
-        MyLog.d("Prepare to download $shareInfo")
-        val downloadManager = getSystemService(DownloadManager::class.java)
-        requests.forEachIndexed { index, request ->
-            val id = downloadManager.enqueue(request)
-            queuedIds.add(id)
-            MyLog.i("*enqueue[$index]: $id")
-        }
-        updateNotification()
     }
 
-    private fun getDownloadRequests(url: String, shareInfo: ShareInfo): List<DownloadManager.Request> {
+    private fun getDownloadRequests(
+        url: String,
+        shareInfo: ShareInfo
+    ): List<DownloadManager.Request> {
         return shareInfo.files.mapIndexed { index, fileInfo ->
             val uri = Uri.parse("$url/$index")
             return@mapIndexed DownloadManager.Request(uri).apply {
                 this.setTitle(fileInfo.filename)
                 this.setDescription(getString(R.string.downloading))
                 this.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
-                this.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileInfo.filename)
+                this.setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS,
+                    fileInfo.filename
+                )
             }
         }
     }

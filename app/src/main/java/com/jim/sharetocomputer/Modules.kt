@@ -36,9 +36,17 @@ val applicationModule = module {
     factory { (port: Int) -> WebServerSingleFile(get(), port) }
     factory { (port: Int) -> WebServerMultipleFiles(get(), port) }
     factory { (fragment: Fragment) -> SettingNavigation(fragment) }
-    viewModel { SendViewModel(get(), WifiApi(get()), ActivityHelper()) }
+    factory { WifiApi(get()) }
+    factory { ActivityHelper() }
+    viewModel { SendViewModel(get(), get(), get()) }
     viewModel { MainViewModel(get()) }
-    viewModel { (fragment: Fragment) -> ReceiveViewModel(ReceiveNavigation(fragment)) }
+    viewModel { (fragment: Fragment) ->
+        ReceiveViewModel(
+            get(),
+            get(),
+            ReceiveNavigation(fragment, get())
+        )
+    }
 }
 
 object Module {

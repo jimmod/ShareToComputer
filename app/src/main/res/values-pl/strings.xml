@@ -1,47 +1,56 @@
 <!DOCTYPE resources [<!ENTITY appname "Share to Computer">]>
 <resources>
     <string name="app_name">&appname;</string>
-    <string name="version_name">1.1.4</string>
-    <string name="channel_name">Powiadomienia domyślne</string>
-    <string name="channel_description">Powiadomienia wspólne</string>
+    <string name="version_name">1.1.5</string>
+    <string name="channel_name">Domyślne powiadomienie</string>
+    <string name="channel_description">Wspólne powiadomienie</string>
     <string name="notification_title">&appname;</string>
-    <string name="notification_server_text">Otwórz w przeglądarce http://%1$s:%2$s</string>
+    <string name="notification_server_text">Otwórz z poziomu przeglądarki  http://%1$s:%2$s</string>
     <string name="download_url">http://%1$s:%2$s</string>
     <string name="about">O aplikacji</string>
     <string name="version">Wersja</string>
     <string name="source_code">Kod źródłowy</string>
     <string name="source_code_url">https://github.com/jimmod/ShareToComputer</string>
     <string name="license">Licencja</string>
-    <string name="license_detail">Licencja GNU General Public License w wersji 3 lub nowszej.\nCopyright © 2019 Jimmy</string>
+    <string name="license_detail">GNU General Public License w wersji 3 lub nowszej.\nCopyright © 2019 Jimmy</string>
     <string name="stop_share">Przerwij udostępnianie</string>
-    <string name="stop">Zatrzymaj</string>
+    <string name="stop">Stop</string>
     <string name="download">Pobierz</string>
     <string name="downloading">Pobieranie</string>
     <plurals name="info_downloading">
-        <item quantity="one">Pobierz %1$d plik z %2$d</item>
-        <item quantity="few">Pobierz %1$d pliki z %2$d</item>
-        <item quantity="many">Pobierz %1$d plików z %2$d</item>
-        <item quantity="other">Pobierz %1$d plików z %2$d</item>
+        <item quantity="one">Pobierz %1$d z %2$d plików</item>
+        <item quantity="other">Pobierz %1$d z %2$d plików</item>
     </plurals>
     <string name="qrcode_url">http://%1$s:%2$s</string>
     <string name="scan_qr_code">Skanuj kod QR</string>
 
-    <string name="warning_newer_qrcode">[&appname;] Rozpocznij pobieranie\nOstrzeżenie: wykryto nowszą wersję kodu QR, zaktualizuj go do nowszej wersji</string>
+    <string name="warning_newer_qrcode">[&appname;] Rozpocznij pobieranie\nOstrzeżenie: wykryto nowszą wersję kodu QR, zaktualizuj do nowszej wersji</string>
     <string name="warning_unknown_qrcode">Nieznany format kodu QR</string>
 
     <string name="info_download_start">[&appname;] Rozpocznij pobieranie</string>
-    <string name="info_download_completed">[&appname;] Pobieranie zakończone</string>
+    <string name="info_download_completed">[&appname;] Zakończone pobieranie</string>
     <string name="share_image_video">Udostępnij Obraz/Wideo</string>
-    <string name="share_file">Udostępnij Plik</string>
-    <string name="download_instruction_qr_code">Pobierz za pomocą kodu QR</string>
-    <string name="download_instruction_browser">Pobierz za pomocą przeglądarki:</string>
-    <string name="title_download_log_preference">Pobierz dziennik</string>
-    <string name="summary_download_log_preference">Skopiuj plik mylog.log do katalogu pobierania</string>
-    <string name="info_download_log_complete">Pobrano plik dziennika</string>
-    <string name="title_send_feedback_preference">Prześlij opinię</string>
-    <string name="feedback_mail_title">[&appname;] Opinia</string>
-    <string name="error_fail_send_feedback">Nie można otworzyć aplikacji pocztowej</string>
-    <string name="error_wifi_required">Wymagane połączenia z siecią Wi-Fi</string>
+    <string name="share_file">Udostępnij plik</string>
+    <string name="download_instruction_qr_code">Pobierz z użyciem kodu QR</string>
+    <string name="download_instruction_browser">Pobierz z użyciem przeglądarki:</string>
+    <string name="title_download_log_preference">Pobierz log</string>
+    <string name="summary_download_log_preference">Skopiuj mylog.log, aby pobrać katalog</string>
+    <string name="info_download_log_complete">Plik log został pobrany </string>
+    <string name="title_send_feedback_preference">Wyślij opinię</string>
+    <string name="feedback_mail_title">[&appname;] Opinie</string>
+    <string name="error_fail_send_feedback">Nie można otworzyć aplikacji poczty</string>
+    <string name="error_wifi_required">Wymagane jest połączenie z siecią Wi-Fi</string>
     <string name="feedback_email_body"><![CDATA[<put your feedback here>]]></string>
+
+    <string name="tab_title_send">Wyślij</string>
+    <string name="tab_title_receive">Odbierz</string>
     <string name="tab_title_setting">Ustawienia</string>
+    <string name="title_about_preference">O aplikacji</string>
+    <string name="receive_from_computer">Z komputera</string>
+    <string name="success_web_upload">Plik został pomyślnie przesłany. Sprawdź w telefonie</string>
+    <string name="error_failed_web_upload">Przesyłanie nie powiodło się, plik istnieje w telefonie</string>
+    <string name="upload_another_file">Prześlij inny plik</string>
+    <string name="stop_receiving">Przerwij odbieranie</string>
+    <string name="upload_from_your_browser">Prześlij z użyciem przeglądarki</string>
+    <string name="info_success_web_upload">Plik został pomyślnie odebrany. Kliknij, aby otworzyć</string>
 </resources>
